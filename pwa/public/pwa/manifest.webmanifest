@@ -10,21 +10,28 @@
   "theme_color": "#000000",
   "background_color": "#000000",
   "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://kurokawa-logistics.com/pwa/manifest.webmanifest",
+      "id": "https://kurokawa-logistics.com/"
+    }
+  ],
   "icons": [
     {
-      "src": "/pwa/icons/icon-192.png",
+      "src": "/pwa/icons/icon-192-v2.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/pwa/icons/icon-512.png",
+      "src": "/pwa/icons/icon-512-v2.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/pwa/icons/icon-maskable-512.png",
+      "src": "/pwa/icons/icon-maskable-512-v2.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

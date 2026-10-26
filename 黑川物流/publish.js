@@ -6,11 +6,12 @@
  *   02 · 页面外观：浏览器配色与按笔记属性设置的页面背景图。
  *   03 · 催更按钮：点击统计、共享计数及按钮反馈。
  *   04 · KKN 语法高亮：已停用，历史代码保留备用。
- *   05 · PWA 安装配置：引入应用清单和图标，由浏览器提供原生安装入口。
+ *   05 · PWA：原生安装入口、安装按钮点击统计与独立窗口使用统计。
  *
- * 外部服务（仅由 03 使用）
- *   Google Analytics：记录催更点击，通过 googletagmanager.com 加载统计脚本。
- *   Abacus / abacus.jasoncameron.dev：保存、读取累计催更点击次数。
+ * 外部服务
+ *   Google Analytics：03 / 05 记录催更点击、PWA 安装按钮点击及 PWA 查看。
+ *     复用已有 Google tag；尚未加载时从 googletagmanager.com 加载。
+ *   Abacus / abacus.jasoncameron.dev：03 保存、读取累计催更点击次数。
  *   02 使用 Publish 已加载的笔记缓存；背景图由浏览器从填写的链接加载。
  *   05 从主站 /pwa/ 加载安装配置与图标；资源部署说明见仓库 pwa/README.md。
  *
@@ -319,6 +320,40 @@ document.documentElement.lang = 'zh-CN';
 })();
 
 
+/* ---------- 03 / 05 共用的 Google Analytics 事件入口 ---------- */
+// 只在需要发送事件时加载；沿用站点现有 GA4 媒体资源。
+var kurokawaTrackEvent = (function () {
+  var GA_ID = 'G-39LLSCKKW6';
+
+  return function (name, parameters) {
+    try {
+      if (typeof window.gtag !== 'function') {
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { window.dataLayer.push(arguments); };
+        // 先配置后发送事件；此兜底不额外发送 page_view，避免重复浏览量。
+        window.gtag('js', new Date());
+        window.gtag('config', GA_ID, { send_page_view: false });
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+        document.head.appendChild(script);
+      }
+      var details = {
+        send_to: GA_ID,
+        page_title: document.title,
+        page_location: window.location.href
+      };
+      if (parameters) {
+        Object.keys(parameters).forEach(function (key) { details[key] = parameters[key]; });
+      }
+      window.gtag('event', name, details);
+    } catch (error) {
+      // 统计被拦截或不可用时，不影响安装提示、阅读或按钮反馈。
+    }
+  };
+})();
+
+
 /* ========================================================================
  * 03 · 催更按钮（Google Analytics + Abacus + 点击反馈）
  * ========================================================================
@@ -338,49 +373,10 @@ document.documentElement.lang = 'zh-CN';
 (function () {
   /* ---------- 配置 ---------- */
 
-  // 复用现有 GA ID；备份说明见 __正在编辑/__备份文件/Google Analytics.md。
-  var GA_ID = 'G-39LLSCKKW6';
   // Abacus 是独立计数服务，和 02 的 theme-color 功能没有关联。
   // {op} 替换为 get（只读）或 hit（加 1）；后两段标识本站的共享计数。
   var COUNTER_URL =
     'https://abacus.jasoncameron.dev/{op}/kurokawa-logistics/cuigeng-homepage';
-
-  /* ---------- A · Google Analytics 点击统计 ---------- */
-
-  var gtagLoading = false;
-
-  function ensureGtag(callback) {
-    // 已存在 gtag 时直接复用；它也可能是等待库加载的数据队列函数。
-    if (typeof window.gtag === 'function') {
-      callback(true);
-      return;
-    }
-    // 没有 gtag 时，先建立事件队列；仅在第一次点击时加载官方脚本。
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function () { window.dataLayer.push(arguments); };
-    if (gtagLoading) {
-      var timer = setInterval(function () {
-        if (window.__cuigengGtagReady) {
-          clearInterval(timer);
-          callback(true);
-        }
-      }, 100);
-      setTimeout(function () { clearInterval(timer); }, 5000);
-      return;
-    }
-    gtagLoading = true;
-    var s = document.createElement('script');
-    s.async = true;
-    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
-    s.onload = function () {
-      window.gtag('js', new Date());
-      window.gtag('config', GA_ID);
-      window.__cuigengGtagReady = true;
-      callback(true);
-    };
-    s.onerror = function () { callback(false); };
-    document.head.appendChild(s);
-  }
 
   /* ---------- B · Abacus 共享点击计数 ---------- */
 
@@ -428,15 +424,9 @@ document.documentElement.lang = 'zh-CN';
     if (!btn) return;
 
     // A. 记录点击事件（不等待计数服务）。
-    ensureGtag(function (ok) {
-      if (ok && typeof window.gtag === 'function') {
-        window.gtag('event', 'cuigeng_click', {
-          event_category: 'engagement',
-          event_label: 'homepage_welcome',
-          page_title: document.title,
-          page_location: window.location.href
-        });
-      }
+    kurokawaTrackEvent('cuigeng_click', {
+      event_category: 'engagement',
+      event_label: 'homepage_welcome'
     });
 
     // B. 累计次数加 1，成功后显示返回的数字（包括 0）。
@@ -538,14 +528,198 @@ document.documentElement.lang = 'zh-CN';
 
 
 /* ========================================================================
- * 05 · PWA 安装配置
+ * 05 · PWA 安装配置与使用统计
  * ========================================================================
  * /pwa/ 下的 Manifest 和图标由 Cloudflare 单独托管；详见 pwa/README.md。
  * Manifest 声明应用名称、图标、启动页、独立窗口和默认主题色。
- * 不拦截 beforeinstallprompt，让浏览器按自身规则提供原生安装入口或提示。
+ * 主页按钮：可安装时调用原生提示；检测到已安装时请求在应用中打开。
+ * 不能提供安装入口时显示添加到主屏幕的提示；在应用窗口内隐藏该区域。
+ * 保存 beforeinstallprompt，但不取消默认行为，保留浏览器自身的安装推广。
  * 是否弹出以及何时弹出，取决于浏览器、访问互动和用户之前的安装选择。
+ * GA4：pwa_install_click 记录有效安装按钮点击；pwa_view 记录独立窗口查看。
  * ======================================================================== */
 (function () {
+  /* ---------- 主页安装按钮 ---------- */
+
+  var installPrompt = null;
+  var installed = false;
+  var installationCheck = 0;
+  var standalone = window.matchMedia
+    ? window.matchMedia('(display-mode: standalone)') : null;
+
+  function isPwaWindow() {
+    return !!((standalone && standalone.matches) ||
+      (window.navigator && window.navigator.standalone));
+  }
+
+  function canPromptInstall() {
+    return !!installPrompt && !installed && !isPwaWindow();
+  }
+
+  /* ---------- PWA 查看人数：按事件的「总用户数」查看 ---------- */
+
+  var lastPwaLocation = null;
+  function trackPwaView() {
+    if (!isPwaWindow()) {
+      lastPwaLocation = null;
+      return;
+    }
+    if (document.visibilityState === 'hidden') return;
+    // 同页锚点、重复导航通知不重复计数；切换笔记或返回上一页可再次记录。
+    var location = window.location.href.split('#')[0];
+    if (location === lastPwaLocation) return;
+    lastPwaLocation = location;
+    kurokawaTrackEvent('pwa_view');
+  }
+
+  // 常驻应用回到前台也记录一次，覆盖隔日继续使用同一页面的情况。
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') lastPwaLocation = null;
+    else trackPwaView();
+  });
+
+  var navigationAttempts = 0;
+  function connectPwaAnalytics() {
+    var publish = window.publish;
+    if (publish && publish.render && typeof publish.on === 'function') {
+      publish.on('navigated', trackPwaView);
+      trackPwaView();
+      return;
+    }
+    // Publish 正文稍后加载；最多等待约 10 秒，然后仍可记录独立窗口访问。
+    if (++navigationAttempts < 50) setTimeout(connectPwaAnalytics, 200);
+    else trackPwaView();
+  }
+  connectPwaAnalytics();
+
+  function updateInstallButtons() {
+    var mode = isPwaWindow() ? 'hidden' : installed ? 'open' :
+      canPromptInstall() ? 'install' : 'help';
+    var areas = document.querySelectorAll('[data-pwa-install-ui]');
+    for (var i = 0; i < areas.length; i++) {
+      var area = areas[i];
+      area.hidden = mode === 'hidden';
+      // 现有 flex 样式可能覆盖浏览器默认的 [hidden]，因此同时控制 display。
+      area.style.display = mode === 'hidden' ? 'none' : '';
+      var button = area.querySelector('[data-pwa-install]');
+      if (button) {
+        if (button._pwaInstallLabel === undefined) button._pwaInstallLabel = button.textContent;
+        var label = mode === 'open' ? '在 黑川物流 中打开' : button._pwaInstallLabel;
+        // 仅在文案变化时写入，避免触发正文观察器的循环。
+        if (button.textContent !== label) button.textContent = label;
+        var available = mode === 'install' || mode === 'open';
+        button.hidden = !available;
+        button.style.display = available ? '' : 'none';
+        button.disabled = !available;
+      }
+      var hint = area.querySelector('.cuigeng-hint');
+      if (hint) {
+        if (hint._pwaInstallHint === undefined) hint._pwaInstallHint = hint.textContent;
+        var description = mode === 'help'
+          ? '您还可以将 黑川物流 添加到主屏幕来获得最完整的体验。'
+          : mode === 'open' ? '以独立应用窗口打开本站' : hint._pwaInstallHint;
+        if (hint.textContent !== description) hint.textContent = description;
+      }
+    }
+  }
+
+  function checkInstalledPwa() {
+    if (isPwaWindow() || !window.navigator ||
+        typeof window.navigator.getInstalledRelatedApps !== 'function') return;
+    var check = ++installationCheck;
+    try {
+      window.navigator.getInstalledRelatedApps().then(function (apps) {
+        if (check !== installationCheck) return;
+        // 只识别本站 PWA，不能把其他关联应用当成本站已安装。
+        installed = apps.some(function (app) {
+          if (app.platform !== 'webapp') return false;
+          try {
+            if (app.id) return new URL(app.id, origin + '/').href === origin + '/';
+            return new URL(app.url, origin + '/').href ===
+              origin + '/pwa/manifest.webmanifest';
+          } catch (error) { return false; }
+        });
+        if (installed) installPrompt = null;
+        updateInstallButtons();
+      }, function () {
+        // 不支持或拒绝检测时保留当前可用入口，不猜测安装状态。
+      });
+    } catch (error) {
+      // 接口存在但不可用时保留原生安装/主屏幕提示。
+    }
+  }
+
+  function clearInstallPrompt(event) {
+    if (installPrompt !== event) return;
+    installPrompt = null;
+    updateInstallButtons();
+  }
+
+  window.addEventListener('beforeinstallprompt', function (event) {
+    if (typeof event.prompt !== 'function') return;
+    ++installationCheck;
+    installed = false;
+    // 不调用 preventDefault：浏览器仍可按自身策略展示原生推广。
+    installPrompt = event;
+    updateInstallButtons();
+    // 用户也可能从地址栏安装；原生提示被接受或关闭后，旧事件不可再次使用。
+    if (event.userChoice && typeof event.userChoice.then === 'function') {
+      event.userChoice.then(function () { clearInstallPrompt(event); },
+        function () { clearInstallPrompt(event); });
+    }
+  });
+
+  document.addEventListener('click', function (event) {
+    var button = event.target && event.target.closest
+      ? event.target.closest('[data-pwa-install]') : null;
+    if (!button || isPwaWindow()) return;
+    if (installed) {
+      // 新的无 opener 顶层导航可交给浏览器捕获到已安装的应用。
+      // 是否交给 PWA 仍取决于浏览器支持和用户的“在应用中打开链接”设置。
+      window.open(window.location.href, '_blank', 'noopener');
+      return;
+    }
+    if (!canPromptInstall()) return;
+    var promptEvent = installPrompt;
+    // 每个事件只能调用一次 prompt；先清除，防止连续点击重复弹出。
+    installPrompt = null;
+    updateInstallButtons();
+    try {
+      // 必须直接在用户点击回调中调用，保留浏览器要求的用户操作状态。
+      var result = promptEvent.prompt();
+      if (result && typeof result.catch === 'function') result.catch(function () {});
+    } catch (error) {
+      // 浏览器已使用或撤销该事件时，等待下一次可安装通知。
+    }
+    // 先同步调起原生提示，再发送统计；点击不等于用户确认安装。
+    kurokawaTrackEvent('pwa_install_click');
+  });
+
+  window.addEventListener('appinstalled', function () {
+    ++installationCheck;
+    installed = true;
+    installPrompt = null;
+    updateInstallButtons();
+  });
+  if (standalone && typeof standalone.addEventListener === 'function') {
+    standalone.addEventListener('change', function () {
+      updateInstallButtons();
+      trackPwaView();
+      checkInstalledPwa();
+    });
+  }
+  window.addEventListener('focus', checkInstalledPwa);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState !== 'hidden') checkInstalledPwa();
+  });
+  // Publish 正文异步插入、站内跳转及堆叠窗格都会产生新的主页按钮。
+  new MutationObserver(function () {
+    updateInstallButtons();
+  }).observe(document.body, { childList: true, subtree: true });
+  updateInstallButtons();
+
+  /* ---------- 安装清单与图标 ---------- */
+
   // Publish 设置了指向 obsidian.md 的 <base>，必须明确使用当前网页域名。
   var origin = window.location.origin;
 
@@ -554,6 +728,7 @@ document.documentElement.lang = 'zh-CN';
     manifest.rel = 'manifest';
     manifest.type = 'application/manifest+json';
     manifest.href = origin + '/pwa/manifest.webmanifest';
+    manifest.addEventListener('load', checkInstalledPwa);
     document.head.appendChild(manifest);
   }
 
@@ -561,7 +736,7 @@ document.documentElement.lang = 'zh-CN';
     var icon = document.createElement('link');
     icon.rel = 'apple-touch-icon';
     icon.sizes = '180x180';
-    icon.href = origin + '/pwa/icons/apple-touch-icon.png';
+    icon.href = origin + '/pwa/icons/apple-touch-icon-v2.png';
     document.head.appendChild(icon);
   }
 
@@ -572,4 +747,5 @@ document.documentElement.lang = 'zh-CN';
     meta.content = '黑川物流';
     document.head.appendChild(meta);
   });
+  checkInstalledPwa();
 })();
