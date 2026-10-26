@@ -6,11 +6,13 @@
  *   02 · 页面外观：浏览器配色与按笔记属性设置的页面背景图。
  *   03 · 催更按钮：点击统计、共享计数及按钮反馈。
  *   04 · KKN 语法高亮：已停用，历史代码保留备用。
+ *   05 · PWA 安装配置：引入应用清单和图标，由浏览器提供原生安装入口。
  *
  * 外部服务（仅由 03 使用）
  *   Google Analytics：记录催更点击，通过 googletagmanager.com 加载统计脚本。
  *   Abacus / abacus.jasoncameron.dev：保存、读取累计催更点击次数。
  *   02 使用 Publish 已加载的笔记缓存；背景图由浏览器从填写的链接加载。
+ *   05 从主站 /pwa/ 加载安装配置与图标；资源部署说明见仓库 pwa/README.md。
  *
  * 发布方式：将本文件放在 Obsidian 仓库根目录，在「发布更改」中发布。
  * 自定义 JavaScript 需要绑定自定义域名；修改后刷新网页以加载新脚本。
@@ -533,3 +535,41 @@ document.documentElement.lang = 'zh-CN';
 //     })(attempts[i]);
 //   }
 // })();
+
+
+/* ========================================================================
+ * 05 · PWA 安装配置
+ * ========================================================================
+ * /pwa/ 下的 Manifest 和图标由 Cloudflare 单独托管；详见 pwa/README.md。
+ * Manifest 声明应用名称、图标、启动页、独立窗口和默认主题色。
+ * 不拦截 beforeinstallprompt，让浏览器按自身规则提供原生安装入口或提示。
+ * 是否弹出以及何时弹出，取决于浏览器、访问互动和用户之前的安装选择。
+ * ======================================================================== */
+(function () {
+  // Publish 设置了指向 obsidian.md 的 <base>，必须明确使用当前网页域名。
+  var origin = window.location.origin;
+
+  if (!document.querySelector('link[rel="manifest"]')) {
+    var manifest = document.createElement('link');
+    manifest.rel = 'manifest';
+    manifest.type = 'application/manifest+json';
+    manifest.href = origin + '/pwa/manifest.webmanifest';
+    document.head.appendChild(manifest);
+  }
+
+  if (!document.querySelector('link[rel="apple-touch-icon"]')) {
+    var icon = document.createElement('link');
+    icon.rel = 'apple-touch-icon';
+    icon.sizes = '180x180';
+    icon.href = origin + '/pwa/icons/apple-touch-icon.png';
+    document.head.appendChild(icon);
+  }
+
+  ['application-name', 'apple-mobile-web-app-title'].forEach(function (name) {
+    if (document.querySelector('meta[name="' + name + '"]')) return;
+    var meta = document.createElement('meta');
+    meta.name = name;
+    meta.content = '黑川物流';
+    document.head.appendChild(meta);
+  });
+})();

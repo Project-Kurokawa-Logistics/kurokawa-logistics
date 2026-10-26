@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kurokawa-logistics-pwa",
+  "compatibility_date": "2026-10-26",
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./public"
+  },
+  "routes": [
+    {
+      "pattern": "kurokawa-logistics.com/pwa/*",
+      "zone_name": "kurokawa-logistics.com"
+    }
+  ]
+}
