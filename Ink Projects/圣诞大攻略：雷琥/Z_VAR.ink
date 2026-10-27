@@ -7,8 +7,24 @@ VAR Choose_YeHen = 0
 VAR Choose_CenYe = 0
 VAR Choose_LeiHu = 0
 
-//  结局计数
+//  结局计数（只统计正片实际达成的不同结局）
 VAR FinaleCount = 0
+
+// 正片结局达成记录：不因 Knot 被访问或开发者预览而自动设置
+VAR Ending_F1_Achieved = false
+VAR Ending_F2_Achieved = false
+VAR Ending_F3_Achieved = false
+VAR Ending_F4_Achieved = false
+VAR Ending_F5_Achieved = false
+VAR Ending_F6_Achieved = false
+VAR Ending_F7_Achieved = false
+VAR Ending_F8_Achieved = false
+VAR Ending_F9_Achieved = false
+VAR Ending_F10_Achieved = false
+VAR Ending_F11_Achieved = false
+
+// 从结局回顾或开发者菜单预览时，不记录新的正片结局
+VAR IsPreviewMode = false
 
 === CleanData
 ~   Rate_LeiHu = 0
@@ -16,6 +32,7 @@ VAR FinaleCount = 0
 ~   Choose_YeHen = 0
 ~   Choose_CenYe = 0
 ~   Choose_LeiHu = 0
+~   IsPreviewMode = false
 ->->
 
 === ShowData
@@ -29,37 +46,37 @@ VAR FinaleCount = 0
 === CountFinale
 ~ FinaleCount = 0
 
-{Finale.F1:
+{Ending_F1_Achieved:
     ~   FinaleCount++
 }
-{Finale.F2:
+{Ending_F2_Achieved:
     ~   FinaleCount++
 }
-{Finale.F3:
+{Ending_F3_Achieved:
     ~   FinaleCount++
 }
-{Finale.F4:
+{Ending_F4_Achieved:
     ~   FinaleCount++
 }
-{Finale.F5:
+{Ending_F5_Achieved:
     ~   FinaleCount++
 }
-{Finale.F6:
+{Ending_F6_Achieved:
     ~   FinaleCount++
 }
-{Finale.F7:
+{Ending_F7_Achieved:
     ~   FinaleCount++
 }
-{Finale.F8:
+{Ending_F8_Achieved:
     ~   FinaleCount++
 }
-{Finale.F9:
+{Ending_F9_Achieved:
     ~   FinaleCount++
 }
-{Finale.F10:
+{Ending_F10_Achieved:
     ~   FinaleCount++
 }
-{Finale.F11:
+{Ending_F11_Achieved:
     ~   FinaleCount++
 }
 您已经尝试攻略雷琥 {START} 次，达成了 {FinaleCount} 个结局，共计 11 个结局。
@@ -80,27 +97,38 @@ VAR FinaleCount = 0
 
 
 === FinaleList
-+   {Finale.F1}1.普通结局《臭味》
++   {Ending_F1_Achieved}1.普通结局《臭味》
+        ~ IsPreviewMode = true
         ->Finale.F1
-+   {Finale.F2}2.最佳结局《“为什么告诉我这些”》
++   {Ending_F2_Achieved}2.最佳结局《“为什么告诉我这些”》
+        ~ IsPreviewMode = true
         ->Finale.F2
-+   {Finale.F3}3.好结局《“我知道了”》
++   {Ending_F3_Achieved}3.好结局《“我知道了”》
+        ~ IsPreviewMode = true
         ->Finale.F3
-+   {Finale.F4}4.普通结局《唉……体育生》
++   {Ending_F4_Achieved}4.普通结局《唉……体育生》
+        ~ IsPreviewMode = true
         ->Finale.F4
-+   {Finale.F5}5.普通结局《服从》
++   {Ending_F5_Achieved}5.普通结局《服从》
+        ~ IsPreviewMode = true
         ->Finale.F5
-+   {Finale.F6}6.普通结局《“求主人……”》
++   {Ending_F6_Achieved}6.普通结局《“求主人……”》
+        ~ IsPreviewMode = true
         ->Finale.F6
-+   {Finale.F7}7.坏结局《失踪》
++   {Ending_F7_Achieved}7.坏结局《失踪》
+        ~ IsPreviewMode = true
         ->Finale.F7
-+   {Finale.F8}8.一般结局《担心身体》
++   {Ending_F8_Achieved}8.一般结局《担心身体》
+        ~ IsPreviewMode = true
         ->Finale.F8
-+   {Finale.F9}9.好结局《好好吃饭》
++   {Ending_F9_Achieved}9.好结局《好好吃饭》
+        ~ IsPreviewMode = true
         ->Finale.F9
-+   {Finale.F10}10.真正结局《袒露心声》
++   {Ending_F10_Achieved}10.真正结局《袒露心声》
+        ~ IsPreviewMode = true
         ->Finale.F10
-+   {Finale.F11}11.最坏结局《圣诞快乐》
++   {Ending_F11_Achieved}11.最坏结局《圣诞快乐》
+        ~ IsPreviewMode = true
         ->Finale.F11
 +   (Dev_Unlock)————————————————
         {Dev_Unlock < 5:
@@ -127,26 +155,37 @@ VAR FinaleCount = 0
 
 === All_Finale
 +   1.普通结局《臭味》
+        ~ IsPreviewMode = true
         ->Finale.F1
 +   2.最佳结局《“为什么告诉我这些”》
+        ~ IsPreviewMode = true
         ->Finale.F2
 +   3.好结局《“我知道了”》
+        ~ IsPreviewMode = true
         ->Finale.F3
 +   4.普通结局《唉……体育生》
+        ~ IsPreviewMode = true
         ->Finale.F4
 +   5.普通结局《服从》
+        ~ IsPreviewMode = true
         ->Finale.F5
 +   6.普通结局《“求主人……”》
+        ~ IsPreviewMode = true
         ->Finale.F6
 +   7.坏结局《失踪》
+        ~ IsPreviewMode = true
         ->Finale.F7
 +   8.一般结局《担心身体》
+        ~ IsPreviewMode = true
         ->Finale.F8
 +   9.好结局《好好吃饭》
+        ~ IsPreviewMode = true
         ->Finale.F9
 +   10.真正结局《袒露心声》
+        ~ IsPreviewMode = true
         ->Finale.F10
 +   11.最坏结局《圣诞快乐》
+        ~ IsPreviewMode = true
         ->Finale.F11
 +   [返回上一级]
 ->->
