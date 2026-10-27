@@ -3,9 +3,6 @@
 // Mental-state score. -1 identifies the first launch; each new route adds 10, repeats add 5.
 VAR SAN_SCORE = -1
 
-// Retained for compatibility with the original story data; currently not used by route logic.
-VAR LAST_NODE = "First"
-
 // Completed route endings / reconnect count.
 VAR COUNT_GAME_OVER = 0
 

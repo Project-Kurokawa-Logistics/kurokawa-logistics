@@ -20,6 +20,8 @@
 
 ……
 
-+   回到标题
++   {HAS_ENTERED_FINAL_RECONCILIATION == false} 回到标题
 
     ->  Check__Environment
+
+->  END

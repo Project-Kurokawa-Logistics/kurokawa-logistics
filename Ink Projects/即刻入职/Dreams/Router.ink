@@ -12,6 +12,10 @@
     - Get__Aboard_Status() == "No.8" and HAS_ENTERED_FINAL_RECONCILIATION == true:
         -> Ending__No8_Reality
 
+    - Get__Forced_Intrusion() != "NONE":
+        // Forced AZ intrusion takes precedence over the random dream roll.
+        -> Flow__Startup.Check
+
     - Get__Sanity_State(SAN_SCORE) == "FINE":
         -> Flow__Startup
 
