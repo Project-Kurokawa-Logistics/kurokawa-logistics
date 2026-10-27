@@ -5,6 +5,15 @@
 =   Check
 
 {
+    - Get__Aboard_Status() == "DRONE":
+        -> Check__Environment
+
+    - Get__Aboard_Status() == "No.8" and HAS_ENTERED_FINAL_RECONCILIATION == false:
+        -> Ending__Final_Reconciliation
+
+    - Get__Aboard_Status() == "No.8" and HAS_ENTERED_FINAL_RECONCILIATION == true:
+        -> Ending__No8_Reality
+
     - Get__Forced_Intrusion() == "WORK":
         <-  Check__Common1
         ->  Work__Shutdown
@@ -69,13 +78,11 @@
 
     一把砸了闹钟。
 
--   Get__Aboard_Status() == "No.8":
-
 -   else:
 
     你愣了一下，努力把精神重新集中起来。
 
-    ->  BUG
+    ->  Dev__BUG
 
 }
 
