@@ -1,6 +1,6 @@
 === Ending__No8_Reality
 
-// TODO(author): Expand the real-world awakening scene. The previous placeholder is retained here as an author-facing task, not player-visible text.
+// TODO(author): 原稿占位：“接续被 AZ 从黑胶真空密封袋中放出来”；“还在编写”。请在正式创作时扩写完整的现实苏醒场景。
 
 意识重新落地。
 
