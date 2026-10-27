@@ -36,7 +36,7 @@ document.documentElement.lang = 'zh-CN';
  * 背景用法：文本属性 background-image 填图片链接；background-mode 可选。
  * 倾斜用法：数字属性 background-rotation 填角度，正数顺时针、负数逆时针。
  * 显示模式：居中填充（默认）、平铺、拉伸、居中、适应。
- * 背景只叠加在所属笔记窗格的主题底色上，以 5% 不透明度显示。
+ * 背景只叠加在所属笔记窗格的主题底色上，以 10% 不透明度显示。
  * 堆叠窗格分别使用各自笔记的背景属性，导航栏和其他窗格不受影响。
  * 时机：首次加载以及 Publish 的 navigated（切换笔记）事件。
  *
@@ -52,8 +52,8 @@ document.documentElement.lang = 'zh-CN';
 
   // 默认留空：未填写或填写无效时恢复原配色。可改成 '#2563EB'。
   var DEFAULT_COLOR = '';
-  // 0.05 表示图片只显示 5%，其余 95% 为当前明亮 / 暗黑主题底色。
-  var BACKGROUND_OPACITY = 0.05;
+  // 0.10 表示图片显示 10%，其余 90% 为当前明亮 / 暗黑主题底色。
+  var BACKGROUND_OPACITY = 0.10;
   // 只保存本功能创建的 meta，便于恢复时保留网站原有标签。
   var themeMeta = null;
   var backgroundStyle = null;
