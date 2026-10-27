@@ -1,4 +1,4 @@
-=== Navigator
+=== Flow__Navigator
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -10,7 +10,7 @@
 
 //  初次启动故事
 
--   INDEX == -1:
+-   SAN_SCORE == -1:
 
     ->  ChuCiQiDongJieShao
 
@@ -18,7 +18,7 @@
 
 //  精神即将崩溃，就想呆在家
 
--   Check__SAN(INDEX) == "AWFUL":
+-   Get__Sanity_State(SAN_SCORE) == "AWFUL":
 
     那里也不想去。就想呆在家里，感觉精神慌慌的。觉得今天外面的世界要毁灭。
 
@@ -30,7 +30,7 @@
 
 //  BAD：上终, 电影
 
--   Check__SAN(INDEX) == "BAD" and Flag__Work__Shutdown != 0 and Flag__Break__Cinema != 0 and Flag__Break__Home == 0:
+-   Get__Sanity_State(SAN_SCORE) == "BAD" and COUNT_ROUTE_WORK_SHUTDOWN != 0 and COUNT_ROUTE_BREAK_CINEMA != 0 and COUNT_ROUTE_BREAK_HOME == 0:
 
     天王老子来了也不会去上班的。
 
@@ -40,7 +40,7 @@
 
 //  BAD：上终, 快递
 
--   Check__SAN(INDEX) == "BAD" and Flag__Work__Shutdown != 0 and Flag__Break__Cinema == 0 and Flag__Break__Home != 0:
+-   Get__Sanity_State(SAN_SCORE) == "BAD" and COUNT_ROUTE_WORK_SHUTDOWN != 0 and COUNT_ROUTE_BREAK_CINEMA == 0 and COUNT_ROUTE_BREAK_HOME != 0:
 
     今天就是天王老子来了也不去上班。今天可是首映，出去走走呼吸新鲜空气。
 
@@ -48,7 +48,7 @@
 
 //  BAD：电影, 快递
 
--   Check__SAN(INDEX) == "BAD" and Flag__Work__Shutdown == 0 and Flag__Break__Cinema != 0 and Flag__Break__Home != 0:
+-   Get__Sanity_State(SAN_SCORE) == "BAD" and COUNT_ROUTE_WORK_SHUTDOWN == 0 and COUNT_ROUTE_BREAK_CINEMA != 0 and COUNT_ROUTE_BREAK_HOME != 0:
 
     谁还不是吊着一口气呢……虽然想休息，但是觉得公司还有事情做，不如还是去上班吧。
 
@@ -56,7 +56,7 @@
 
 //  BAD：只收过快递
 
--   Check__SAN(INDEX) == "BAD" and Flag__Work__Shutdown == 0 and Flag__Break__Cinema == 0 and Flag__Break__Home != 0:
+-   Get__Sanity_State(SAN_SCORE) == "BAD" and COUNT_ROUTE_WORK_SHUTDOWN == 0 and COUNT_ROUTE_BREAK_CINEMA == 0 and COUNT_ROUTE_BREAK_HOME != 0:
 
     精神不太好，但是还是可以去上班……不过今天是某个电影的首映，出去走走呼吸新鲜空气。
 
@@ -64,7 +64,7 @@
 
 //  BAD：只看过电影
 
--   Check__SAN(INDEX) == "BAD" and Flag__Work__Shutdown == 0 and Flag__Break__Cinema != 0 and Flag__Break__Home == 0:
+-   Get__Sanity_State(SAN_SCORE) == "BAD" and COUNT_ROUTE_WORK_SHUTDOWN == 0 and COUNT_ROUTE_BREAK_CINEMA != 0 and COUNT_ROUTE_BREAK_HOME == 0:
 
     可以上班，但是更想在家里休息，首映会什么的就以后看回放也无所谓。
 
@@ -72,7 +72,7 @@
 
 //  BAD：只读过上终
 
--   Check__SAN(INDEX) == "BAD" and Flag__Work__Shutdown != 0 and Flag__Break__Cinema == 0 and Flag__Break__Home == 0:
+-   Get__Sanity_State(SAN_SCORE) == "BAD" and COUNT_ROUTE_WORK_SHUTDOWN != 0 and COUNT_ROUTE_BREAK_CINEMA == 0 and COUNT_ROUTE_BREAK_HOME == 0:
 
     今天就是天王老子来了我也不会去上班。我今天就要休息。
 
@@ -80,7 +80,7 @@
 
 //  BAD 三件事都可以去，小憩是否不影响，所以在这里。
 
--   Check__SAN(INDEX) == "BAD" and Flag__Work__Shutdown == 0 and Flag__Break__Cinema == 0 and Flag__Break__Home == 0:
+-   Get__Sanity_State(SAN_SCORE) == "BAD" and COUNT_ROUTE_WORK_SHUTDOWN == 0 and COUNT_ROUTE_BREAK_CINEMA == 0 and COUNT_ROUTE_BREAK_HOME == 0:
 
     感觉精神不太好。倒是可以去上班。不过如果休息一下也许会更好。
 
@@ -88,7 +88,7 @@
 
 //  OK：三个 OK 的事件都做了
 
--   Check__SAN(INDEX) == "OK" and Flag__Work__Business_Trip != 0 and Flag__Work__Off_Work != 0 and Flag__Break__Interview != 0:
+-   Get__Sanity_State(SAN_SCORE) == "OK" and COUNT_ROUTE_WORK_BUSINESS_TRIP != 0 and COUNT_ROUTE_WORK_OFF_WORK != 0 and COUNT_ROUTE_BREAK_INTERVIEW != 0:
 
     <-  KKL_Letter
 
@@ -100,7 +100,7 @@
 
 //  OK：三个 OK 的事件都没做
 
--   Check__SAN(INDEX) == "OK" and Flag__Work__Business_Trip == 0 and Flag__Work__Off_Work == 0 and Flag__Break__Interview == 0:
+-   Get__Sanity_State(SAN_SCORE) == "OK" and COUNT_ROUTE_WORK_BUSINESS_TRIP == 0 and COUNT_ROUTE_WORK_OFF_WORK == 0 and COUNT_ROUTE_BREAK_INTERVIEW == 0:
 
     <-  KKL_Letter
 
@@ -110,7 +110,7 @@
 
 //  OK：仅没面试
 
--   Check__SAN(INDEX) == "OK" and Flag__Work__Business_Trip != 0 and Flag__Work__Off_Work != 0 and Flag__Break__Interview == 0:
+-   Get__Sanity_State(SAN_SCORE) == "OK" and COUNT_ROUTE_WORK_BUSINESS_TRIP != 0 and COUNT_ROUTE_WORK_OFF_WORK != 0 and COUNT_ROUTE_BREAK_INTERVIEW == 0:
 
     <-  KKL_Letter
 
@@ -120,7 +120,7 @@
 
 //  OK：仅没出差
 
--   Check__SAN(INDEX) == "OK" and Flag__Work__Business_Trip == 0 and Flag__Work__Off_Work != 0 and Flag__Break__Interview != 0:
+-   Get__Sanity_State(SAN_SCORE) == "OK" and COUNT_ROUTE_WORK_BUSINESS_TRIP == 0 and COUNT_ROUTE_WORK_OFF_WORK != 0 and COUNT_ROUTE_BREAK_INTERVIEW != 0:
 
     <-  KKL_Letter
 
@@ -130,7 +130,7 @@
 
 //  OK：仅没下班
 
--   Check__SAN(INDEX) == "OK" and Flag__Work__Business_Trip != 0 and Flag__Work__Off_Work == 0 and Flag__Break__Interview != 0:
+-   Get__Sanity_State(SAN_SCORE) == "OK" and COUNT_ROUTE_WORK_BUSINESS_TRIP != 0 and COUNT_ROUTE_WORK_OFF_WORK == 0 and COUNT_ROUTE_BREAK_INTERVIEW != 0:
 
     <-  KKL_Letter
 
@@ -140,7 +140,7 @@
 
 //  OK：只面试过
 
--   Check__SAN(INDEX) == "OK" and Flag__Work__Business_Trip == 0 and Flag__Work__Off_Work == 0 and Flag__Break__Interview != 0:
+-   Get__Sanity_State(SAN_SCORE) == "OK" and COUNT_ROUTE_WORK_BUSINESS_TRIP == 0 and COUNT_ROUTE_WORK_OFF_WORK == 0 and COUNT_ROUTE_BREAK_INTERVIEW != 0:
 
     <-  KKL_Letter
 
@@ -150,7 +150,7 @@
 
 //  OK：只下班过
 
--   Check__SAN(INDEX) == "OK" and Flag__Work__Business_Trip == 0 and Flag__Work__Off_Work != 0 and Flag__Break__Interview == 0:
+-   Get__Sanity_State(SAN_SCORE) == "OK" and COUNT_ROUTE_WORK_BUSINESS_TRIP == 0 and COUNT_ROUTE_WORK_OFF_WORK != 0 and COUNT_ROUTE_BREAK_INTERVIEW == 0:
 
     <-  KKL_Letter
 
@@ -160,7 +160,7 @@
 
 //  OK：只出差过
 
--   Check__SAN(INDEX) == "OK" and Flag__Work__Business_Trip != 0 and Flag__Work__Off_Work == 0 and Flag__Break__Interview == 0:
+-   Get__Sanity_State(SAN_SCORE) == "OK" and COUNT_ROUTE_WORK_BUSINESS_TRIP != 0 and COUNT_ROUTE_WORK_OFF_WORK == 0 and COUNT_ROUTE_BREAK_INTERVIEW == 0:
 
     <-  KKL_Letter
 
@@ -170,7 +170,7 @@
 
 //  OK：其它
 
--   Check__SAN(INDEX) == "OK":
+-   Get__Sanity_State(SAN_SCORE) == "OK":
 
     OK【这个情况似乎没有考虑到】
 
@@ -178,7 +178,7 @@
 
 //  FINE：已健身、下班
 
--   Check__SAN(INDEX) == "FINE" and Flag__Work__Gym != 0 and Flag__Work__Off_Work != 0:
+-   Get__Sanity_State(SAN_SCORE) == "FINE" and COUNT_ROUTE_WORK_GYM != 0 and COUNT_ROUTE_WORK_OFF_WORK != 0:
 
     <-  KKL_Letter
 
@@ -188,7 +188,7 @@
 
 //  FINE：已下班
 
--   Check__SAN(INDEX) == "FINE" and Flag__Work__Gym == 0 and Flag__Work__Off_Work != 0:
+-   Get__Sanity_State(SAN_SCORE) == "FINE" and COUNT_ROUTE_WORK_GYM == 0 and COUNT_ROUTE_WORK_OFF_WORK != 0:
 
     <-  KKL_Letter
 
@@ -198,7 +198,7 @@
 
 //  FINE：已健身
 
--   Check__SAN(INDEX) == "FINE" and Flag__Work__Gym != 0 and Flag__Work__Off_Work == 0:
+-   Get__Sanity_State(SAN_SCORE) == "FINE" and COUNT_ROUTE_WORK_GYM != 0 and COUNT_ROUTE_WORK_OFF_WORK == 0:
 
     <-  KKL_Letter
 
@@ -208,7 +208,7 @@
 
 //  FINE：其它的 FINE
 
--   Check__SAN(INDEX) == "FINE":
+-   Get__Sanity_State(SAN_SCORE) == "FINE":
 
     <-  KKL_Letter
 
@@ -226,7 +226,7 @@
 
 }
 
-->  Base__Going_To
+->  Flow__Going_To
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -238,9 +238,9 @@
 
 //  完整内容
 
--   INDEX == -1:
+-   SAN_SCORE == -1:
 
-    ~   INDEX ++
+    ~   SAN_SCORE ++
 
 <h1>黑川物流市场部面试邀请函</h1>
 
@@ -278,7 +278,7 @@
 
 //  OK 的信
 
--   Check__SAN(INDEX) == "OK":
+-   Get__Sanity_State(SAN_SCORE) == "OK":
 
     OK 时的信。有一点点想请假。
 
@@ -288,7 +288,7 @@
 
 //  FINE 时的信。
 
--   Check__SAN(INDEX) == "FINE":
+-   Get__Sanity_State(SAN_SCORE) == "FINE":
 
     FINE 时的信。
 
@@ -460,4 +460,4 @@
 
 那么，今天……
 
-->  Base__Going_To
+->  Flow__Going_To

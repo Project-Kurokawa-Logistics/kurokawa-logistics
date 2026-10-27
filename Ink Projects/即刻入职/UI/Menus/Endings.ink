@@ -4,15 +4,15 @@
 
     # CLEAR
 
-    ->  Endings__Index
+    ->  Ending__Route_Gallery
 
-+   {Separator_Count <= 5} 返回标题
++   {COUNT_MENU_SEPARATOR <= 5} 返回标题
 
     # CLEAR
 
-    ->  Check__Env
+    ->  Check__Environment
 
-+   {Separator_Count > 5} 重置游戏
++   {COUNT_MENU_SEPARATOR > 5} 重置游戏
 
     # RESTART
 

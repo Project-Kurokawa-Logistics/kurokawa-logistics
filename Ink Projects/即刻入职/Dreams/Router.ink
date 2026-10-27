@@ -1,95 +1,57 @@
-=== Dream__Index
+=== Dream__Router
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+= Check
+{
+    - Get__Aboard_Status() == "DRONE":
+        -> Check__Environment
 
-=   Check
+    - Get__Aboard_Status() == "No.8" and HAS_ENTERED_FINAL_RECONCILIATION == false:
+        // The white-space reconciliation is the final awakening; do not roll another dream first.
+        -> Ending__Final_Reconciliation
 
-~   temp Roll = RANDOM(1,100)
+    - Get__Aboard_Status() == "No.8" and HAS_ENTERED_FINAL_RECONCILIATION == true:
+        -> Ending__No8_Reality
 
-/*
+    - Get__Sanity_State(SAN_SCORE) == "FINE":
+        -> Flow__Startup
 
-【DEV】Roll = {Roll}
+    - else:
+        -> Check__Dream_Chance
+}
 
-【DEV】INDEX = {INDEX}
+= Check__Dream_Chance
 
-【DEV】SAN：{Check__SAN(INDEX)}
-
-*/
+~ temp Roll = RANDOM(1,100)
 
 {
+    - Get__Sanity_State(SAN_SCORE) == "OK" and Roll <= 50:
+        -> Shuffle
 
--   Check__SAN(INDEX) == "FINE":
+    - Get__Sanity_State(SAN_SCORE) == "OK" and Roll > 50:
+        -> Flow__Startup
 
-    //  【DEV】精神状态良好不用随机做梦。
+    - Get__Sanity_State(SAN_SCORE) == "BAD" and Roll <= 75:
+        -> Shuffle
 
-    ->  Base__Startup
+    - Get__Sanity_State(SAN_SCORE) == "BAD" and Roll > 75:
+        -> Flow__Startup
 
--   Check__SAN(INDEX) == "OK" && Roll <= 50:
+    - Get__Sanity_State(SAN_SCORE) == "AWFUL":
+        -> Shuffle
 
-    【DEV】Roll 到了梦境。50%
-
-    ->  Shuffle
-
--   Check__SAN(INDEX) == "OK" && Roll > 50:
-
-    【DEV】没 Roll 到梦境。50%
-
-    ->  Base__Startup
-
--   Check__SAN(INDEX) == "BAD" && Roll <= 75:
-
-    【DEV】Roll 到了梦境。75%
-
-    ->  Shuffle
-
--   Check__SAN(INDEX) == "BAD" && Roll > 75:
-
-    【DEV】没 Roll 到梦境。25%
-
-    ->  Base__Startup
-
--   Check__SAN(INDEX) == "AWFUL" && Roll <= 100:
-
-    【DEV】精神濒临崩溃，必做梦。100%
-
-    ->  Shuffle
-
--   else:
-
-    其他情况。出 BUG 了
-
-    ->  BUG
-
+    - else:
+        -> Dev__BUG
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+= Shuffle
 
-=   Shuffle
-
-{   shuffle:
-
-    -   <-  Dream1
-
-    -   <-  Dream2
-
-    -   <-  Dream3
-
-    -   <-  Dream4
-
-    -   <-  Dream5
-
-    -   <-  Dream6
-
+{ shuffle:
+    - <- Dream1
+    - <- Dream2
+    - <- Dream3
+    - <- Dream4
+    - <- Dream5
+    - <- Dream6
 }
 
-{
-
--   Check__Aboard_Status() == "No.8":
-
-    ->  Base__Wakeup
-
--   else:
-
-    ->  Base__Startup
-
-}
+-> Flow__Startup

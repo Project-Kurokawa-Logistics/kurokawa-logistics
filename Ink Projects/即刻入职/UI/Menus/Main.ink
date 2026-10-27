@@ -2,59 +2,59 @@
 
 /*
 
-【DEV】INDEX = {INDEX}
+【DEV】SAN_SCORE = {SAN_SCORE}
 
-【DEV】Check__SAN(INDEX)：{Check__SAN(INDEX)}
+【DEV】Get__Sanity_State(SAN_SCORE)：{Get__Sanity_State(SAN_SCORE)}
 
 */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-+   {Count__Game_Over == 0} [初始化] # CLEAR
++   {COUNT_GAME_OVER == 0 and UNLOCKED_NO8_DATABASE == false} [初始化] # CLEAR
 
-    ->  Dream__Index.Check
+    ->  Dream__Router.Check
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-+   {Count__Game_Over != 0 and Flag__Base__Wakeup == 0} 重新连接：第 {Count__Game_Over} 次
++   {COUNT_GAME_OVER != 0 and HAS_ENTERED_FINAL_RECONCILIATION == false and UNLOCKED_NO8_DATABASE == false} 重新连接：第 {COUNT_GAME_OVER} 次
 
-    ->  Dream__Index.Check
+    ->  Dream__Router.Check
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 +   [结局回溯]
 
-    ->  Endings__Index.Index
+    ->  Ending__Route_Gallery.Index
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 +   ————————
 
-    ~   Separator_Count ++
+    ~   COUNT_MENU_SEPARATOR ++
 
     {
 
-    -   Separator_Count > 5:
+    -   COUNT_MENU_SEPARATOR > 5:
 
-        ~   Flag__Work__Gym = 1
+        ~   COUNT_ROUTE_WORK_GYM = 1
 
-        ~   Flag__Work__Off_Work = 1
+        ~   COUNT_ROUTE_WORK_OFF_WORK = 1
 
-        ~   Flag__Work__Business_Trip = 1
+        ~   COUNT_ROUTE_WORK_BUSINESS_TRIP = 1
 
-        ~   Flag__Work__Napping = 1
+        ~   COUNT_ROUTE_WORK_NAPPING = 1
 
-        ~   Flag__Work__Shutdown = 1
+        ~   COUNT_ROUTE_WORK_SHUTDOWN = 1
 
-        ~   Flag__Break__Interview = 1
+        ~   COUNT_ROUTE_BREAK_INTERVIEW = 1
 
-        ~   Flag__Break__Cinema = 1
+        ~   COUNT_ROUTE_BREAK_CINEMA = 1
 
-        ~   Flag__Break__Home = 1
+        ~   COUNT_ROUTE_BREAK_HOME = 1
 
-        ~   Flag__Break__Shutdown = 1
+        ~   COUNT_ROUTE_BREAK_SHUTDOWN = 1
 
-        ~   Flag__Base__Wakeup = 1
+        ~   UNLOCKED_NO8_DATABASE = true
 
         # CLEAR
 
@@ -64,7 +64,7 @@
 
         您想要回溯哪一段内容？
 
-        ->  Endings__Index
+        ->  Ending__Route_Gallery
 
     -   else:
 
