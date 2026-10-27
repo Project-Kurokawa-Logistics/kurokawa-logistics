@@ -10,13 +10,13 @@
 
 +   [不去｜下次再说]
 
-    ->  Work__Index.Afternoon
+    ->  Work__Route_Hub.Afternoon
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 =   Flow
 
-~   Flag__Work__Business_Trip ++
+~   COUNT_ROUTE_WORK_BUSINESS_TRIP ++
 
 ->  Game_Over
 
@@ -24,19 +24,19 @@
 
 =   Game_Over
 
-~   Count__Game_Over ++
+~   COUNT_GAME_OVER ++
 
 出差被 AZ 入职。
 
 {
 
--   Flag__Work__Business_Trip == 1:
+-   COUNT_ROUTE_WORK_BUSINESS_TRIP == 1:
 
-    ~   INDEX = INDEX + 10
+    ~   SAN_SCORE = SAN_SCORE + 10
 
 -   else:
 
-    ~   INDEX = INDEX + 5
+    ~   SAN_SCORE = SAN_SCORE + 5
 
 }
 

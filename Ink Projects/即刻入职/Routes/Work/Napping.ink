@@ -10,13 +10,13 @@
 
 +   算了……
 
-    ->  Work__Index.Evening
+    ->  Work__Route_Hub.Evening
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 =   Flow
 
-~   Flag__Work__Napping ++
+~   COUNT_ROUTE_WORK_NAPPING ++
 
 睡着了……
 
@@ -26,15 +26,17 @@
 
 =   Game_Over
 
+~   COUNT_GAME_OVER ++
+
 {
 
--   Flag__Work__Napping == 1:
+-   COUNT_ROUTE_WORK_NAPPING == 1:
 
-    ~   INDEX = INDEX + 10
+    ~   SAN_SCORE = SAN_SCORE + 10
 
 -   else:
 
-    ~   INDEX = INDEX + 5
+    ~   SAN_SCORE = SAN_SCORE + 5
 
 }
 

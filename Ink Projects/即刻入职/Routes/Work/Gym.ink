@@ -1,6 +1,6 @@
 === Work__Gym
 
-~   Flag__Work__Gym ++
+~   COUNT_ROUTE_WORK_GYM ++
 
 ->  Sign
 
@@ -354,17 +354,17 @@
 
 =   Game_Over
 
-~   Count__Game_Over ++
+~   COUNT_GAME_OVER ++
 
 {
 
--   Flag__Work__Gym == 1:
+-   COUNT_ROUTE_WORK_GYM == 1:
 
-    ~   INDEX = INDEX + 10
+    ~   SAN_SCORE = SAN_SCORE + 10
 
 -   else:
 
-    ~   INDEX = INDEX + 5
+    ~   SAN_SCORE = SAN_SCORE + 5
 
 }
 

@@ -1,8 +1,8 @@
 === Work__Shutdown
 
-~   Flag__Work__Shutdown ++
+~   COUNT_ROUTE_WORK_SHUTDOWN ++
 
-~   Count__Game_Over ++
+~   COUNT_GAME_OVER ++
 
 推开门进了老板办公室发现老板是一只白虎。
 

@@ -1,6 +1,6 @@
 === Work__Off_Work
 
-~   Flag__Work__Off_Work ++
+~   COUNT_ROUTE_WORK_OFF_WORK ++
 
 下班路上被入职。
 
@@ -10,19 +10,19 @@
 
 =   Game_Over
 
-~   Count__Game_Over ++
+~   COUNT_GAME_OVER ++
 
 下班回家被 AZ 入职
 
 {
 
--   Flag__Work__Off_Work == 1:
+-   COUNT_ROUTE_WORK_OFF_WORK == 1:
 
-    ~   INDEX = INDEX + 10
+    ~   SAN_SCORE = SAN_SCORE + 10
 
 -   else:
 
-    ~   INDEX = INDEX + 5
+    ~   SAN_SCORE = SAN_SCORE + 5
 
 }
 

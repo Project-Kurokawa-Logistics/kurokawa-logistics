@@ -1,4 +1,4 @@
-=== Work__Index
+=== Work__Route_Hub
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -10,7 +10,7 @@
 
 {
 
--   Flag__Work__Gym != 0 and Flag__Work__Off_Work != 0 and Flag__Work__Business_Trip != 0 and Flag__Work__Napping != 0:
+-   COUNT_ROUTE_WORK_GYM != 0 and COUNT_ROUTE_WORK_OFF_WORK != 0 and COUNT_ROUTE_WORK_BUSINESS_TRIP != 0 and COUNT_ROUTE_WORK_NAPPING != 0:
 
     你刚到办公室就被老板发消息叫过去了。
 
@@ -24,11 +24,11 @@
 
 //  一天的开始
 
-// 【DEV】Flag__Work__Business_Trip = {Flag__Work__Business_Trip}
+// 【DEV】COUNT_ROUTE_WORK_BUSINESS_TRIP = {COUNT_ROUTE_WORK_BUSINESS_TRIP}
 
 {
 
--   Check__SAN(INDEX) == "FINE":
+-   Get__Sanity_State(SAN_SCORE) == "FINE":
 
     你在听着音乐的过程中，不知不觉已经来到了公司。
 
@@ -58,7 +58,9 @@
 
 -   else:
 
-    【出差消息的描述】
+    // TODO(author): 补充重复访问时的出差邮件替代叙述。
+
+    你扫了一眼那封邮件，内容已经熟悉得不需要再读第二遍。
 
 }
 
@@ -70,7 +72,7 @@
 
 //  OK：其它
 
--   Check__SAN(INDEX) == "OK" and Flag__Work__Business_Trip != 0:
+-   Get__Sanity_State(SAN_SCORE) == "OK" and COUNT_ROUTE_WORK_BUSINESS_TRIP != 0:
 
     感觉今天出门会被撞大运。还是不要出差了。
 
@@ -78,7 +80,7 @@
 
 //  OK：其它
 
--   Check__SAN(INDEX) == "OK":
+-   Get__Sanity_State(SAN_SCORE) == "OK":
 
     今天出差会是个好选择的。
 
@@ -86,7 +88,7 @@
 
 //  FINE：健身、下班（还没出差）
 
--   Check__SAN(INDEX) == "FINE" and Flag__Work__Gym != 0 and Flag__Work__Off_Work != 0:
+-   Get__Sanity_State(SAN_SCORE) == "FINE" and COUNT_ROUTE_WORK_GYM != 0 and COUNT_ROUTE_WORK_OFF_WORK != 0:
 
     感觉下午也无心上班，去一下也未尝不可。
 
@@ -94,7 +96,7 @@
 
 //  FINE：其它
 
--   Check__SAN(INDEX) == "FINE":
+-   Get__Sanity_State(SAN_SCORE) == "FINE":
 
     你寻思着这件事情有问题，猜测也许就是想要干扰你一手，一旦你的工作积压了，就说你不能胜任，找个借口把你辞了。
 
@@ -120,7 +122,7 @@
 
 -   else:
 
-【BUG】出现了我没有料到的情况，但是暂时不影响运行。希望注意到这条消息的朋友可以上报这一问题！非常感谢。
+你盯着屏幕发了一会儿呆，直到老板的新消息弹出来，才重新把注意力拉回工作上。
 
 }
 
@@ -136,7 +138,7 @@
 
 //  状态很差，不得不咪
 
--   Check__SAN(INDEX) == "BAD":
+-   Get__Sanity_State(SAN_SCORE) == "BAD":
 
     ->  Work__Napping.Flow
 
@@ -144,7 +146,7 @@
 
 //  OK：三个 OK 的事件都做了
 
--   Check__SAN(INDEX) == "OK" and Flag__Work__Business_Trip != 0 and Flag__Work__Off_Work != 0 and Flag__Break__Interview != 0:
+-   Get__Sanity_State(SAN_SCORE) == "OK" and COUNT_ROUTE_WORK_BUSINESS_TRIP != 0 and COUNT_ROUTE_WORK_OFF_WORK != 0 and COUNT_ROUTE_BREAK_INTERVIEW != 0:
 
     悄悄眯一下也没人知道，现在眯一下，也许晚上还能恢复精神去健身呢？
 
@@ -154,7 +156,7 @@
 
 //  精神可以，但是眯过了
 
--   Check__SAN(INDEX) == "OK" and Flag__Work__Napping != 0:
+-   Get__Sanity_State(SAN_SCORE) == "OK" and COUNT_ROUTE_WORK_NAPPING != 0:
 
     感觉咪了会被老板发现，到时候再搞得不愉快。要不就算了。
 
@@ -162,7 +164,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
--   Check__SAN(INDEX) == "OK":
+-   Get__Sanity_State(SAN_SCORE) == "OK":
 
     有一点点瞌睡，但撑住还是可以不睡着的。没什么大事要做，可以眯一下，但是这样晚上睡觉可能会睡不着觉。还要咪一下么？
 
@@ -172,7 +174,7 @@
 
 //  FINE：不咪
 
--   Check__SAN(INDEX) == "FINE":
+-   Get__Sanity_State(SAN_SCORE) == "FINE":
 
     ->  BuMi
 
@@ -198,7 +200,7 @@
 
 //  OK：没下过班
 
--   Check__SAN(INDEX) == "OK" and Flag__Work__Off_Work != 0:
+-   Get__Sanity_State(SAN_SCORE) == "OK" and COUNT_ROUTE_WORK_OFF_WORK != 0:
 
     月光光心慌慌，总感觉有什么东西在黑暗中埋伏我。但应该只是我多虑了。
 
@@ -206,7 +208,7 @@
 
 //  OK：没下过班
 
--   Check__SAN(INDEX) == "OK" and Flag__Work__Off_Work == 0:
+-   Get__Sanity_State(SAN_SCORE) == "OK" and COUNT_ROUTE_WORK_OFF_WORK == 0:
 
     哈欠……好困……今晚一定能早点睡的。
 
@@ -214,7 +216,7 @@
 
 //  FINE：已健身、下班
 
--   Check__SAN(INDEX) == "FINE" and Flag__Work__Gym != 0 and Flag__Work__Off_Work != 0:
+-   Get__Sanity_State(SAN_SCORE) == "FINE" and COUNT_ROUTE_WORK_GYM != 0 and COUNT_ROUTE_WORK_OFF_WORK != 0:
 
     浑身酸软又不想去健身房，又莫名其妙的感觉现在不是很想回家。但是在公司呆着又是纯纯的浪费生命……该怎么办呢。
 
@@ -222,7 +224,7 @@
 
 //  FINE：已下班
 
--   Check__SAN(INDEX) == "FINE" and Flag__Work__Gym == 0 and Flag__Work__Off_Work != 0:
+-   Get__Sanity_State(SAN_SCORE) == "FINE" and COUNT_ROUTE_WORK_GYM == 0 and COUNT_ROUTE_WORK_OFF_WORK != 0:
 
     感觉身体充满了活力，如果不去健身消耗一下的话，怕是晚上都睡不着。而且，不知为什么，冥冥之中感觉如果现在直接回家会发生什么灾难。
 
@@ -230,7 +232,7 @@
 
 //  FINE：已健身
 
--   Check__SAN(INDEX) == "FINE" and Flag__Work__Gym != 0 and Flag__Work__Off_Work == 0:
+-   Get__Sanity_State(SAN_SCORE) == "FINE" and COUNT_ROUTE_WORK_GYM != 0 and COUNT_ROUTE_WORK_OFF_WORK == 0:
 
     奇怪，明明今天精神状态不错，但是一想到要去健身房就会有一种莫名的抗拒，浑身感觉突然就酸疼了起来……    感觉要是今天去了健身房，可能身体要散架……
 
@@ -240,7 +242,7 @@
 
 //  FINE：其它
 
--   Check__SAN(INDEX) == "FINE":
+-   Get__Sanity_State(SAN_SCORE) == "FINE":
 
     （今晚的{~红烧土豆排骨盖饭|西红柿鸡蛋汤|辣椒炒肉盖饭|番茄培根意面}味道绝了。）
 
@@ -260,27 +262,27 @@
 
 -   else:
 
-    【出现了没想到的情况】
+    你忽然有些走神，想不起刚才还在考虑什么。
 
 }
 
-+   {Check__SAN(INDEX) == "FINE" and Flag__Work__Gym == 0} [健身｜去消耗一下多余的精力]
++   {Get__Sanity_State(SAN_SCORE) == "FINE" and COUNT_ROUTE_WORK_GYM == 0} [健身｜去消耗一下多余的精力]
 
     # CLEAR
 
     ->  Work__Gym
 
-+   {Check__SAN(INDEX) == "FINE" and Flag__Work__Gym != 0} 健身｜强迫自己去
++   {Get__Sanity_State(SAN_SCORE) == "FINE" and COUNT_ROUTE_WORK_GYM != 0} 健身｜强迫自己去
 
     # CLEAR
 
     ->  Work__Gym
 
-+   {Flag__Work__Gym == 0} 回家｜懒癌犯了
++   {COUNT_ROUTE_WORK_GYM == 0} 回家｜懒癌犯了
 
     ->  Work__Off_Work
 
-+   {Flag__Work__Gym != 0} 回家
++   {COUNT_ROUTE_WORK_GYM != 0} 回家
 
     ->  Work__Off_Work
 

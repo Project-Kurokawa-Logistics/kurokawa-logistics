@@ -26,4 +26,7 @@ VAR COUNT_ROUTE_BREAK_SHUTDOWN = 0
 // True only after entering the final white-space reconciliation scene (the hidden menu easter egg may set it too).
 VAR HAS_ENTERED_FINAL_RECONCILIATION = false
 
+// Secret database easter egg; deliberately separate from the actual final reconciliation.
+VAR UNLOCKED_NO8_DATABASE = false
+
 -> DONE
