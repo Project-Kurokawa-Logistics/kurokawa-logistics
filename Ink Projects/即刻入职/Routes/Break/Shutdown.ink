@@ -1,6 +1,6 @@
 === Break__Shutdown
 
-~   Flag__Break__Shutdown ++
+~   COUNT_ROUTE_BREAK_SHUTDOWN ++
 
 ->  Game_Over
 
@@ -8,7 +8,7 @@
 
 =   Game_Over
 
-~   Count__Game_Over ++
+~   COUNT_GAME_OVER ++
 
 No.AZ 直接打开了家门进来入职。
 

@@ -1,6 +1,6 @@
 === Break__Interview
 
-~   Flag__Break__Interview ++
+~   COUNT_ROUTE_BREAK_INTERVIEW ++
 
 ->  Game_Over
 
@@ -8,19 +8,19 @@
 
 =   Game_Over
 
-~   Count__Game_Over ++
+~   COUNT_GAME_OVER ++
 
 下班回家被 AZ 入职
 
 {
 
--   Flag__Break__Interview == 1:
+-   COUNT_ROUTE_BREAK_INTERVIEW == 1:
 
-    ~   INDEX = INDEX + 10
+    ~   SAN_SCORE = SAN_SCORE + 10
 
 -   else:
 
-    ~   INDEX = INDEX + 5
+    ~   SAN_SCORE = SAN_SCORE + 5
 
 }
 

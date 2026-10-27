@@ -2,7 +2,7 @@
 
 更新日期：20260327
 
-{Flag__Base__Wakeup: 要重新体验游戏，可以点击菜单中的 RESTART。}
+{HAS_ENTERED_FINAL_RECONCILIATION: 要重新体验游戏，可以点击菜单中的 RESTART。}
 
 <h1 style="color: \#966495;">即刻入职</h1>
 

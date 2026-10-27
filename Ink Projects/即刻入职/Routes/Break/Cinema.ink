@@ -1,6 +1,6 @@
 === Break__Cinema
 
-~   Flag__Break__Cinema ++
+~   COUNT_ROUTE_BREAK_CINEMA ++
 
 ->  Game_Over
 
@@ -8,19 +8,19 @@
 
 =   Game_Over
 
-~   Count__Game_Over ++
+~   COUNT_GAME_OVER ++
 
 在电影院被 AZ 入职
 
 {
 
--   Flag__Break__Cinema == 1:
+-   COUNT_ROUTE_BREAK_CINEMA == 1:
 
-    ~   INDEX = INDEX + 10
+    ~   SAN_SCORE = SAN_SCORE + 10
 
 -   else:
 
-    ~   INDEX = INDEX + 5
+    ~   SAN_SCORE = SAN_SCORE + 5
 
 }
 

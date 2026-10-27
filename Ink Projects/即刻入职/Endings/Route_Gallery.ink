@@ -1,34 +1,34 @@
-=== Endings__Index
+=== Ending__Route_Gallery
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 =   Index
 
-+   {Flag__Work__Business_Trip != 0} 出差
++   {COUNT_ROUTE_WORK_BUSINESS_TRIP != 0} 出差
 
     <-  Ending__Work__Business_Trip
 
     ->  Menu__Endings
 
-+   {Flag__Work__Gym != 0} 健身房
++   {COUNT_ROUTE_WORK_GYM != 0} 健身房
 
     <-  Ending__Work__Gym
 
     ->  Menu__Endings
 
-+   {Flag__Work__Off_Work != 0} 下班路上
++   {COUNT_ROUTE_WORK_OFF_WORK != 0} 下班路上
 
     <-  Ending__Work__Off_Work
 
     ->  Menu__Endings
 
-+   {Flag__Work__Napping != 0} 小憩
++   {COUNT_ROUTE_WORK_NAPPING != 0} 小憩
 
     <-  Ending__Work__Napping
 
     ->  Menu__Endings
 
-+   {Flag__Work__Shutdown != 0} 办公室
++   {COUNT_ROUTE_WORK_SHUTDOWN != 0} 办公室
 
     <-  Ending__Work__Shutdown
 
@@ -36,27 +36,27 @@
 
 +   <hr>
 
-    ->  Endings__Index
+    ->  Ending__Route_Gallery
 
-+   {Flag__Break__Interview != 0} 面试
++   {COUNT_ROUTE_BREAK_INTERVIEW != 0} 面试
 
     <-  Ending__Break__Interview
 
     ->  Menu__Endings
 
-+   {Flag__Break__Cinema != 0} 电影院
++   {COUNT_ROUTE_BREAK_CINEMA != 0} 电影院
 
     <-  Ending__Break__Cinema
 
     ->  Menu__Endings
 
-+   {Flag__Break__Home != 0} 收快递
++   {COUNT_ROUTE_BREAK_HOME != 0} 收快递
 
     <-  Ending__Break__Home
 
     ->  Menu__Endings
 
-+   {Flag__Break__Shutdown != 0} 在家
++   {COUNT_ROUTE_BREAK_SHUTDOWN != 0} 在家
 
     <-  Ending__Break__Shutdown
 
@@ -64,13 +64,13 @@
 
 +   <hr>
 
-    ->  Endings__Index
+    ->  Ending__Route_Gallery
 
-+   {Separator_Count <= 5} [返回上一级]
++   {COUNT_MENU_SEPARATOR <= 5} [返回上一级]
 
     ->  Menu__Main
 
-+   {Separator_Count > 5} 重置游戏
++   {COUNT_MENU_SEPARATOR > 5} 重置游戏
 
     # RESTART
 

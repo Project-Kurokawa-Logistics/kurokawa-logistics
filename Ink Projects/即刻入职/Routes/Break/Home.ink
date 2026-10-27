@@ -1,6 +1,6 @@
 === Break__Home
 
-~   Flag__Break__Home ++
+~   COUNT_ROUTE_BREAK_HOME ++
 
 于是在家里收了快递。
 
@@ -10,19 +10,19 @@
 
 =   Game_Over
 
-~   Count__Game_Over ++
+~   COUNT_GAME_OVER ++
 
 打开门被 AZ 入职了。
 
 {
 
--   Flag__Break__Home == 1:
+-   COUNT_ROUTE_BREAK_HOME == 1:
 
-    ~   INDEX = INDEX + 10
+    ~   SAN_SCORE = SAN_SCORE + 10
 
 -   else:
 
-    ~   INDEX = INDEX + 5
+    ~   SAN_SCORE = SAN_SCORE + 5
 
 }
 
