@@ -1,41 +1,29 @@
-=== Parameters
+=== Core__Variables
 
-//  精神状态
+// Mental-state score. -1 identifies the first launch; each new route adds 10, repeats add 5.
+VAR SAN_SCORE = -1
 
-VAR INDEX = -1
+// Retained for compatibility with the original story data; currently not used by route logic.
+VAR LAST_NODE = "First"
 
-//  最后节点
+// Completed route endings / reconnect count.
+VAR COUNT_GAME_OVER = 0
 
-VAR LAST = "First"
+// Hidden title-menu interaction counter.
+VAR COUNT_MENU_SEPARATOR = 0
 
-//  完犊子次数
+// Route visit counters: 0 = unseen, 1 = first visit, >1 = repeated visits.
+VAR COUNT_ROUTE_WORK_GYM = 0
+VAR COUNT_ROUTE_WORK_OFF_WORK = 0
+VAR COUNT_ROUTE_WORK_BUSINESS_TRIP = 0
+VAR COUNT_ROUTE_WORK_NAPPING = 0
+VAR COUNT_ROUTE_WORK_SHUTDOWN = 0
+VAR COUNT_ROUTE_BREAK_INTERVIEW = 0
+VAR COUNT_ROUTE_BREAK_CINEMA = 0
+VAR COUNT_ROUTE_BREAK_HOME = 0
+VAR COUNT_ROUTE_BREAK_SHUTDOWN = 0
 
-VAR Count__Game_Over = 0
+// True only after entering the final white-space reconciliation scene (the hidden menu easter egg may set it too).
+VAR HAS_ENTERED_FINAL_RECONCILIATION = false
 
-//  菜单分隔线点击次数
-
-VAR Separator_Count = 0
-
-//  阅读检测
-
-VAR Flag__Work__Gym = 0
-
-VAR Flag__Work__Off_Work = 0
-
-VAR Flag__Work__Business_Trip = 0
-
-VAR Flag__Work__Napping = 0
-
-VAR Flag__Work__Shutdown = 0
-
-VAR Flag__Break__Interview = 0
-
-VAR Flag__Break__Cinema = 0
-
-VAR Flag__Break__Home = 0
-
-VAR Flag__Break__Shutdown = 0
-
-VAR Flag__Base__Wakeup = 0
-
-->  DONE
+-> DONE

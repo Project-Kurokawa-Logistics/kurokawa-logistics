@@ -1,14 +1,14 @@
 === function Get__Forced_Intrusion()
 
 {
-    // Preserve the existing escalation thresholds and priority.
-    - Check__SAN(INDEX) == "BAD" and (Flag__Work__Business_Trip == 0 or Flag__Work__Off_Work == 0):
+    // Priority matches the original startup checks: missing key work routes, missing interview, then missing gym.
+    - Get__Sanity_State(SAN_SCORE) == "BAD" and (COUNT_ROUTE_WORK_BUSINESS_TRIP == 0 or COUNT_ROUTE_WORK_OFF_WORK == 0):
         ~ return "WORK"
 
-    - Check__SAN(INDEX) == "BAD" and Flag__Break__Interview == 0:
+    - Get__Sanity_State(SAN_SCORE) == "BAD" and COUNT_ROUTE_BREAK_INTERVIEW == 0:
         ~ return "BREAK"
 
-    - Check__SAN(INDEX) != "FINE" and Flag__Work__Gym == 0:
+    - Get__Sanity_State(SAN_SCORE) != "FINE" and COUNT_ROUTE_WORK_GYM == 0:
         ~ return "WORK"
 
     - else:
