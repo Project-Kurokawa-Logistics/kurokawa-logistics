@@ -1,35 +1,35 @@
-=== TEST
+=== Dev__TEST
 
-// ~   INDEX = 100
+// ~   SAN_SCORE = 100
 
-// ~   Flag__Work__Gym = 1
+// ~   COUNT_ROUTE_WORK_GYM = 1
 
-// ~   Flag__Work__Off_Work = 0
+// ~   COUNT_ROUTE_WORK_OFF_WORK = 0
 
-// ~   Flag__Work__Business_Trip = 1
+// ~   COUNT_ROUTE_WORK_BUSINESS_TRIP = 1
 
-// ~   Flag__Break__Interview = 1
+// ~   COUNT_ROUTE_BREAK_INTERVIEW = 1
 
-// ~   INDEX = 30
+// ~   SAN_SCORE = 30
 
-// ~   Flag__Work__Gym = 1
+// ~   COUNT_ROUTE_WORK_GYM = 1
 
-// ~   Flag__Work__Off_Work = 1
+// ~   COUNT_ROUTE_WORK_OFF_WORK = 1
 
-// ~   Flag__Work__Business_Trip = 1
+// ~   COUNT_ROUTE_WORK_BUSINESS_TRIP = 1
 
-// ~   Flag__Work__Napping = 1
+// ~   COUNT_ROUTE_WORK_NAPPING = 1
 
-// ~   Flag__Work__Shutdown = 1
+// ~   COUNT_ROUTE_WORK_SHUTDOWN = 1
 
-// ~   Flag__Break__Interview = 1
+// ~   COUNT_ROUTE_BREAK_INTERVIEW = 1
 
-// ~   Flag__Break__Cinema = 1
+// ~   COUNT_ROUTE_BREAK_CINEMA = 1
 
-// ~   Flag__Break__Home = 1
+// ~   COUNT_ROUTE_BREAK_HOME = 1
 
-// ~   Flag__Break__Shutdown = 0
+// ~   COUNT_ROUTE_BREAK_SHUTDOWN = 0
 
-// ~   Flag__Base__Wakeup = 0
+// ~   HAS_ENTERED_FINAL_RECONCILIATION = 0
 
-->  Check__Env
+->  Check__Environment

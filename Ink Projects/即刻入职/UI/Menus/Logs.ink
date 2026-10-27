@@ -4,4 +4,4 @@
 
     # CLEAR
 
-    ->  Check__Env
+    ->  Check__Environment

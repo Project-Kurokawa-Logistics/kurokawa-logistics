@@ -1,8 +1,10 @@
-=== Break__Index
+// LEGACY: This route hub is no longer included by the runtime entry. The main navigation offers route choices directly.
+
+=== Break__Route_Hub
 
 {
 
--   Flag__Break__Interview != 0 and Flag__Break__Cinema != 0 and Flag__Break__Home != 0:
+-   COUNT_ROUTE_BREAK_INTERVIEW != 0 and COUNT_ROUTE_BREAK_CINEMA != 0 and COUNT_ROUTE_BREAK_HOME != 0:
 
     哪里也不想去。
 
@@ -10,6 +12,6 @@
 
 -   else:
 
-    ->  Base__Going_To.Choice
+    ->  Flow__Going_To.Choice
 
 }
