@@ -7,14 +7,16 @@
 | 变量 | 当前可见初值/用途 | 来源 |
 |---|---|---|
 | NAME__AZ | 初值为 "No.AZ"；主角显示名称相关 | [Characters/AZ.ink](../Characters/AZ.ink) |
-| Careers__AZ | 初值为 "No.AZ"；后续可被设为“冒险者”等职业 | [Characters/AZ.ink](../Characters/AZ.ink)、[Maps/Ruoment_City/Suburban.ink](../Maps/Ruoment_City/Suburban.ink) |
-| Count__GAME_OVER | 初值为 0；在后期冲突选项中递增 | [Misc/Parameters.ink](../Misc/Parameters.ink)、[Maps/Forest/FarMoriTown.ink](../Maps/Forest/FarMoriTown.ink) |
-| Count__Start | 初值为 0；当前用途尚未在此文档中完整追踪 | [Misc/Parameters.ink](../Misc/Parameters.ink) |
-| Count__Chapter | 初值为 0；章节推进时递增 | [Misc/Parameters.ink](../Misc/Parameters.ink)、[Maps/Forest/FarMoriTown.ink](../Maps/Forest/FarMoriTown.ink) |
+| Careers__AZ | 初值为 "No.AZ"；郊区会写入“冒险者”并用于分支，不代表完整职业系统已经实现 | [Characters/AZ.ink](../Characters/AZ.ink)、[Maps/Ruoment_City/Suburban.ink](../Maps/Ruoment_City/Suburban.ink) |
+| Count__GAME_OVER | 初值为 0；在深渊、地城及远森镇死亡选项中递增，当前未发现读取处 | [Misc/Parameters.ink](../Misc/Parameters.ink)、[Maps/Abyss/Rift.ink](../Maps/Abyss/Rift.ink)、[Maps/Forest/Dungeon.ink](../Maps/Forest/Dungeon.ink)、[Maps/Forest/FarMoriTown.ink](../Maps/Forest/FarMoriTown.ink) |
+| Count__Start | 初值为 0；新游戏、重新连接及章节跳转等入口递增，并控制主菜单的新游戏／重新连接选项 | [Misc/Parameters.ink](../Misc/Parameters.ink)、[Menus/Main.ink](../Menus/Main.ink)、[Menus/JumpTo.ink](../Menus/JumpTo.ink) |
+| Count__Chapter | 初值为 0；章节推进时递增，重新连接、身份选择及各章节跳转按现状写入不同值 | [Misc/Parameters.ink](../Misc/Parameters.ink)、[Menus/Main.ink](../Menus/Main.ink)、[Menus/JumpTo.ink](../Menus/JumpTo.ink)、[Maps/Ruoment_City/Suburban.ink](../Maps/Ruoment_City/Suburban.ink)、[Maps/Forest/FarMoriTown.ink](../Maps/Forest/FarMoriTown.ink) |
 | Place__ShanFeiMiMiYingDi | 初值为“山匪秘密营地”；后续有节点将其改成其他地点描述 | [Misc/Parameters.ink](../Misc/Parameters.ink)、[Maps/Forest/Boulevard.ink](../Maps/Forest/Boulevard.ink) |
 | Count__不明生物的尸体 | 初值为 0；物品/资源计数 | [Misc/Items.ink](../Misc/Items.ink) |
 | Count__枯树的碎片 | 初值为 0；物品/资源计数 | [Misc/Items.ink](../Misc/Items.ink) |
 | Race__Arshasy | 在远森镇相关剧情中出现，并被赋值为“人类” | [Maps/Forest/FarMoriTown.ink](../Maps/Forest/FarMoriTown.ink) |
+| Path__ShouFuAiRen | 初值为空字符串；首都酒馆记录“缓慢地接近”或“大胆地接近”，并决定后续分支 | [Maps/Ruoment_City/Capital.ink](../Maps/Ruoment_City/Capital.ink) |
+| Path__BuySomeCai | 初值为空字符串；首都集市记录“腊肉”“香薰”或“麦秆”，在大胆接近路线中决定后续差分 | [Maps/Ruoment_City/Capital.ink](../Maps/Ruoment_City/Capital.ink) |
 
 ## 2. 命名类别（按源码用法归纳）
 
@@ -39,20 +41,24 @@
 - 能力提升选择：TEMP__PowerUp_Arshasy、TEMP__PowerUp_Aize、TEMP__PowerUp_Lind。
 - 追捕/冲突分支：TEMP__NianGuoQu、TEMP__ZhuanXinJieJueZheJiGeJiaHuo、TEMP__FanJi、TEMP__RangTaAnXi。
 
-在 [Maps/Ruoment_City/Suburban.ink](../Maps/Ruoment_City/Suburban.ink) 中还可见 TEMP__WoChiYiGeRen，用于限制医疗帐篷内某个选择的重复出现。
+在 [Maps/Ruoment_City/Suburban.ink](../Maps/Ruoment_City/Suburban.ink) 中，TEMP__WoChiYiGeRen 初值为 0；选择对应行动后递增并返回 MedicalTent，使该选项不再出现；选择分析新生物时又将它重置为 0。这是当前源码行为，不代表其跨周目或回溯保留规则已经确定。
 
-以上仅列出已确认的代表性变量；其是否在所有返回路径中正确重置，尚未全部审计。
+以上仅列出已确认的代表性变量；其他旗标是否在所有返回路径中正确重置，尚未全部审计。
 
-## 4. 结局标记
+## 4. 结局与死法访问记录
 
-[Misc/Finales.ink](../Misc/Finales.ink) 的目录使用以下标记来判断是否显示对应结局：
+[Misc/Finales.ink](../Misc/Finales.ink) 的目录读取以下 stitch 的访问计数，而非同名 VAR：
 
-- Lord_of_the_Black_Goo_Demon
-- BaiHuMengJiang
-- YiZheRenXin
-- PoChan
+| stitch | 当前静态剧情入口 |
+|---|---|
+| Lord_of_the_Black_Goo_Demon | [Maps/Abyss/START.ink](../Maps/Abyss/START.ink) 的交流分支 |
+| BaiHuMengJiang | [Maps/Ruoment_City/Suburban.ink](../Maps/Ruoment_City/Suburban.ink) 的退休分支 |
+| YiZheRenXin | [Maps/Forest/FarMoriTown.ink](../Maps/Forest/FarMoriTown.ink) 的 Ending_Today 随缘分支 |
+| PoChan | [Maps/Forest/FarMoriTown.ink](../Maps/Forest/FarMoriTown.ink) 的 DealCommercial 第一项和 Choose_7 追捕分支 |
 
-**待验证：** 需要全量追踪这些标记在哪些节点被设置，以及每个结局是否至少存在一条当前可达路线。不要只新增目录条目而忘记添加/验证相应的解锁状态。
+[Misc/Shutdown.ink](../Misc/Shutdown.ink) 的六个死法同样通过 stitch 访问计数显示。目录重看详情和调试强制展示也会增加访问计数，因此这些数值不能直接解释为唯一通关次数。
+
+**待验证／待确认：** 各剧情入口的实际可达性仍需逐条运行验证；是否继续采用访问计数，以及重开、回溯时如何保留记录，由作者决定，不得在结构迁移中自行改成新规则。
 
 ## 5. 变量变更检查清单
 

@@ -13,10 +13,10 @@
 
 主文件最终跳转到 Title；标题/菜单脚本再进入 Menu__START。开局选项位于 [Menus/START.ink](../Menus/START.ink)。
 
-- **森林开局**（[Maps/Forest/START.ink](../Maps/Forest/START.ink)）：从森林中的失忆与饥饿状态开始，遇见涅特斯后目前会跳到 PAUSE。这条开局是否已有后续完整流程，需结合暂停点和后续章节入口进一步确认。
-- **深渊开局**（[Maps/Abyss/START.ink](../Maps/Abyss/START.ink)）：探索周围环境后接触小恶魔。尝试交流的分支会导向黑胶失控相关的坏结局；攻击/逃离方向继续经过 [Maps/Abyss/Rift.ink](../Maps/Abyss/Rift.ink)，再进入洛蒙特城郊外的医疗帐篷流程。
-- **沙漠开局**（[Maps/Desert/START.ink](../Maps/Desert/START.ink)）：当前文件需要进一步检查完成度；现有入口和 TODO 不应被视为已完成路线。
-- **城市郊外开局**：在开局菜单中带有禁用标记，旁边有直接从政的 TODO。
+- **森林开局**（[Maps/Forest/START.ink](../Maps/Forest/START.ink)）：从森林中的失忆与饥饿状态开始，遇见涅特斯并模仿其名字发音后进入 `PAUSE`，当前没有后续完整流程。
+- **深渊开局**（[Maps/Abyss/START.ink](../Maps/Abyss/START.ink)）：探索周围环境后接触小恶魔。尝试交流的分支会导向黑胶失控相关的坏结局；攻击方向经过 [Maps/Abyss/Rift.ink](../Maps/Abyss/Rift.ink) 进入洛蒙特城郊外的医疗帐篷流程。逃离等其他方向仍带有未开放标记。
+- **沙漠开局**（[Maps/Desert/START.ink](../Maps/Desert/START.ink)）：两个初始行动都有 TODO，但没有 `# unclickable`；随后共同进入 `PAUSE`，不能视为已完成路线。
+- **城市郊外开局**：在开局菜单中带有禁用标记，旁边有直接从政的 TODO，没有后续 divert。
 
 ## 3. 深渊路线与建立新身份
 
@@ -65,20 +65,30 @@
 - 追捕分支中，Choose_7 的“追！”会进入 Finales.PoChan；“深不可追”会继续进入 BieJi 等节点。
 - 后续还有 Choose_8 至 Choose_11、林德/阿沙西相关转化剧情，以及 Ending__CP_ChangXiu 的章节推进。部分节点明确标有 TODO，角色状态与结局路径需要进一步核对。
 
-## 6. 结局目录
+## 6. 返回洛蒙特城与首都当前进度
 
-[Misc/Finales.ink](../Misc/Finales.ink) 中列出四个结局：
+相关文件：[Maps/Forest/FarMoriTown.ink](../Maps/Forest/FarMoriTown.ink)、[Maps/Forest/Boulevard.ink](../Maps/Forest/Boulevard.ink)、[Maps/Ruoment_City/Suburban.ink](../Maps/Ruoment_City/Suburban.ink)、[Maps/Ruoment_City/Capital.ink](../Maps/Ruoment_City/Capital.ink)
 
-| 结局标记 | 当前标题 | 源码中的定位 |
+- Ending__CP_ChangXiu 后进入 Start__CP_XinHuoBanYiJiXinDeGongJuMen，再依次经过 Forest__Boulevard.Back_To_FactoryOne、Ruoment_City__Suburban.ZhouBianDeNongZhuang，抵达 Ruoment_City__Capital.QiXieShi_Back。
+- QiXieShi_Back 的休息选择进入 ShouFuAiRen。`Path__ShouFuAiRen` 记录“缓慢地接近”或“大胆地接近”，两个方向之后都会进入 Another_Day。
+- Another_Day 中的集市选择写入 `Path__BuySomeCai`。缓慢接近方向随后进入 After_HuanManDiJieJin 并止于 `PAUSE`；大胆接近方向进入 Check__Path__BuySomeCai，再按腊肉、香薰、麦秆分别进入三个止于 `PAUSE` 的差分。
+- 因此当前不能把两种接近方式与三种购买选择理解为六条完整路线；实际静态终点是四处 `PAUSE`。
+- `Menus/JumpTo.ink` 的“上次更新结束的地方”直接进入 ShouFuAiRen，是调试入口，不等同于从上一章完整推进。
+
+## 7. 结局目录
+
+[Misc/Finales.ink](../Misc/Finales.ink) 中列出四个结局 stitch：
+
+| 结局 stitch | 当前标题 | 源码中的定位 |
 |---|---|---|
 | Lord_of_the_Black_Goo_Demon | 黑胶恶魔领主 | 坏结局 |
 | BaiHuMengJiang | 白虎猛将 | 摸鱼结局 |
 | YiZheRenXin | 医者仁心 | 不完美的结局 |
 | PoChan | 破产 | 坏结局 |
 
-结局目录会按标记显示已经经历过的结局。以上是目录中能看到的结局标记；每个标记的设置位置、可达性和所有入口尚未完成全量审计。
+结局目录按 stitch 访问计数显示已经历过的结局，不是读取四个独立布尔变量。静态入口已定位为：深渊交流分支、郊区退休分支、远森镇随缘分支，以及远森镇经营和追捕处的两个破产入口；调试强制展示与目录重看也会访问结局 stitch。各剧情路线的实际可达性仍需逐条运行验证。
 
-## 7. 阅读流程时的注意事项
+## 8. 阅读流程时的注意事项
 
 - Ending__CP1、Ending__CP2 等命名节点不一定是全局最终结局；要继续追踪其后是否还有跳转。
 - ⛔️、TODO 和 # unclickable 是项目中用于标识未开放内容的记号；不能仅凭文本就断言运行时一定如何处理。
