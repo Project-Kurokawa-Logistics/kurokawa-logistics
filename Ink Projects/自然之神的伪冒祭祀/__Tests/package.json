@@ -1,0 +1,15 @@
+{
+  "name": "nature-god-regression",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Verification baseline for 自然之神的伪冒祭祀 (compile + inkjs runtime regression tests)",
+  "type": "commonjs",
+  "scripts": {
+    "compile": "node compile.cjs",
+    "test": "node --test regression.test.cjs",
+    "check": "npm run compile && npm test"
+  },
+  "devDependencies": {
+    "inkjs": "2.4.0"
+  }
+}
