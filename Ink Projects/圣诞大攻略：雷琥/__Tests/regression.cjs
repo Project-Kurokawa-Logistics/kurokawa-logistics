@@ -318,6 +318,21 @@ test('normal title routes reach F1-F6, F8, F9 and F11 without injecting variable
   assert.deepEqual(achieved(basement), [11]);
 });
 
+test('A-01 injected route matrix uses selection eligibility and the affection boundary', () => {
+  for (const rate of [2, 3]) for (let mask = 0; mask < 8; mask++) {
+    const s = fresh();
+    s.variablesState.Rate_LeiHu = rate;
+    s.variablesState.Choose_YeHen = mask & 1 ? 2 : 0;
+    s.variablesState.Choose_CenYe = mask & 2 ? 1 : 0;
+    s.variablesState.Choose_LeiHu = mask & 4 ? 2 : 0;
+    jump(s, 'G_Dormitory.RouteDecision');
+    finish(s);
+    // This order is the implementation's provisional conflict behavior, not an author-confirmed rule.
+    const expected = rate >= 3 ? 8 : mask & 1 ? 5 : mask & 2 ? 6 : 7;
+    assert.deepEqual(achieved(s), [expected], `rate=${rate}, mask=${mask}`);
+  }
+});
+
 test('normal F2 then F7 unlocks F10 across retries without injecting variables', () => {
   let f7Path;
   search: for (let first = 0; first < 5; first++) {

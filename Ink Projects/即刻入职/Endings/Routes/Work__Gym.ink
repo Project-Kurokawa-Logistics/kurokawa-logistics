@@ -6,7 +6,7 @@
 
 # IMAGE:  https:\/\/encrypted-tbn0.gstatic.com\/images?q=tbn:ANd9GcTEkP1Cb44RedeX84zvlRGppCTOHWkHEsy_ef-F2T4SC2rhRKbgrSbh_yUh8Z8KdXOGEUw&usqp=CAU
 
-// TODO(author): 替换占位图片；保留当前图片引用，直到正式素材确认。
+// 待办（主创）：替换占位图片；保留当前图片引用，直到正式素材确认。
 
 你变成了一个执行体。
 

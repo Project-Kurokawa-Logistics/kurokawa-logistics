@@ -1,4 +1,4 @@
-// Shared runtime state. Keep global declarations here, outside knots.
+// 共享的运行时状态。全局声明统一放在这里，不要写进节点内部。
 
 VAR SAN_SCORE = -1
 VAR COUNT_GAME_OVER = 0

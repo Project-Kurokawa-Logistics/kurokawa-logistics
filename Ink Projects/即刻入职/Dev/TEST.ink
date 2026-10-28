@@ -1,5 +1,5 @@
-// ISOLATED DEV: This file is not INCLUDE'd by 即刻入职.ink and is not reachable
-// from the release flow. Keep test-only state injection here, not in production knots.
+// 隔离开发文件：本文件不会被 即刻入职.ink 通过 INCLUDE 引入，发布流程也无法到达。
+// 测试专用的状态注入只放在这里，不要写进正式节点。
 
 === Dev__TEST
 

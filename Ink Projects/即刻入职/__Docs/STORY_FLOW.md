@@ -2,7 +2,7 @@
 
 - 更新日期：2026-10-28
 - 对应架构：目录迁移后的 `main`（PR #3）
-- **验证声明：** 本文主要根据当前 Ink 源码静态整理，箭头不表示每条路径均已运行验证。Phase 0 的 InkJS 2.4.0 编译和 18 项 smoke 测试已通过；Phase 1 另在 `__Tests/` 建立 11 项可复用回归并全部通过（含直接路径与状态注入）。后续两款 inklecate 交叉编译、29 项 smoke 与完整自然通关也已通过，Inky GUI 实机回归仍未运行；验证记录见 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)。
+- **验证声明：** 本文主要根据当前 Ink 源码静态整理，箭头不表示每条路径均已运行验证。Phase 0 的 InkJS 2.4.0 编译和 18 项 smoke 测试已通过；Phase 1 另在 `__Tests/` 建立 11 项可复用回归并全部通过（含直接路径与状态注入）。历史上两款 inklecate 交叉编译、29 项 smoke 与纯点击九路线完整自然通关也已通过，但 29 项 smoke 的执行脚本 `tools/phase0_smoke.cjs` 已按主创要求删除，**该 29 项与自然通关当前不可复跑**；当前 11 项回归不覆盖自然通关。Inky GUI 实机回归、宿主 `#RESTART` 与作者验收仍未运行。验证记录见 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)。
 
 ## 1. 主流程图
 
@@ -144,7 +144,7 @@ flowchart TD
   → 现实中醒来，接受 AZ 的安排，成为市场部部长 No.8
 ```
 
-当前 `Ending__Final_Reconciliation.ink` 在场景开始时设置 `HAS_ENTERED_FINAL_RECONCILIATION = true`，并用 `COUNT_GAME_OVER - 1` 生成前几次醒来的数量。状态注入测试与完整自然通关均已确认 `COUNT_GAME_OVER = 9` 时显示“前8次”，终局顺序正确；最终醒来次数的叙事含义仍按 Phase 3 待核对。现实结局文件目前仍有 TODO 和 AI 草稿，需要主创审阅。
+当前 `Ending__Final_Reconciliation.ink` 在场景开始时设置 `HAS_ENTERED_FINAL_RECONCILIATION = true`，并用 `COUNT_GAME_OVER - 1` 生成前几次醒来的数量。状态注入测试与历史完整自然通关均已确认 `COUNT_GAME_OVER = 9` 时显示“前8次”，终局顺序正确（自然通关为历史记录，执行脚本已删除、当前不可复跑）；最终醒来次数的叙事含义仍按 Phase 3 待核对。现实结局文件目前仍有 TODO 和 AI 草稿，需要主创审阅。
 
 ## 6. 当前需验证的问题
 
@@ -154,10 +154,13 @@ flowchart TD
 - [x] OK／BAD 休息选项和 FINE 健身条件。
 - [x] 已测强制闯入路径在下一次环境检查进入 DRONE 乱码页。
 - [x] 全路线自然经历时 No.8 门槛正确；隐藏菜单捷径的计数写入也已单独验证。
-- [x] 状态注入与完整自然通关中“空白空间 → 现实 No.8”顺序均正确，不出现额外普通醒来。
+- [x] 状态注入与历史完整自然通关中“空白空间 → 现实 No.8”顺序均正确，不出现额外普通醒来。
 - [x] 结局回顾、菜单预览与 `Menu__Game_Over`／标题往返不意外改变路线计数或精神状态。
 - [x] Gym 的历史次数使用 `Work__Gym.Game_Over` Stitch 读计数，首次／重复显示至少 1／2 次，不混淆 `COUNT_GAME_OVER`。
 - [ ] 两条 Shutdown 的 SAN 增加与否仍待主创确认（现状均不增加）。
 - [ ] 主菜单中的 `【DEV】` 调试信息当前由块注释隐藏，是否保留由主创决定。
+- [ ] Inky GUI 实机回归、宿主 `#RESTART` 与作者验收尚未进行。
+
+**复跑边界：** 当前唯一可复跑的自动化测试是 `__Tests/` 的 11 项（`inkjs@2.4.0`）。29 项 smoke 与纯点击自然通关是历史结果，执行脚本已删除，**当前不可复跑**；需要重新自动验证自然通关时，应在 `__Tests/` 新增纯点选驱动，而不是恢复 `tools/phase0_smoke.cjs`。inklecate 交叉编译不受此限制：可按 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md) 第 1 节的历史编译方式对当前源码重新编译，但历史产物哈希只对同一基线快照有效，且重编译不替代 Inky GUI 实机回归与作者验收。
 
 本图用于沟通和审查；任何实现变更后都要同步更新。若故事设定与代码不一致，应在文档中标出差异并交给主创决定，不要由实现者自行推断。

@@ -42,7 +42,7 @@ const INITIAL_VARIABLES = {
   UNLOCKED_NO8_DATABASE: false,
 };
 
-// First/repeat settlement per route: path, counter, SAN gain on first and repeat.
+// 每条路线的首次／重复结算：路径、计数器、首次与重复时的 SAN 增量。
 const ROUTE_CASES = [
   { path: 'Work__Gym', counter: 'COUNT_ROUTE_WORK_GYM', firstGain: 10, repeatGain: 5 },
   { path: 'Work__Business_Trip.Flow', counter: 'COUNT_ROUTE_WORK_BUSINESS_TRIP', firstGain: 10, repeatGain: 5 },
@@ -108,9 +108,9 @@ function atGameOverMenu(story) {
   return texts.length === 2 && texts.includes('断开连接') && texts.includes('制作人员');
 }
 
-// Enters a route at its knot/stitch and auto-picks the first option until Menu__Game_Over.
-// This is the scripted path for the Gym sequence (Reception → Locker → AZ → Game_Over);
-// for the other routes no option is needed.
+// 在所属节点进入一条路线，并自动选择第一个选项，直到 Menu__Game_Over。
+// 这是健身房流程（Reception → Locker → AZ → Game_Over）的脚本化路径；
+// 其它路线不需要选择任何选项。
 function settleRoute(story, path) {
   story.ChoosePathString(path);
   let text = drain(story);

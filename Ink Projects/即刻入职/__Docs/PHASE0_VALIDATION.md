@@ -1,8 +1,14 @@
-# 《即刻入职》Phase 0 交叉验证记录
+# 《即刻入职》Phase 0 交叉验证记录（历史）
 
 - 日期：2026-10-28
 - 来源：`codex/ink-phase0-validation` 工作树的实际执行记录，在移除该工作树前移植至 `kimi/Ink`。
-- 范围：inklecate 交叉编译、InkJS 运行时 smoke、完整自然通关与 Credits 结局验证；不代表 Inky GUI 实机回归或主创验收已完成。
+- 范围：inklecate 交叉编译、InkJS 运行时 smoke、完整自然通关与 Credits 结局验证（均为历史执行结果）；不代表 Inky GUI 实机回归或主创验收已完成。
+
+> **历史记录说明（2026-10-28 补注）**
+>
+> - 本文第 2 节的 29 项 smoke 由 `tools/phase0_smoke.cjs` 执行。该脚本已**按主创要求删除**，`tools/` 不再作为第二套测试轨道，也不应恢复该脚本或旧 `docs/` 目录；文中保留的命令只说明当时的执行方式，**当前仓库已不能复跑**。
+> - 本文的 29 项 smoke、两款 inklecate 交叉编译与纯点击九路线完整自然通关都是**当时的实际执行结果**，不因脚本删除而失效；删除脚本只影响复跑方式，不影响历史结论。
+> - 当前仓库唯一可复跑的测试入口是 `__Tests/`（`inkjs@2.4.0`，11 项）。这 11 项**不覆盖**本文记录的纯点击九路线自然通关，因此“11 项全绿”不等于“完整自然通关已复验”。两者必须分开表述。
 
 ## 1. 环境与编译
 
@@ -24,9 +30,12 @@
 
 ## 2. Smoke 回归
 
-复现命令：
+> **脚本已删除，以下命令不能复跑。** 本节保留它只为说明 29 项结果当时如何产生。
+
+历史执行方式（`tools/phase0_smoke.cjs`，已于 2026-10-28 按主创要求删除）：
 
 ```bash
+# 历史命令，仅作记录；当前仓库中该路径不存在
 INKJS_MODULE="/absolute/path/to/inkjs" \
   node "Ink Projects/即刻入职/tools/phase0_smoke.cjs" \
   /path/to/current.json
@@ -37,7 +46,7 @@ INKJS_MODULE="/absolute/path/to/inkjs" \
 - 覆盖新游戏、市场部邀请函、首次导航仅面试／上班，以及自然面试→GAME OVER→重连。
 - 七条普通路线首次 +10／重复 +5，且每次恰好一个 `COUNT_GAME_OVER`；两个 Shutdown 不增加精神数值是既有行为，仍待主创确认。直接进入节点并注入状态的用例均标为 `[direct,state-injected]`。
 - 覆盖 FINE 健身、OK／BAD 休息，以及强制 WORK／BREAK 从正常主菜单进入 `Dream__Router.Check`，再经 Shutdown→DRONE；以 `VisitCountAtPathString` 证明 Dream1–Dream7 均未访问。
-- 自然全九路线采用纯点选，无 `ChoosePathString`、无变量注入；顺序为健身→下班→面试→出差→小憩→居家休息→电影→办公室 Shutdown→居家 Shutdown。SAN 依次为 `10/20/30/40/50/60/70/70/70`，`COUNT_GAME_OVER` 为 1–9；最后一次断连后第 9 次重连→和解→现实→制作人员正常 END。
+- 自然全九路线采用纯点选，无 `ChoosePathString`、无变量注入；顺序为健身→下班→面试→出差→小憩→居家休息→电影→办公室 Shutdown→居家 Shutdown。SAN 依次为 `10/20/30/40/50/60/70/70/70`，`COUNT_GAME_OVER` 为 1–9；最后一次断连后第 9 次重连→和解→现实→制作人员正常 END。**此项为历史结果，当前 `__Tests/` 的 11 项不含纯点选自然通关。**
 - 终局 visit 增量：正常通关 `Ending__Final_Reconciliation = 1`、`Ending__No8_Reality = 1`；`Flow__Startup`、`Flow__Navigator`、`Dream1`–`Dream7` 均为 0。已进入和解状态直接到现实时 `Final = 0`、`Reality = 1`。
 - 未通关 Credits→回标题的对照用例通过；`ResetState` 与结局回顾无计数副作用。
 - 循环保护使用 `ContinueAsync(10)` 分片推进，完成一行才读取 `currentText`；每个场景有 5 秒总预算和最多 500 行限制。
@@ -67,3 +76,16 @@ INKJS_MODULE="/absolute/path/to/inkjs" \
 - `Endings/No8_Reality.ink` 仍有作者 TODO／草稿段落，本次未改。
 - `ResetState` 用例只证明引擎层重置，未测试图形界面或 `#RESTART` 宿主。
 - 未在 Inky／InkShell 图形界面执行；自然全路线与终局证据来自 inklecate `-c` + InkJS 运行时，作者验收尚未进行。
+
+## 6. 当前复跑边界（2026-10-28）
+
+| 验证层次 | 结果 | 现在能否复跑 |
+| --- | --- | --- |
+| 两款 inklecate 交叉编译 | 通过（历史） | 可重编译当前源码，按第 1 节命令手工执行；历史产物哈希需同一基线快照 |
+| Phase 0 的 18 项 smoke | 通过（历史） | 否，临时 `.phase0-tools/` 已清理 |
+| 29 项 smoke（含纯点击自然通关） | 通过（历史） | **否**，`tools/phase0_smoke.cjs` 已删除 |
+| `__Tests/` 11 项回归 | 通过 | **是**，当前唯一测试入口 |
+
+- 当前标准复跑命令（在 `__Tests/` 下）：`npm ci --no-audit --no-fund && npm test`，固定 `inkjs@2.4.0`。
+- 该 11 项包含 `ChoosePathString` 与变量注入，覆盖编译、计数、强制闯入、No.8 状态注入与 `ResetState`；它不驱动完整九路线自然通关，也不替代 Inky GUI 与作者验收。
+- 若将来需要重新自动验证自然通关，应新写纯点选驱动测试并纳入 `__Tests/`，而不是恢复 `tools/phase0_smoke.cjs`。

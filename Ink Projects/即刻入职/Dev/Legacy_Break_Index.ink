@@ -1,6 +1,6 @@
-// LEGACY / ISOLATED DEV: This route hub is no longer included by the runtime entry.
-// It keeps the pre-migration knot name Break__Route_Hub for reference only; the main
-// navigation offers route choices directly. Do not divert to it from release code.
+// 遗留／隔离开发：运行入口已不再 INCLUDE 这个路线中枢。
+// 它仅保留迁移前的节点名 Break__Route_Hub 作为参考；主导航会直接给出路线选项。
+// 不要从发布代码跳转到这里。
 
 === Break__Route_Hub
 

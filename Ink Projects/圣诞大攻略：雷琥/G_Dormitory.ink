@@ -55,16 +55,18 @@
     ~   Rate_LeiHu++
     雷琥每天磨洋工的次数，随着你陪他的次数而同步减少，从唠嗑再到给他带饭，或者和他交流各种知识，教他怎么继续写论文之类的，不得不说…这家伙其实该会的都会，就是老说无聊。
     一周很快过去，今天也就是最后一天，同时还是平安夜了，雷琥说是要一鼓作气地搞定最终部分，提前跑回去了，你也不想拖沓，很快也跟了过去。
--   
+-   ->  RouteDecision
+=   RouteDecision
 //  ->  ShowData    ->
+// 多角色均被选择时暂沿用现有分支顺序；此优先级尚待作者确认。
 {Rate_LeiHu < 3:
-    {Choose_YeHen > (Choose_CenYe or Choose_LeiHu):
+    {Choose_YeHen > 0:
         ->  Finale.F5
     }
-    {Choose_CenYe > (Choose_YeHen or Choose_LeiHu):
+    {Choose_CenYe > 0:
         ->  Finale.F6
     }
-    {Choose_LeiHu > (Choose_YeHen or Choose_CenYe):
+    {Choose_LeiHu > 0:
         ->  Finale.F7
     }
     ->  Finale.F7

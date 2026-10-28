@@ -19,7 +19,7 @@
 | `Endings/` | 最终和解、现实 No.8、结局回顾 |
 | `UI/` | 菜单、标题、日志、异常页、制作人员 |
 | `Dev/` | 开发测试与兜底节点 |
-| `__Tests/` | 可复用的最小编译与回归入口（`inkjs@2.4.0`，CommonJS） |
+| `__Tests/` | 当前唯一可复跑的编译与回归入口（`inkjs@2.4.0`，CommonJS） |
 
 目录不使用数字前缀。文件名采用易读英文词组与下划线，例如 `Business_Trip.ink`、`Final_Reconciliation.ink`。
 
@@ -70,6 +70,37 @@
 - 不要在选项呈现或预览过程中偷偷增加路线计数；状态副作用应发生在真正进入路线／结算的位置。
 - 需要显示某一 Knot／Stitch 的历史访问序号时，使用 Ink 的 Stitch 读计数并显式 `+ 1` 表示当前一次（如 `Work__Gym` 的 `Game_Over + 1`）；不要用 `COUNT_GAME_OVER` 顶替这类历史访问次数。
 - 每条结局的计数和精神数值变化应有明确约定，并由测试覆盖；不能仅靠复制粘贴保持一致。
+
+### 注释约定
+
+- **解释性注释使用中文。** 面向维护者的说明、条件原因、设计约束都用中文写，方便主创与后续接手者审阅。
+- **代码标识符保留项目命名。** 注释里引用变量、Knot、Stitch、函数时使用源码中的原名（如 `SAN_SCORE`、`COUNT_GAME_OVER`、`Dream__Router.Check`），不要翻译、简写或另造别名。
+- **复杂条件解释原因，不写复述性噪音。** 说明“为什么需要这个条件／顺序”“它保护哪个设计约束”；不要逐行复述 `+ [选项]` 或 `-> Knot` 已经表达的内容。
+- 现有解释性注释已统一为中文；后续新增或修改注释时继续遵循本约定，不再新增英文说明。
+
+示例（取自 `Systems/Intrusion.ink` 的实际写法）：
+
+```ink
+// 优先级与原始启动检查一致：先检查缺失的关键工作路线，再检查缺失的面试，
+// 最后检查缺失的健身房。顺序会影响多个条件同时成立时的返回值。
+{
+    - Get__Sanity_State(SAN_SCORE) == "BAD" and COUNT_ROUTE_WORK_OFF_WORK == 0:
+        ~ return "WORK"
+
+    - Get__Sanity_State(SAN_SCORE) == "BAD" and COUNT_ROUTE_BREAK_INTERVIEW == 0:
+        ~ return "BREAK"
+}
+```
+
+不要写成：
+
+```ink
+// 如果状态是 BAD
+{ Get__Sanity_State(SAN_SCORE) == "BAD":
+    // 返回 WORK
+    ~ return "WORK"
+}
+```
 
 ### 排版模板
 
@@ -125,4 +156,4 @@
 - `Work__Gym` 的 `Game_Over + 1` 是 `Work__Gym.Game_Over` Stitch 的历史访问次数加当前一次，不是 `COUNT_GAME_OVER`；`ResetState()` 会重置该计数。
 - `Dream7` 已被 INCLUDE，但当前随机池只调用 Dream1–Dream6。
 - `UI/Menus/Main.ink` 中的 `【DEV】` 状态诊断文本当前由块注释隐藏。
-- InkJS 2.4.0 编译、Phase 0 的 18 项 smoke 与 Phase 1 的 11 项回归已有通过记录（测试入口 `__Tests/`，`npm test`）；后续两款 inklecate 交叉编译、29 项 smoke 与完整自然通关也已通过，Inky GUI 实机回归仍未运行。参见 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)、[KIMI_CODE_HANDOFF.md](KIMI_CODE_HANDOFF.md) 与 [REFACTOR_PLAN.md](REFACTOR_PLAN.md)。
+- InkJS 2.4.0 编译、Phase 0 的 18 项 smoke 与 Phase 1 的 11 项回归已有通过记录（当前测试入口 `__Tests/`，`npm test`）；历史的两款 inklecate 交叉编译、29 项 smoke 与纯点击完整自然通关也已通过，但执行脚本 `tools/phase0_smoke.cjs` 已按主创要求删除，29 项与自然通关**当前不可复跑**，11 项回归也不等于完整自然通关。Inky GUI 实机回归、宿主 `#RESTART` 与作者验收仍未运行。参见 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)、[KIMI_CODE_HANDOFF.md](KIMI_CODE_HANDOFF.md) 与 [REFACTOR_PLAN.md](REFACTOR_PLAN.md)。
