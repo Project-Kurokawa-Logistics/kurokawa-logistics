@@ -11,7 +11,7 @@
 
 本项目是 Ink 互动小说《圣诞大攻略：雷琥》。当前 `main` 已包含一轮未完成、未经过运行时验证的结局状态重构。不要假设所有已提交代码一定正确，也不要把它们全部推倒重写；请先审查现状，再以最小必要改动完成目标。
 
-当前最新提交：
+当前源码交接基线提交：
 [`c672c607`](https://github.com/Project-Kurokawa-Logistics/kurokawa-logistics/commit/c672c60798eb7d81da701de94a3329a90da8da47)
 
 该提交已经位于 `main`，没有需要重复合并的独立分支或 PR。后续代码工作应从这个 main HEAD 创建新分支，禁止未经审查直接推送到 main。
