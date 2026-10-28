@@ -1,4 +1,4 @@
-=== function Get__Forced_Intrusion
+=== function Get__Forced_Intrusion()
 
 {
     // Priority matches the original startup checks: missing key work routes, missing interview, then missing gym.

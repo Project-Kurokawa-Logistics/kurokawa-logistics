@@ -28,7 +28,7 @@
 
 //  在家呆着收到快递
 
-+   {Get__Sanity_State(SAN_SCORE) == "BAD"} 请假｜呆在家里回血
++   {Get__Sanity_State(SAN_SCORE) == "OK" or Get__Sanity_State(SAN_SCORE) == "BAD"} 请假｜呆在家里回血
 
     ->  Break__Home
 
