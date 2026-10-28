@@ -3,7 +3,7 @@
 - 交接日期：2026-10-28
 - 工程目录：`Ink Projects/即刻入职/`
 - 后续执行：KIMI CODE
-- 当前阶段：Phase 1 的静态审查与运行时回归已完成技术计数项；两条 Shutdown 的 SAN 设计仍待主创确认，完整自然通关、Inky GUI／inklecate 与作者验收尚未进行。
+- 当前阶段：Phase 1 的静态审查与运行时回归已完成技术计数项；后续 Phase 0 补测已完成两款 inklecate 交叉编译、29 项 smoke 与完整自然通关（见 `PHASE0_VALIDATION.md`）；两条 Shutdown 的 SAN 设计仍待主创确认，Inky GUI 实机回归与作者验收尚未进行。
 
 ## 一、开始工作前
 

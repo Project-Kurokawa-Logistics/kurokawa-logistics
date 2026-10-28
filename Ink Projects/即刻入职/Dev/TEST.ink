@@ -1,3 +1,6 @@
+// ISOLATED DEV: This file is not INCLUDE'd by 即刻入职.ink and is not reachable
+// from the release flow. Keep test-only state injection here, not in production knots.
+
 === Dev__TEST
 
 // ~   SAN_SCORE = 100

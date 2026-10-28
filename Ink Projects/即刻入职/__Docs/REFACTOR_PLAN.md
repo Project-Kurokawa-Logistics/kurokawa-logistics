@@ -2,7 +2,7 @@
 
 - 更新日期：2026-10-28
 - 当前基线：目录重构已合并至 `main`（PR #3，merge commit `728b84c201693db1a4774e2ee4402873914eb4e1`）
-- 状态：**Phase 1 技术计数项已由静态审查与 11 项运行时回归确认；两条 Shutdown 的 SAN 设计待主创确认，完整自然通关、Inky GUI／inklecate 实机回归与作者验收尚未完成**
+- 状态：**Phase 1 技术计数项已由静态审查与 11 项运行时回归确认；后续 Phase 0 补测已完成完整自然通关与 inklecate 交叉验证（见 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)）；两条 Shutdown 的 SAN 设计待主创确认，Inky GUI 实机回归与作者验收尚未完成**
 - 测试入口：`__Tests/`（`npm ci --no-audit --no-fund && npm test`），固定 `inkjs@2.4.0`
 - 原则：先保证行为，再逐步整理；每次改动可审查、可测试、可回滚。
 - 后续执行：KIMI CODE；具体约束与下一步见 [KIMI_CODE_HANDOFF.md](KIMI_CODE_HANDOFF.md)。
@@ -181,18 +181,18 @@ Ending__No8_Reality
 
 | 优先级 | 风险 | 当前状态／下一步 |
 | --- | --- | --- |
-| P0 | 结构迁移后未确认编译 | InkJS 2.4.0 编译通过（47/47 INCLUDE，0 错误／警告）；Inky／inklecate 与完整自然通关尚未验证 |
+| P0 | 结构迁移后未确认编译 | InkJS 2.4.0 与两款 inklecate 均编译通过；完整自然通关见 Phase 0 交叉验证记录 |
 | P0 | INCLUDE／Divert 引用可能因改名失效 | 静态扫描与 InkJS 编译均未发现失效引用 |
-| P1 | 最终和解计数可能差一 | 状态注入下 `COUNT_GAME_OVER = 9` 显示「前8次」；最终醒来次数语义按 Phase 3 核对，完整自然终局未验证 |
-| P1 | No.8／DRONE／强制闯入的优先级 | 关键组合已由回归覆盖；尚未穷举完整状态组合 |
+| P1 | 最终和解计数可能差一 | 状态注入与自然终局均已验证顺序；`COUNT_GAME_OVER = 9` 显示「前8次」的叙事含义仍按 Phase 3 核对 |
+| P1 | No.8／DRONE／强制闯入的优先级 | 关键组合与自然全九路线已覆盖；尚未穷举完整状态组合 |
 | P1 | 各路线结局统计是否恰好一次 | 九条路线首次／重复回归通过，每次结算恰好 +1；Shutdown 精神增量设计待主创确认 |
 | P1 | 两条 Shutdown 是否应增加 SAN | **设计未确认**：现状均不增加，本轮未修改，保持待主创决定 |
 | P1 | Gym 历史次数被误当 `COUNT_GAME_OVER` | 回归确认使用 `Work__Gym.Game_Over` Stitch 读计数，首次／重复显示 1／2 次；不得替换 |
-| P1 | 初始导航、OK／BAD 休息条件 | 直接路径与回归通过；完整自然通关未运行 |
+| P1 | 初始导航、OK／BAD 休息条件 | 直接路径、状态注入与自然全九路线均通过 |
 | P2 | 菜单中的 `【DEV】` 文本 | 当前由块注释隐藏；是否保留由主创决定 |
 | P2 | Dream7 未进入随机池 | 设计待确认，不擅自更改 |
 | P2 | No.8 现实结局仍是短草稿 | 主创审阅并扩写 |
-| P2 | 回归仅覆盖 InkJS 运行时 | 未运行 Inky GUI、inklecate、宿主 `#RESTART`；测试含 direct path／状态注入 |
+| P2 | 回归仅覆盖 InkJS 运行时 | InkJS 与 inklecate 交叉验证已通过；Inky GUI 与宿主 `#RESTART` 未运行；测试含 direct path／状态注入 |
 | P3 | 历史命名不完全统一 | 不阻塞验证；后续渐进处理 |
 
 ## 4. 每个实现 PR 的验收格式

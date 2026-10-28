@@ -2,7 +2,7 @@
 
 - 更新日期：2026-10-28
 - 对应架构：目录迁移后的 `main`（PR #3）
-- **验证声明：** 本文主要根据当前 Ink 源码静态整理，箭头不表示每条路径均已运行验证。Phase 0 的 InkJS 2.4.0 编译和 18 项 smoke 测试已通过；Phase 1 另在 `__Tests/` 建立 11 项可复用回归并全部通过（含直接路径与状态注入）。完整自然通关、Inky GUI／inklecate 实机回归仍未运行；该边界见 [KIMI_CODE_HANDOFF.md](KIMI_CODE_HANDOFF.md)。
+- **验证声明：** 本文主要根据当前 Ink 源码静态整理，箭头不表示每条路径均已运行验证。Phase 0 的 InkJS 2.4.0 编译和 18 项 smoke 测试已通过；Phase 1 另在 `__Tests/` 建立 11 项可复用回归并全部通过（含直接路径与状态注入）。后续两款 inklecate 交叉编译、29 项 smoke 与完整自然通关也已通过，Inky GUI 实机回归仍未运行；验证记录见 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)。
 
 ## 1. 主流程图
 
@@ -144,17 +144,17 @@ flowchart TD
   → 现实中醒来，接受 AZ 的安排，成为市场部部长 No.8
 ```
 
-当前 `Ending__Final_Reconciliation.ink` 在场景开始时设置 `HAS_ENTERED_FINAL_RECONCILIATION = true`，并用 `COUNT_GAME_OVER - 1` 生成前几次醒来的数量。状态注入测试已确认 `COUNT_GAME_OVER = 9` 时显示“前8次”；这只是现状状态注入验证，最终醒来次数的语义仍按 Phase 3 待核对，不能据此声称完整自然终局已验证。现实结局文件目前仍有 TODO 和 AI 草稿，需要主创审阅。
+当前 `Ending__Final_Reconciliation.ink` 在场景开始时设置 `HAS_ENTERED_FINAL_RECONCILIATION = true`，并用 `COUNT_GAME_OVER - 1` 生成前几次醒来的数量。状态注入测试与完整自然通关均已确认 `COUNT_GAME_OVER = 9` 时显示“前8次”，终局顺序正确；最终醒来次数的叙事含义仍按 Phase 3 待核对。现实结局文件目前仍有 TODO 和 AI 草稿，需要主创审阅。
 
 ## 6. 当前需验证的问题
 
-- [x] InkJS 2.4.0 编译、所有 INCLUDE 与 Divert 目标；尚未用 Inky／inklecate 交叉验证。
+- [x] InkJS 2.4.0 编译、所有 INCLUDE 与 Divert 目标；两款 inklecate 交叉编译也已通过。
 - [x] 初始导航确实只有面试／上班。
 - [x] 普通路线首次 +10、重复 +5，九条路线的 `COUNT_GAME_OVER` 每次只增加一次。
 - [x] OK／BAD 休息选项和 FINE 健身条件。
 - [x] 已测强制闯入路径在下一次环境检查进入 DRONE 乱码页。
-- [ ] 全路线自然经历时 No.8 门槛正确；隐藏菜单捷径的计数写入已单独验证，但仍需自然经历验证。
-- [x] 状态注入下“空白空间 → 现实 No.8”顺序正确，不出现额外普通醒来；完整自然通关未运行。
+- [x] 全路线自然经历时 No.8 门槛正确；隐藏菜单捷径的计数写入也已单独验证。
+- [x] 状态注入与完整自然通关中“空白空间 → 现实 No.8”顺序均正确，不出现额外普通醒来。
 - [x] 结局回顾、菜单预览与 `Menu__Game_Over`／标题往返不意外改变路线计数或精神状态。
 - [x] Gym 的历史次数使用 `Work__Gym.Game_Over` Stitch 读计数，首次／重复显示至少 1／2 次，不混淆 `COUNT_GAME_OVER`。
 - [ ] 两条 Shutdown 的 SAN 增加与否仍待主创确认（现状均不增加）。

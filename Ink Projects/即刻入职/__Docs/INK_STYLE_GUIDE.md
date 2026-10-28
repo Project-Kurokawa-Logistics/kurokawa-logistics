@@ -125,4 +125,4 @@
 - `Work__Gym` 的 `Game_Over + 1` 是 `Work__Gym.Game_Over` Stitch 的历史访问次数加当前一次，不是 `COUNT_GAME_OVER`；`ResetState()` 会重置该计数。
 - `Dream7` 已被 INCLUDE，但当前随机池只调用 Dream1–Dream6。
 - `UI/Menus/Main.ink` 中的 `【DEV】` 状态诊断文本当前由块注释隐藏。
-- InkJS 2.4.0 编译、Phase 0 的 18 项 smoke 与 Phase 1 的 11 项回归已有通过记录（测试入口 `__Tests/`，`npm test`）；完整自然通关与 Inky GUI／inklecate 实机回归仍未运行。参见 [KIMI_CODE_HANDOFF.md](KIMI_CODE_HANDOFF.md) 与 [REFACTOR_PLAN.md](REFACTOR_PLAN.md)。
+- InkJS 2.4.0 编译、Phase 0 的 18 项 smoke 与 Phase 1 的 11 项回归已有通过记录（测试入口 `__Tests/`，`npm test`）；后续两款 inklecate 交叉编译、29 项 smoke 与完整自然通关也已通过，Inky GUI 实机回归仍未运行。参见 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)、[KIMI_CODE_HANDOFF.md](KIMI_CODE_HANDOFF.md) 与 [REFACTOR_PLAN.md](REFACTOR_PLAN.md)。

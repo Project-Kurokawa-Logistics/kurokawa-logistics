@@ -1,4 +1,6 @@
-// LEGACY: This route hub is no longer included by the runtime entry. The main navigation offers route choices directly.
+// LEGACY / ISOLATED DEV: This route hub is no longer included by the runtime entry.
+// It keeps the pre-migration knot name Break__Route_Hub for reference only; the main
+// navigation offers route choices directly. Do not divert to it from release code.
 
 === Break__Route_Hub
 
