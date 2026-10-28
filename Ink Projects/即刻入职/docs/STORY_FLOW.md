@@ -1,120 +1,160 @@
-# 《即刻入职》故事线路图（当前实现）
+# 《即刻入职》故事线路图与状态说明
 
-> 根据 main commit b6edda0a51aa253f2f256d978ba482f7c2cc2e2c 中的 Ink 源码静态整理。**实线表示当前可见的 divert／分支关系，不保证经实机测试可达；图中简化了对白、循环条件与局部 Stitch。** 设定解释与代码事实分列说明。
+- 更新日期：2026-10-28
+- 对应架构：目录迁移后的 `main`（PR #3）
+- **验证声明：** 本文根据当前 Ink 源码静态整理，未执行 Ink 编译或全路径实机测试。箭头表示源码中的可见转移，不保证每条路径已被运行验证。
 
-## 一、入口、重新连接和深层故事
-
-```mermaid
-flowchart TD
-    Entry["即刻入职.ink<br/>INCLUDE + -> Check__Env"] --> Env{"Check__Aboard_Status()"}
-    Env -->|"DRONE"| Drone["Page__Drone<br/>异常乱码／故障重置"]
-    Env -->|"Prototype 或 No.8"| Title["Page__Title → Menu__Main"]
-    Title -->|"初始化／重新连接"| DreamCheck{"Dream__Index.Check<br/>按 INDEX 抽梦"}
-    Title -->|"结局回溯"| Gallery["Endings__Index<br/>已有事件回顾"]
-    DreamCheck -->|"未触发梦境／FINE"| Startup["Base__Startup.Check"]
-    DreamCheck -->|"触发梦境"| Shuffle["Dream__Index.Shuffle<br/>Dream1～Dream6"]
-    Shuffle --> Aboard{"Check__Aboard_Status()"}
-    Aboard -->|"No.8"| Wakeup["Base__Wakeup<br/>记忆回归／终局前：仍在编写"]
-    Aboard -->|"其他"| Startup
-    Startup -->|"特定条件提前终结"| Forced["Work__Shutdown<br/>或 Break__Shutdown"]
-    Startup -->|"常规"| Navigator["Navigator.Index<br/>按状态和经历变化叙述"]
-    Navigator --> Going["Base__Going_To.Choice"]
-    Going --> Work["Work 路线"]
-    Going --> Break["Break 路线"]
-    Work --> Over["对应结局 → Menu__Game_Over"]
-    Break --> Over
-    Forced --> Over
-    Over -->|"断开连接"| Env
-    Drone -->|"确认重置"| Reset["# RESTART / END"]
-```
-
-**叙事层面的理解：** 洛书在工作／请假选择中反复遇到 AZ 所代表的“入职”事件；不同遭遇累计成跨周目的记录与压力变化。随着循环，梦境逐渐透露黑胶同化、意识和身份的信息。Base__Wakeup 进一步提出反复死亡／重新连接以及 No.8 身份问题。它目前仍有占位与未完段落，不把未写出的真相当成已实现剧情。
-
-## 二、工作与请假路线（事件级）
+## 1. 主流程图
 
 ```mermaid
 flowchart TD
-    Choice["Base__Going_To.Choice"] -->|"上班；受状态／标志限制"| WM["Work__Index.Morning"]
-    Choice -->|"请假面试：FINE／OK"| BI["Break__Interview"]
-    Choice -->|"看电影：OK／BAD"| BC["Break__Cinema"]
-    Choice -->|"在家收快递：BAD"| BH["Break__Home"]
-    Choice -->|"异常文字选项：AWFUL"| BS["Break__Shutdown"]
-    WM -->|"工作事件均已体验"| WS["Work__Shutdown：办公室"]
-    WM -->|"其他情况"| BT{"Work__Business_Trip.Choice"}
-    BT -->|"去"| BTF["Work__Business_Trip.Flow"]
-    BT -->|"不去"| WA["Work__Index.Afternoon"]
-    WA -->|"BAD：强制"| NP["Work__Napping.Flow"]
-    WA -->|"OK：可选择"| NPC{"Work__Napping.Choice"}
-    NPC -->|"睡"| NP
-    NPC -->|"不睡"| WE["Work__Index.Evening"]
-    WA -->|"FINE：不睡"| WE
-    WE -->|"FINE 可选"| Gym["Work__Gym：健身房／AZ"]
-    WE -->|"回家"| WO["Work__Off_Work：下班路上"]
-    BI --> End["各路线自己的 Ending__... → Menu__Game_Over"]
-    BC --> End
-    BH --> End
-    BS --> End
-    WS --> End
-    BTF --> End
-    NP --> End
-    Gym --> End
-    WO --> End
+    Entry["即刻入职.ink"] --> Env{"Check__Environment"}
+    Env -->|"Get__Aboard_Status() = DRONE"| Drone["Page__Drone：乱码／故障页"]
+    Env -->|"其他状态"| Title["Page__Title → Menu__Main"]
+    Title -->|"初始化／重新连接"| Router["Dream__Router.Check"]
+    Title -->|"结局回顾"| Gallery["Ending__Route_Gallery.Index"]
+    Router -->|"状态为 DRONE"| Env
+    Router -->|"No.8 且未进入和解"| White["Ending__Final_Reconciliation"]
+    Router -->|"No.8 且已进入和解"| Reality["Ending__No8_Reality"]
+    Router -->|"强制闯入条件成立"| Startup["Flow__Startup.Check"]
+    Router -->|"FINE"| Startup
+    Router -->|"OK／BAD／AWFUL 的梦境判定"| Chance["Dream__Router.Check__Dream_Chance"]
+    Chance -->|"触发梦境"| Dreams["Dream1–Dream6"]
+    Chance -->|"不触发"| Startup
+    Dreams --> Startup
+    Startup -->|"强制 WORK"| WorkShutdown["Work__Shutdown"]
+    Startup -->|"强制 BREAK"| BreakShutdown["Break__Shutdown"]
+    Startup -->|"常规流程"| Nav["Flow__Navigator.Index"]
+    Nav --> Going["Flow__Going_To.Choice"]
+    Going --> Work["Work__Route_Hub"]
+    Going --> Break["Break__Interview／Cinema／Home／Shutdown"]
+    Work --> End["路线结算 → Menu__Game_Over"]
+    Break --> End
+    WorkShutdown --> End
+    BreakShutdown --> End
+    End -->|"断开连接／重新连接"| Env
+    White --> Reality
 ```
 
-上图按已写出的显式入口组织，**不是保证每条路径同时可选**：
+### 启动、梦境和强制闯入的优先级
 
-- Base__Startup.Check 在常规导航前可能强制 Work__Shutdown 或 Break__Shutdown，因此不能只看 Base__Going_To 的选项判断可达性。
-- Work__Index.Morning 在四个工作事件（Gym、Off_Work、Business_Trip、Napping）均已有记录时自动进入办公室终结。
-- Work__Index.Afternoon 的 BAD 状态直接转入小憩，而 FINE 状态跳过小憩；晚间健身选项还依赖 FINE。
-- Break__Index 文件有“Interview／Cinema／Home 都有记录时转居家终结”的判定，但当前主行动菜单由 Base__Going_To.Choice 直接跳转各 Break 事件；这段判定是否实际被调用仍待核查。
+`Dream__Router.Check` 当前按以下顺序判断：
 
-## 三、结局事件与数值变化
+1. DRONE → 回到环境检查／异常页。
+2. No.8 且 `HAS_ENTERED_FINAL_RECONCILIATION == false` → 空白空间最终和解。
+3. No.8 且该标记为 true → 现实苏醒的 No.8 结局。
+4. `Get__Forced_Intrusion() != "NONE"` → 进入启动分流，由 `Flow__Startup.Check` 决定强制 WORK 或 BREAK。
+5. FINE → 直接进入正常启动流程。
+6. 其他精神状态 → 按梦境概率决定是否进入随机梦境，再进入正常启动流程。
 
-Flag__... 虽名为 Flag，当前由 ++ 更新，实际表示**事件经历次数**，判断 != 0 表示已看过。下表仅说明对应事件文件中可见的直接更新。
+这意味着 No.8 与强制闯入检查优先于普通随机梦境。需要通过实机测试确认每个状态组合的实际可达性。
 
-| 事件 | 对应计数 | 首次／重复对 INDEX 的变化 | 增加 Count__Game_Over |
-| --- | --- | --- | --- |
-| 工作：出差 | Flag__Work__Business_Trip | +10／+5 | 是 |
-| 工作：健身房 | Flag__Work__Gym | +10／+5 | 是 |
-| 工作：下班路上 | Flag__Work__Off_Work | +10／+5 | 是 |
-| 工作：小憩 | Flag__Work__Napping | +10／+5 | **未看到（待确认）** |
-| 工作：办公室 | Flag__Work__Shutdown | 未直接增加 | 是 |
-| 请假：面试 | Flag__Break__Interview | +10／+5 | 是 |
-| 请假：电影院 | Flag__Break__Cinema | +10／+5 | 是 |
-| 请假：收快递 | Flag__Break__Home | +10／+5 | 是 |
-| 请假：居家终结 | Flag__Break__Shutdown | 未直接增加 | 是 |
+## 2. 作者确认的故事设计约束
 
-INDEX 初始化为 -1，Base/Navigator.ink 的初次面试信分支将其增加为 0。是否最终应将它定义为“压力”还是“sanity”需要主创确定：**现有规则是值越大，状态越差**。
+以下是主创明确的叙事目标，不应仅因为当前代码与之不一致就反过来修改设定：
 
-## 四、精神状态、梦境、终局和异常
+- 故事发生在洛书已于现实中被 AZ 抓住之后。反复醒来首先发生在精神空间。
+- 开局收到黑川物流市场部面试邀请函；首次导航仅有面试与上班两个选择。
+- 第一次经历某条普通路线增加精神数值 10，重复经历增加 5；反复刷同一条路线不应成为最佳策略。
+- FINE 时才考虑健身；BAD 时更想休息；OK 与 BAD 都允许考虑休息。
+- 精神状态恶化且部分路线尚未经历时，下一次醒来可能触发 AZ 强制闯入；其后在 DRONE 状态下显示故障乱码。
+- 所有普通路线的结局都是被入职。若所有路线完成且洛书仍保有自我，必须在空白空间中完成与自己的和解；这是最后一次精神空间的醒来。随后才在现实中醒来，接受 AZ 的安排，成为黑川物流市场部部长 No.8。
+- 空白空间是最终和解，不是普通路线回顾项，也不能在其后再插入一次普通梦境／精神空间醒来。
 
-### 精神状态（Functions/Check__SAN.ink）
+## 3. 行动选择与路线
 
-| 返回值 | 当前代码条件（按判定顺序） | 梦境抽取概率（Dream__Index.Check） |
+### 初始行动
+
+入口 `SAN_SCORE = -1`，`Get__Sanity_State(-1)` 应返回 FINE。当前 `Flow__Going_To.Choice` 的条件设计为：
+
+| 选项 | 当前条件 |
+| --- | --- |
+| 请假去黑川物流面试 | FINE 或 OK |
+| 请假出门看电影 | OK 或 BAD |
+| 请假在家休息／收快递 | OK 或 BAD |
+| 异常乱码的居家终结选项 | AWFUL |
+| 去公司上班 | 非 BAD／AWFUL，或办公室终结尚未经历 |
+
+因此首次 FINE 导航应只显示面试和上班。请用实际运行验证，而不要只依据静态条件判断。
+
+### 工作路线
+
+- `Work__Route_Hub.Morning` 先检查部分已经历路线；若健身、下班、出差、小憩均有记录，会转入办公室终结。
+- 上午可能进入出差路线；下午根据精神状态处理小憩；晚上 FINE 状态才显示健身选项，另可选择下班回家。
+- BAD 状态的下午逻辑当前会直接转入小憩流程；OK 状态进入小憩选择；FINE 状态跳过小憩分支。
+- 具体分支还受已经历路线和前置条件影响，不能把上述概括当作每次都出现的固定菜单。
+
+### 请假路线
+
+| 路线 | 目标含义 | 当前可见入口条件 |
 | --- | --- | --- |
-| AWFUL | INDEX >= 60，且已出现 5 个 Work + 3 个 Break 事件记录（不含 Break__Shutdown） | 100% |
-| BAD | 不满足上项且 INDEX >= 60 | 75% |
-| OK | 30 <= INDEX < 60 | 50% |
-| FINE | INDEX < 30 | 0% |
+| `Break__Interview` | 黑川物流面试 | FINE／OK |
+| `Break__Cinema` | 出门看电影 | OK／BAD |
+| `Break__Home` | 在家休息／收快递 | OK／BAD |
+| `Break__Shutdown` | AZ 强制闯入／居家终结 | AWFUL 的特殊选项或启动强制分支 |
 
-### No.8 身份判定（Functions/Check__Aboard_Status.ink）
+## 4. 精神状态与梦境概率
 
-- 优先条件：**5 个 Work + 4 个 Break** 事件全部已有记录，返回 "No.8"（和 AWFUL 的条件**不相同**）。
-- 其次根据状态、未完成事件与相应 Shutdown 事件，返回 "DRONE"；环境检查将其导向异常乱码页，页面提供重置。
-- 其他情况返回 "Prototype"，走正常标题界面。
-- Dream__Index.Shuffle 完成后再次检查 "No.8"；成立才进入 Base__Wakeup。这不是普通结局回顾。
+`Systems/Sanity.ink` 的当前判定顺序：
 
-### 随机梦境池
+| 状态 | 源码条件 |
+| --- | --- |
+| AWFUL | `score >= 60`，且健身、下班、出差、小憩、办公室、面试、电影、收快递这 8 条普通路线都有记录 |
+| BAD | `score >= 60`，但不满足 AWFUL 的路线集合条件 |
+| OK | `30 <= score < 60` |
+| FINE | `score < 30` |
 
-Dream__Index.Shuffle 当前写了 Dream1～Dream6 六个调用。**Dreams/Dream7.ink 已 INCLUDE、已有内容，但尚未出现在 Shuffle 列表中。** 不应在资料图上误画成随机可抽到。
+`Dream__Router.Check__Dream_Chance` 当前梦境概率：
 
-### 菜单隐蔽入口
+| 状态 | 概率／行为 |
+| --- | --- |
+| FINE | 不抽梦，直接正常启动 |
+| OK | 50% |
+| BAD | 75% |
+| AWFUL | 100% |
 
-Menu__Main 的分隔线选项累计点击超过 5 次时，会把多个 Flag 设置为 1，并开放 No.8／结局回溯相关文本。这是当前源码提供的特殊入口；不视为正常流程里自然达成全部事件的证明。
+随机池目前只有 Dream1–Dream6。Dream7 虽在入口文件中被 INCLUDE，但未在 `Dream__Router.Shuffle` 中调用；是否加入随机池是待主创确认的设计决定。
 
-## 五、维护时如何更新本图？
+## 5. 身份状态、路线计数和终局
 
-1. 新增可选事件：在第二张图加入节点和跳转；同步更新结局表。
-2. 修改 INDEX、事件门槛、梦境概率：同步修改第四节的条件表，并检查 Check__SAN 与 Check__Aboard_Status 的先后次序。
-3. 添加真结局文本：单独扩展 Base__Wakeup 的局部流程，避免主图过密。
-4. 发布前对至少 FINE、OK、BAD、AWFUL 与特殊 No.8／DRONE 路径进行实际 Ink 编译和游玩测试；静态结构图无法替代测试。
+### 路线计数
+
+- `COUNT_ROUTE_WORK_*`、`COUNT_ROUTE_BREAK_*`：0 表示未经历，非 0 表示已经历；数值还用于区分第一次与重复经历。
+- 普通路线的结算逻辑应是第一次 +10、重复 +5。
+- `COUNT_GAME_OVER` 参与重新连接／醒来次数显示。必须逐条确认每条路线恰好增加一次；不要默认它与“醒来次数”完全同义。
+
+### 身份状态
+
+`Systems/Aboard_Status.ink` 当前优先检查：
+
+1. 5 条 Work 路线与 4 条 Break 路线全部有记录 → `No.8`。
+2. 部分 BAD／非 FINE 状态、路线缺失且相应 Shutdown 已发生 → `DRONE`。
+3. 其他状态 → `Prototype`。
+
+隐藏菜单可以把多条路线计数直接设为 1，因此“计数满足 No.8 门槛”不一定意味着玩家自然经历过每条路线。测试时应把正常通关与隐藏菜单捷径分开。
+
+### 最终两阶段
+
+```text
+所有路线达到 No.8 判定
+  → Ending__Final_Reconciliation
+  → 在空白精神空间中醒来并与自己和解
+  → Ending__No8_Reality
+  → 现实中醒来，接受 AZ 的安排，成为市场部部长 No.8
+```
+
+当前 `Ending__Final_Reconciliation.ink` 在场景开始时设置 `HAS_ENTERED_FINAL_RECONCILIATION = true`，并用 `COUNT_GAME_OVER - 1` 生成前几次醒来的数量。两项都需要在运行时核对，尤其是计数是否差一。现实结局文件目前仍有 TODO 和 AI 草稿，需要主创审阅。
+
+## 6. 当前需验证的问题
+
+- [ ] Ink 编译、所有 INCLUDE 与 Divert 目标。
+- [ ] 初始导航确实只有面试／上班。
+- [ ] 首次 +10、重复 +5，且 `COUNT_GAME_OVER` 每次只增加一次。
+- [ ] OK／BAD 休息选项和 FINE 健身条件。
+- [ ] 强制闯入触发后，下一次环境检查进入 DRONE 乱码页。
+- [ ] 全路线自然经历时 No.8 门槛正确；隐藏菜单捷径单独测试。
+- [ ] 空白空间 → 现实 No.8 的顺序不可逆，不出现额外普通醒来。
+- [ ] 结局回顾不意外改变路线计数或精神状态。
+- [ ] 主菜单中的 `【DEV】` 调试信息是否需要隐藏。
+
+本图用于沟通和审查；任何实现变更后都要同步更新。若故事设定与代码不一致，应在文档中标出差异并交给主创决定，不要由实现者自行推断。
