@@ -1,0 +1,14 @@
+{
+  "name": "jike-ruzhi-ink-tests",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Minimal compile and regression harness for 即刻入职 Phase 1.",
+  "scripts": {
+    "compile": "node compile.cjs",
+    "regression": "node compile.cjs && node regression.cjs",
+    "test": "node compile.cjs && node regression.cjs"
+  },
+  "dependencies": {
+    "inkjs": "2.4.0"
+  }
+}
