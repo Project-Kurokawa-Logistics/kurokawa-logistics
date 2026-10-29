@@ -97,7 +97,7 @@ function home(s, target) {
   start(s, true);
   choose(s, target === 2 ? 2 : target === 4 ? 1 : 0); // heating
   choose(s, target === 2 ? 0 : 1); // help
-  choose(s, 0); // cook
+  choose(s, target === 3 ? 1 : 0); // cook: F3 takes takeout to stay on the threshold
   if (target === 4) choose(s, 0); // ask progress
   else {
     choose(s, 0); // warmth
@@ -225,7 +225,7 @@ test('developer previews of F2/F7 do not unlock hidden branches on the next norm
     finish(s);
     title(s);
   }
-  dormitory(s, 1, 2, 2); // rate=3 through normal choices
+  dormitory(s, 2, 2, 2); // rate=3 through normal choices
   assert.deepEqual(s.currentChoices.map(c => c.text), ['担心身体']);
   assert.deepEqual(achieved(s), []);
   finish(s);
@@ -266,8 +266,10 @@ test('normal retry menu clears injected dirty run state, retaining formal ending
   s.variablesState.Rate_LeiHu = 9;
   for (const name of ['Choose_YeHen', 'Choose_CenYe', 'Choose_LeiHu']) s.variablesState[name] = 4;
   s.variablesState.IsPreviewMode = true;
+  s.variablesState.Dormitory_LeiHu_Direct = true;
   choose(s, '再攻略一次！');
   assert.deepEqual(variables(s), [0, 0, 0, 0]);
+  assert.equal(s.variablesState.Dormitory_LeiHu_Direct, false);
   assert.equal(s.variablesState.IsPreviewMode, false);
   assert.deepEqual(achieved(s), [2]);
 });
@@ -280,9 +282,11 @@ test('engine ResetState clears all run values, formal flags, preview and develop
   for (const name of flagNames) s.variablesState[name] = true;
   s.variablesState.Rate_LeiHu = 9;
   for (const name of ['Choose_YeHen', 'Choose_CenYe', 'Choose_LeiHu']) s.variablesState[name] = 4;
+  s.variablesState.Dormitory_LeiHu_Direct = true;
   s.ResetState();
   drain(s);
   assert.deepEqual(variables(s), [0, 0, 0, 0]);
+  assert.equal(s.variablesState.Dormitory_LeiHu_Direct, false);
   assert.deepEqual(achieved(s), []);
   assert.equal(s.variablesState.FinaleCount, 0);
   assert.equal(s.variablesState.IsPreviewMode, false);
@@ -296,16 +300,48 @@ test('normal title routes reach F1-F6, F8, F9 and F11 without injecting variable
     home(s, id);
     assert.deepEqual(achieved(s), [id]);
   }
-  for (const [id, first, greeting, activity] of [[5, 0, 0, 0], [6, 1, 1, 1], [8, 1, 2, 2]]) {
+  for (const [id, first, greeting, activity] of [[5, 0, 0, 0], [6, 1, 1, 1], [8, 2, 2, 2]]) {
     const s = fresh();
     dormitory(s, first, greeting, activity);
     finish(s);
     assert.deepEqual(achieved(s), [id]);
   }
+  const cenye = fresh();
+  start(cenye);
+  choose(cenye, 1); // CenYe opening: count only, no affection
+  assert.deepEqual(variables(cenye), [0, 0, 1, 0]);
+  assert.equal(cenye.variablesState.Dormitory_LeiHu_Direct, false);
+  const leihu = fresh();
+  start(leihu);
+  choose(leihu, 2); // LeiHu opening: affection, count and direct flag
+  assert.deepEqual(variables(leihu), [1, 0, 0, 1]);
+  assert.equal(leihu.variablesState.Dormitory_LeiHu_Direct, true);
+  choose(leihu, 0); // follow-up
+  assert.equal(leihu.variablesState.Rate_LeiHu, 2);
+  choose(leihu, 0); // pay branch: both third-level branches raise affection
+  assert.equal(leihu.variablesState.Rate_LeiHu, 3);
+  const tired = fresh();
+  start(tired);
+  choose(tired, 2); // LeiHu opening
+  assert.equal(tired.variablesState.Rate_LeiHu, 1);
+  choose(tired, 0); // follow-up
+  assert.equal(tired.variablesState.Rate_LeiHu, 2);
+  choose(tired, 1); // tired branch
+  assert.equal(tired.variablesState.Rate_LeiHu, 3);
+  const tenement = fresh();
+  start(tenement, true);
+  choose(tenement, 0); // Tune_On
+  choose(tenement, 1); // stop helping
+  choose(tenement, 0); // cook yourself
+  assert.equal(tenement.variablesState.Rate_LeiHu, 1);
+  choose(tenement, 0); // "看你热成那样"
+  assert.equal(tenement.variablesState.Rate_LeiHu, 2);
+  choose(tenement, 0); // fold his clothes at the bathroom door
+  assert.equal(tenement.variablesState.Rate_LeiHu, 3);
   const s = fresh();
   home(s, 2);
   title(s);
-  dormitory(s, 1, 2, 2);
+  dormitory(s, 2, 2, 2);
   assert.deepEqual(s.currentChoices.map(c => c.text), ['好好吃饭', '担心身体']);
   finish(s, '好好吃饭');
   assert.deepEqual(achieved(s), [2, 9]);
@@ -318,18 +354,25 @@ test('normal title routes reach F1-F6, F8, F9 and F11 without injecting variable
   assert.deepEqual(achieved(basement), [11]);
 });
 
-test('A-01 injected route matrix uses selection eligibility and the affection boundary', () => {
-  for (const rate of [2, 3]) for (let mask = 0; mask < 8; mask++) {
+test('A-01 injected route matrix follows the RAW rule: affection boundary, direct LeiHu opening, unique-highest bias', () => {
+  const expected = (rate, y, c, l, direct) => {
+    if (rate >= 3) return 8;
+    if (direct) return 7;
+    if (y > c && y > l) return 5;
+    if (c > y && c > l) return 6;
+    return 7; // unique LeiHu lead, ties and all-zero states share the default F7
+  };
+  for (const rate of [2, 3]) for (let mask = 0; mask < 8; mask++) for (const direct of [false, true]) {
     const s = fresh();
+    const y = mask & 1 ? 2 : 0, c = mask & 2 ? 1 : 0, l = mask & 4 ? 2 : 0;
     s.variablesState.Rate_LeiHu = rate;
-    s.variablesState.Choose_YeHen = mask & 1 ? 2 : 0;
-    s.variablesState.Choose_CenYe = mask & 2 ? 1 : 0;
-    s.variablesState.Choose_LeiHu = mask & 4 ? 2 : 0;
+    s.variablesState.Choose_YeHen = y;
+    s.variablesState.Choose_CenYe = c;
+    s.variablesState.Choose_LeiHu = l;
+    s.variablesState.Dormitory_LeiHu_Direct = direct;
     jump(s, 'G_Dormitory.RouteDecision');
     finish(s);
-    // This order is the implementation's provisional conflict behavior, not an author-confirmed rule.
-    const expected = rate >= 3 ? 8 : mask & 1 ? 5 : mask & 2 ? 6 : 7;
-    assert.deepEqual(achieved(s), [expected], `rate=${rate}, mask=${mask}`);
+    assert.deepEqual(achieved(s), [expected(rate, y, c, l, direct)], `rate=${rate}, mask=${mask}, direct=${direct}`);
   }
 });
 
@@ -354,7 +397,7 @@ test('normal F2 then F7 unlocks F10 across retries without injecting variables',
   finish(s);
   assert.deepEqual(achieved(s), [2, 7]);
   title(s);
-  dormitory(s, 1, 2, 2);
+  dormitory(s, 2, 2, 2);
   assert.deepEqual(s.currentChoices.map(c => c.text), ['好好吃饭', '袒露心声', '担心身体']);
   finish(s, '袒露心声');
   assert.deepEqual(achieved(s), [2, 7, 10]);
@@ -374,7 +417,8 @@ test('normal dormitory choices expose multi-character selection and reachability
     endings[id] = (endings[id] || 0) + 1;
   }
   assert.ok(lowStates.has('1,1,1'), 'normal low-affection three-character path must be covered');
-  assert.ok(![...lowStates].some(v => /^0,0,\d+$/.test(v)), 'low-affection LeiHu-only and all-zero states require injection');
+  assert.ok(![...lowStates].some(v => /^0,0,\d+$/.test(v)), 'low-affection LeiHu-only and all-zero states require injection: greeting and afternoon each add a count');
+  assert.deepEqual(endings, { 5: 6, 6: 6, 7: 12, 8: 21 }, 'RAW-derived 45-path distribution');
   t.diagnostic(JSON.stringify({ normalDormitoryPaths: 45, endingDistribution: endings, lowAffectionSelectionStates: [...lowStates].sort() }));
 });
 

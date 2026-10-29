@@ -11,10 +11,12 @@
         “听说橄榄球教练最近把夜痕留的挺晚的…”
         “呵…他这个人很在乎实力，欲求不满地渴求进步空间。”雷琥声调有些怪，像是讽刺什么。
 +   [岑烨的事]
-        ~   Rate_LeiHu++
+        ~   Choose_CenYe++
         “岑烨的棒球成绩很不错诶，搞得和他打友谊赛的人都不让他当击球手。”
         “啧啧，毕竟对于他而言，击中时的感觉比最终成绩还重要，所以他经常练习，不到傍晚他不会回来的。”雷琥这算是夸赞还是玩味，你也没问下去。
 +   [雷琥的事]
+        ~   Choose_LeiHu++
+        ~   Dormitory_LeiHu_Direct = true
         ~   Rate_LeiHu++
         “雷琥，你平时除了上课，就是训练吗？”
         “……陪我的舍友玩算额外的嘛？哼哼…”
@@ -26,6 +28,7 @@
                 ~   Rate_LeiHu++
                 “高…很高，至少我很满意。”雷琥又变得干脆起来。
             +++ [“会不会累?”]“平时学校里的学业和训练都够累了，你兼职会不会很累？”
+                ~   Rate_LeiHu++
                 “那份工作，虽然不是我主动找的，但是我很满意。至于累不累，得看这些东西以外的休息时间够不够有趣咯，你问这么多，还要不要我写了？”雷琥带有笑意的埋怨起你来。
         ++  [就此打住]
 -   你也不继续问了，刷手机的过程中，夜痕与岑烨满身大汗相继回到宿舍。
@@ -58,15 +61,19 @@
 -   ->  RouteDecision
 =   RouteDecision
 //  ->  ShowData    ->
-// 多角色均被选择时暂沿用现有分支顺序；此优先级尚待作者确认。
+// 依据 RAW 原稿：好感不足时按“大体偏向”分流，只有唯一最高的选择计数才决定路线；
+// 平局与全零保留默认 F7。“雷琥的事”开场在 RAW 中直接导向雷琥线结局。
 {Rate_LeiHu < 3:
-    {Choose_YeHen > 0:
+    {Dormitory_LeiHu_Direct:
+        ->  Finale.F7
+    }
+    {Choose_YeHen > Choose_CenYe && Choose_YeHen > Choose_LeiHu:
         ->  Finale.F5
     }
-    {Choose_CenYe > 0:
+    {Choose_CenYe > Choose_YeHen && Choose_CenYe > Choose_LeiHu:
         ->  Finale.F6
     }
-    {Choose_LeiHu > 0:
+    {Choose_LeiHu > Choose_YeHen && Choose_LeiHu > Choose_CenYe:
         ->  Finale.F7
     }
     ->  Finale.F7

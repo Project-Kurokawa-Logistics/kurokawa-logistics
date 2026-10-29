@@ -141,7 +141,7 @@ test('初始全局值与首次自然启动：SAN 哨兵 -1 → 邀请函后 0，
   assert.deepEqual(variables(story), INITIAL_VARIABLES);
 
   const titleText = drain(story);
-  assert.ok(titleText.includes('更新日期：20260327'), '自然启动应先到标题页');
+  assert.ok(titleText.includes('更新日期：20261029'), '自然启动应先到标题页');
   const menu = choiceTexts(story);
   assert.ok(menu.includes('初始化'));
   assert.ok(!menu.some((item) => item.includes('重新连接')), 'COUNT_GAME_OVER 为 0 时不应显示重新连接');
@@ -280,7 +280,7 @@ test('Ending__Route_Gallery：预览与九条结局回顾不改变 SAN / COUNT_G
   drain(story);
   choose(story, '健身房');
   const titleText = choose(story, '返回标题');
-  assert.ok(titleText.includes('更新日期：20260327'));
+  assert.ok(titleText.includes('更新日期：20261029'));
   assert.deepEqual(variables(story), before);
 });
 
@@ -299,7 +299,7 @@ test('强制 WORK / 强制 BREAK：复用 Shutdown 结算，SAN 不变，随后�
 
   const workEnv = choose(work, '断开连接');
   assert.ok(workEnv.includes('⟦'), '强制 WORK 后环境检查应进入 DRONE 页');
-  assert.ok(!workEnv.includes('更新日期：20260327'));
+  assert.ok(!workEnv.includes('更新日期：20261029'));
   assert.equal(work.variablesState['COUNT_ROUTE_WORK_SHUTDOWN'], 1);
   assert.equal(work.variablesState['COUNT_GAME_OVER'], 1);
 
@@ -329,14 +329,14 @@ test('普通环境检查进入标题；Menu__Game_Over → 标题往返不增加
   const plain = newStory({ SAN_SCORE: 10 });
   plain.ChoosePathString('Check__Environment');
   const titleText = drain(plain);
-  assert.ok(titleText.includes('更新日期：20260327'));
+  assert.ok(titleText.includes('更新日期：20261029'));
   assert.ok(choiceTexts(plain).includes('初始化'));
 
   const story = newStory({ SAN_SCORE: 20 });
   settleRoute(story, 'Work__Off_Work');
   const before = variables(story);
   const menuText = choose(story, '断开连接');
-  assert.ok(menuText.includes('更新日期：20260327'));
+  assert.ok(menuText.includes('更新日期：20261029'));
   assert.deepEqual(variables(story), before);
   assert.ok(choiceTexts(story).includes('重新连接：第 1 次'));
 });

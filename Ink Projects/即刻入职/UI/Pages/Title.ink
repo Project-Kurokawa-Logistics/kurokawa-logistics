@@ -1,8 +1,12 @@
 === Page__Title
 
-更新日期：20260327
+更新日期：20261029
 
-{HAS_ENTERED_FINAL_RECONCILIATION: 要重新体验游戏，可以点击菜单中的 RESTART。}
+{HAS_ENTERED_FINAL_RECONCILIATION:
+    <h1>感谢您的游玩 🤗</h1>
+    您已达成最终结局～🎉
+    要重新体验游戏，可以点击菜单中的 RESTART。
+}
 
 <h1 style="color: \#966495;">即刻入职</h1>
 

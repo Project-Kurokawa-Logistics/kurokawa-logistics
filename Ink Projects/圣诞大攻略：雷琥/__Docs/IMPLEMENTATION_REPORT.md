@@ -1,5 +1,7 @@
 # A-01 实施与结局状态验证报告
 
+> 历史文档：本报告记录 2026-10-28 的审查与基线验证，其中“18/19”“候选优先级待作者决定”等状态均属当时情况。2026-10-29 作者已确认按 RAW 原稿的“好感度 + 大体偏向”实施，相关现状见 [KIMI CODE 实施交接](HANDOFF_KIMI_CODE.md)、[逻辑审查记录](LOGIC_AUDIT.md) 与 [故事线与结局目录](STORY_FLOW_AND_ENDINGS.md)。
+
 - 日期：2026-10-28（Asia/Shanghai）
 - 工作分支：`codex/leihu-a01-ending-audit`
 - 最新 main 基线：`f96c366b8b4496134c7da9e5a63a82e5f99f56a9`，已 fetch 并核对，包含交接基线 `c672c607`。

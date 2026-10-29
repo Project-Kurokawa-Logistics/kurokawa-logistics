@@ -7,6 +7,9 @@ VAR Choose_YeHen = 0
 VAR Choose_CenYe = 0
 VAR Choose_LeiHu = 0
 
+// 当前周目布尔状态：开场选择“雷琥的事”直接导向雷琥线结局（RAW 原稿），不是正式结局记录
+VAR Dormitory_LeiHu_Direct = false
+
 //  结局计数（只统计正片实际达成的不同结局）
 VAR FinaleCount = 0
 
@@ -32,6 +35,7 @@ VAR IsPreviewMode = false
 ~   Choose_YeHen = 0
 ~   Choose_CenYe = 0
 ~   Choose_LeiHu = 0
+~   Dormitory_LeiHu_Direct = false
 ~   IsPreviewMode = false
 ->->
 
