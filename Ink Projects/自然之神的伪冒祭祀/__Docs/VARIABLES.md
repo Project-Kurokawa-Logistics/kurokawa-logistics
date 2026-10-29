@@ -41,7 +41,7 @@
 - 能力提升选择：TEMP__PowerUp_Arshasy、TEMP__PowerUp_Aize、TEMP__PowerUp_Lind。
 - 追捕/冲突分支：TEMP__NianGuoQu、TEMP__ZhuanXinJieJueZheJiGeJiaHuo、TEMP__FanJi、TEMP__RangTaAnXi。
 
-在 [Maps/Ruoment_City/Suburban.ink](../Maps/Ruoment_City/Suburban.ink) 中，TEMP__WoChiYiGeRen 初值为 0；选择对应行动后递增并返回 MedicalTent，使该选项不再出现；选择分析新生物时又将它重置为 0。这是当前源码行为，不代表其跨周目或回溯保留规则已经确定。
+在 [Maps/Ruoment_City/Suburban.ink](../Maps/Ruoment_City/Suburban.ink) 中，TEMP__WoChiYiGeRen 初值为 0；选择对应行动后递增并返回 MedicalTent，使该选项不再出现；选择分析新生物时又将它重置为 0。这是当前源码行为，不代表其跨线路或回溯保留规则已经确定。
 
 以上仅列出已确认的代表性变量；其他旗标是否在所有返回路径中正确重置，尚未全部审计。
 

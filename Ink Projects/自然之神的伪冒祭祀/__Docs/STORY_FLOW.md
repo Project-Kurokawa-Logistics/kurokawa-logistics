@@ -23,9 +23,9 @@
 相关文件：[Maps/Ruoment_City/Suburban.ink](../Maps/Ruoment_City/Suburban.ink)
 
 1. 主角在医疗帐篷中醒来，并可以选择分析当地情报、处理新生物等行动。
-2. Select__Protocol 决定对新对象采用何种黑胶协议；当前只有部分选项可用。
+2. Select__Protocol 决定对新对象采用何种黑胶协议；当前仅“注射殖民协议”未标未开放，其他选项带有禁用标记。
 3. Abyss_Memory_Recall 允许回顾深渊经历，并推进后续身份选择。
-4. Select__Career 目前实际可用的职业选项是“冒险者”；“神官”和“司令”选项带有禁用标记。
+4. Select__Career 中仅“冒险者”未标未开放；“神官”和“司令”选项带有禁用标记。禁用标记的实际宿主表现仍待确认。
 5. Select__Path 可继续建立据点/冒险团队，也有退休相关分支。
 6. Ending__CP1 是章节推进节点（虽然名称含有 Ending，但后续仍会继续），随后通过 Go_Away 离开医疗帐篷并选择目的地。
 7. 当前可见的森林目的地会进入 Forest__Boulevard.Select__Traffic。
@@ -46,7 +46,7 @@
 远森镇的主要节点：
 
 - **GoTown**：跟随商队到达远森镇，并进入 GoWhere。
-- **GoWhere**：当前有寻找自然神神庙、寻找住处等可用行动；部分选项禁用。
+- **GoWhere**：当前有寻找自然神神庙、寻找住处等未标未开放的行动；部分选项带有禁用标记。
 - **Find_Memories**：主角询问失忆与身份问题。当前当 Careers__AZ == "神官" 时会跳到 BUG；非神官则走另一段对话。
 - **Find_Base**：建立据点。
 - **Choose_Another**：控制下午还能进行的行动；之后进入 Ending_Today。
