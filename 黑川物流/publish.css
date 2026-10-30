@@ -130,3 +130,32 @@ body {
 .site-header-text:hover {
     text-decoration: none;
 }
+
+/* ========== Twikoo 评论区 ========== */
+.kkl-twikoo {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--background-modifier-border);
+}
+
+.kkl-twikoo-title {
+    margin: 0 0 0.25em;
+    font-size: 1.25em;
+}
+
+.kkl-twikoo-note,
+.kkl-twikoo-status {
+    margin: 0 0 1em;
+    color: var(--text-muted);
+    font-size: var(--font-smaller);
+}
+
+.kkl-twikoo-status[hidden] {
+    display: none;
+}
+
+@media print {
+    .kkl-twikoo {
+        display: none;
+    }
+}

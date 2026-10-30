@@ -7,6 +7,7 @@
  *   03 · 催更按钮：点击统计、共享计数及按钮反馈。
  *   04 · KKN 语法高亮：已停用，历史代码保留备用。
  *   05 · PWA：原生安装入口、安装按钮点击统计与独立窗口使用统计。
+ *   06 · Twikoo 评论：文章显式开启，使用永久 comment-id 区分评论串。
  *
  * 外部服务
  *   Google Analytics：03 / 05 记录催更点击、PWA 安装按钮点击及 PWA 查看。
@@ -14,6 +15,8 @@
  *   Abacus / abacus.jasoncameron.dev：03 保存、读取累计催更点击次数。
  *   02 使用 Publish 已加载的笔记缓存；背景图由浏览器从填写的链接加载。
  *   05 从主站 /pwa/ 加载安装配置与图标；资源部署说明见仓库 pwa/README.md。
+ *   Netlify / MongoDB Atlas：06 保存和读取评论，仅在启用的笔记中连接。
+ *   npmmirror / jsDelivr：06 按固定版本和完整性哈希加载 Twikoo。
  *
  * 发布方式：将本文件放在 Obsidian 仓库根目录，在「发布更改」中发布。
  * 自定义 JavaScript 需要绑定自定义域名；修改后刷新网页以加载新脚本。
@@ -748,4 +751,334 @@ var kurokawaTrackEvent = (function () {
     document.head.appendChild(meta);
   });
   checkInstalledPwa();
+})();
+
+
+/* ========================================================================
+ * 06 · Twikoo 评论（Netlify + MongoDB Atlas）
+ * ========================================================================
+ * 默认关闭。只有复选框属性 comments 为 true，且文本属性 comment-id 合法时，
+ * 才加载 Twikoo。comment-id 一经使用不要修改或分配给其他笔记。
+ * 评论串使用 /notes/<comment-id>，不随标题、文件路径或 permalink 改变。
+ * ======================================================================== */
+(function () {
+  var TWIKOO_ENV_ID =
+    'https://kkl-twikoo.netlify.app/.netlify/functions/twikoo';
+  var TWIKOO_SOURCES = [
+    'https://registry.npmmirror.com/twikoo/2.0.17/files/dist/twikoo.min.js',
+    'https://cdn.jsdelivr.net/npm/twikoo@2.0.17/dist/twikoo.min.js'
+  ];
+  var TWIKOO_INTEGRITY =
+    'sha384-EJPyhbbrkvGsDOBDGqqwgcYL6MJufQJbVC2yq58Qu77AeXzyZy8FQYde04X70ZDF';
+  var publish = null;
+  var cache = null;
+  var states = [];
+  var missingIdWarnings = {};
+  var scriptPromise = null;
+  var nextContainerId = 1;
+  var attempts = 0;
+  var syncQueued = false;
+
+  function parseCommentId(value) {
+    if (typeof value !== 'string') return '';
+    var id = value.trim();
+    return /^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/.test(id) ? id : '';
+  }
+
+  function findState(pane) {
+    for (var i = 0; i < states.length; i++) {
+      if (states[i].pane === pane) return states[i];
+    }
+    return null;
+  }
+
+  function dropState(state) {
+    state.active = false;
+    if (state.resizeObserver) state.resizeObserver.disconnect();
+    if (state.section.parentNode) state.section.parentNode.removeChild(state.section);
+    state.renderer.updateFooter();
+    var index = states.indexOf(state);
+    if (index !== -1) states.splice(index, 1);
+  }
+
+  function pruneStates() {
+    for (var i = states.length - 1; i >= 0; i--) {
+      if (!states[i].pane.isConnected) {
+        states[i].active = false;
+        if (states[i].resizeObserver) states[i].resizeObserver.disconnect();
+        states.splice(i, 1);
+      }
+    }
+  }
+
+  function setStatus(state, text) {
+    state.status.textContent = text;
+    state.status.hidden = !text;
+  }
+
+  function loadTwikoo() {
+    if (window.twikoo && typeof window.twikoo.init === 'function') {
+      return Promise.resolve();
+    }
+    if (scriptPromise) return scriptPromise;
+
+    scriptPromise = new Promise(function (resolve, reject) {
+      function loadSource(index) {
+        if (index >= TWIKOO_SOURCES.length) {
+          reject(new Error('Twikoo failed to load from all configured CDNs'));
+          return;
+        }
+        var script = document.createElement('script');
+        script.src = TWIKOO_SOURCES[index];
+        script.async = true;
+        script.integrity = TWIKOO_INTEGRITY;
+        script.crossOrigin = 'anonymous';
+        script.referrerPolicy = 'no-referrer';
+        script.onload = function () {
+          if (window.twikoo && typeof window.twikoo.init === 'function') resolve();
+          else {
+            script.remove();
+            loadSource(index + 1);
+          }
+        };
+        script.onerror = function () {
+          script.remove();
+          loadSource(index + 1);
+        };
+        document.head.appendChild(script);
+      }
+      loadSource(0);
+    }).catch(function (error) {
+      // 允许刷新或重新进入文章后再次尝试，不缓存失败结果。
+      scriptPromise = null;
+      throw error;
+    });
+    return scriptPromise;
+  }
+
+  function initialize(state) {
+    // 页脚会随虚拟滚动暂时离开 DOM；等容器重新接入后再初始化。
+    if (!state.active || !state.container.isConnected ||
+        state.loading || state.initialized || state.failed) return;
+    state.loading = true;
+    setStatus(state, '评论加载中…');
+    loadTwikoo().then(function () {
+      if (!state.active || !state.container.isConnected) {
+        state.loading = false;
+        return false;
+      }
+      return Promise.resolve(window.twikoo.init({
+        envId: TWIKOO_ENV_ID,
+        el: '#' + state.container.id,
+        path: state.path,
+        lang: 'zh-CN'
+      })).then(function () { return true; });
+    }).then(function (initialized) {
+      if (!state.active || !initialized) return;
+      state.initialized = true;
+      state.loading = false;
+      setStatus(state, '');
+      state.renderer.updateFooter();
+    }).catch(function (error) {
+      if (!state.active) return;
+      state.loading = false;
+      state.failed = true;
+      setStatus(state, '评论加载失败，请刷新页面重试。');
+      state.renderer.updateFooter();
+      console.warn('[Twikoo] 评论初始化失败：', error);
+    });
+  }
+
+  function createState(pane, renderer, content, path) {
+    var section = document.createElement('section');
+    section.className = 'kkl-twikoo';
+    var titleId = 'kkl-twikoo-title-' + nextContainerId;
+    section.setAttribute('aria-labelledby', titleId);
+
+    var title = document.createElement('h2');
+    title.id = titleId;
+    title.className = 'kkl-twikoo-title';
+    title.textContent = '评论';
+
+    var note = document.createElement('p');
+    note.className = 'kkl-twikoo-note';
+    note.textContent = '无需注册或登录即可评论。';
+
+    var status = document.createElement('p');
+    status.className = 'kkl-twikoo-status';
+    status.hidden = true;
+    status.setAttribute('role', 'status');
+
+    var container = document.createElement('div');
+    container.id = 'kkl-twikoo-' + nextContainerId;
+    nextContainerId++;
+
+    section.appendChild(title);
+    section.appendChild(note);
+    section.appendChild(status);
+    section.appendChild(container);
+    content.appendChild(section);
+
+    var state = {
+      pane: pane,
+      renderer: renderer,
+      section: section,
+      container: container,
+      status: status,
+      path: path,
+      active: true,
+      loading: false,
+      initialized: false,
+      failed: false,
+      resizeObserver: null
+    };
+    states.push(state);
+    // Twikoo 异步加载、展开回复或输入文本都会改变页脚高度。
+    // 只在连接时测量，避免虚拟滚动移除页脚后的 0 高度覆盖缓存。
+    if (typeof ResizeObserver === 'function') {
+      var lastHeight = -1;
+      state.resizeObserver = new ResizeObserver(function () {
+        if (!state.active || !state.section.isConnected) return;
+        var height = state.section.getBoundingClientRect().height;
+        if (height === lastHeight) return;
+        lastHeight = height;
+        renderer.updateFooter();
+      });
+      state.resizeObserver.observe(section);
+    }
+    renderer.updateFooter();
+    initialize(state);
+  }
+
+  function syncComments() {
+    if (!publish || !cache) return;
+    pruneStates();
+    var renderers = Array.isArray(publish.stack) ? publish.stack.slice() : [];
+    if (renderers.indexOf(publish.render) === -1) renderers.push(publish.render);
+    var seenPanes = [];
+
+    for (var i = 0; i < renderers.length; i++) {
+      var renderer = renderers[i];
+      var pane = renderer && renderer.renderContainerEl;
+      if (!pane || !pane.isConnected) continue;
+      seenPanes.push(pane);
+      var state = findState(pane);
+      var filepath = renderer.currentFilepath;
+      var file = filepath ? cache.getCache(filepath) : null;
+      var properties = file && file.frontmatter;
+      if (!properties || properties.comments !== true) {
+        if (state) dropState(state);
+        continue;
+      }
+
+      var commentId = parseCommentId(properties['comment-id']);
+      if (!commentId) {
+        if (state) dropState(state);
+        if (!missingIdWarnings[filepath]) {
+          console.warn('[Twikoo] “' + filepath +
+            '”已开启评论，但缺少有效的 comment-id，评论区不会加载。');
+          missingIdWarnings[filepath] = true;
+        }
+        continue;
+      }
+
+      var markdownRenderer = renderer.renderer;
+      var content = markdownRenderer && markdownRenderer.footer &&
+        markdownRenderer.footer.el;
+      if (!content || typeof markdownRenderer.updateFooter !== 'function') continue;
+      var path = '/notes/' + commentId;
+      if (state && state.path === path) {
+        // 导航和反向链接渲染可能清空页脚；重挂同一节点保留评论和草稿。
+        if (state.section.parentNode !== content) {
+          content.appendChild(state.section);
+          markdownRenderer.updateFooter();
+        }
+        initialize(state);
+        continue;
+      }
+      if (state) dropState(state);
+      // sizer 的直接子节点由 Publish 虚拟滚动重建，不能自行追加。
+      // 使用已登记的 footer section，才能正确计算全文高度和末尾位置。
+      createState(pane, markdownRenderer, content, path);
+    }
+
+    // 已关闭的堆叠窗格不应保留评论或未完成初始化。
+    for (var j = states.length - 1; j >= 0; j--) {
+      if (seenPanes.indexOf(states[j].pane) === -1) dropState(states[j]);
+    }
+  }
+
+  function queueSync() {
+    if (syncQueued) return;
+    syncQueued = true;
+    setTimeout(function () {
+      syncQueued = false;
+      syncComments();
+    }, 0);
+  }
+
+  function handleNavigation() {
+    // Publish 会先通知导航，再更新正文；多次同步覆盖慢速渲染和堆叠窗格。
+    queueSync();
+    setTimeout(queueSync, 100);
+    setTimeout(queueSync, 500);
+  }
+
+  function connectPublish() {
+    var container = document.querySelector('.published-container');
+    var candidate = window.publish;
+    var candidateCache = candidate && candidate.site && candidate.site.cache;
+    if (!candidate || !candidate.render || !candidateCache || !container ||
+        typeof candidateCache.getCache !== 'function' || typeof candidate.on !== 'function') {
+      if (++attempts < 50) setTimeout(connectPublish, 200);
+      return;
+    }
+    publish = candidate;
+    cache = candidateCache;
+    publish.on('navigated', handleNavigation);
+
+    function affectsRenderedContent(mutation) {
+      if (mutation.target.nodeType === 1 &&
+          (mutation.target.classList.contains('markdown-preview-sizer') ||
+           mutation.target.classList.contains('mod-footer'))) return true;
+      var lists = [mutation.addedNodes, mutation.removedNodes];
+      for (var i = 0; i < lists.length; i++) {
+        for (var j = 0; j < lists[i].length; j++) {
+          var node = lists[i][j];
+          if (node.nodeType !== 1) continue;
+          if (node.matches('.markdown-preview-sizer, .mod-footer') ||
+              node.querySelector('.markdown-preview-sizer, .mod-footer')) return true;
+        }
+      }
+      return false;
+    }
+
+    var wasNotFound = container.classList.contains('has-not-found');
+    new MutationObserver(function (mutations) {
+      var contentChanged = false;
+      for (var i = 0; i < mutations.length; i++) {
+        var mutation = mutations[i];
+        if (mutation.type === 'childList' && affectsRenderedContent(mutation)) {
+          contentChanged = true;
+        } else if (mutation.type === 'attributes') {
+          // 404 页面不触发 navigated，也要清除上一篇文章的评论。
+          var isNotFound = container.classList.contains('has-not-found');
+          if (isNotFound !== wasNotFound) {
+            wasNotFound = isNotFound;
+            handleNavigation();
+          }
+        }
+      }
+      // 正文、页脚或虚拟滚动范围变化时同步，不响应 Twikoo 内部节点变化。
+      if (contentChanged) queueSync();
+    }).observe(container, {
+      attributes: true,
+      attributeFilter: ['class'],
+      childList: true,
+      subtree: true
+    });
+    handleNavigation();
+  }
+
+  connectPublish();
 })();

@@ -125,3 +125,26 @@ background-rotation: 15
 支持的浏览器会读取安装配置，并根据自身规则显示原生安装图标或提示。主页在收到可安装通知后显示安装按钮；检测到本站 PWA 已安装时，同一按钮改为「在 PWA 中打开」，点击后由浏览器决定是否交给已安装的应用。没有可用安装入口时显示「你还可以将 黑川物流 添加到主屏幕来获得最完整的体验。」；已在 PWA 窗口内时隐藏整块区域。脚本保留浏览器默认安装推广。`KK-L.com` 继续跳转到主站，应用归属主站域名。
 
 PWA 统计沿用本站 GA4：`pwa_install_click` 记录主页安装按钮点击，`pwa_view` 记录通过独立应用窗口查看本站。在 GA4 事件报告中按名称筛选并查看「总用户数」可了解人数，「事件数」可了解次数。具体统计口径见 [PWA 部署说明](pwa/README.md#google-analytics-统计)。
+
+## 按笔记开启 Twikoo 评论
+
+评论默认关闭。只在笔记的复选框属性 `comments` 为 `true`，并设置了永久文本属性 `comment-id` 时显示评论区：
+
+```yaml
+---
+comments: true
+comment-id: "kkl-story-0001"
+---
+```
+
+`comment-id` 可包含英文字母、数字、小数点、下划线、冒号和连字符，最长 128 个字符。开始收集评论后不要修改它，也不要把它分配给其他笔记；标题、文件路径和 `permalink` 改变不会影响评论串。缺少这两个属性、`comments: false` 或 ID 无效时，不加载 Twikoo 脚本。多个堆叠窗格分别读取所属笔记的属性。评论挂载到 Publish 管理的文章页脚，并在内容变化时更新页脚高度；不要直接追加到 `.markdown-preview-sizer`，其子节点会被虚拟滚动重建。页脚清空或暂时移出 DOM 后，脚本会保留并重新挂回同一评论节点，避免重复初始化或丢失未提交输入。
+
+评论前端固定为 Twikoo `2.0.17`，优先从 npmmirror 加载，失败时回退到 jsDelivr，两个地址使用相同的 SHA-384 完整性哈希，脚本请求不发送 Referer。后端由 GitHub 仓库 [Ander-Index/kkl-twikoo](https://github.com/Ander-Index/kkl-twikoo) 通过 Netlify 自动部署，使用 MongoDB Atlas；连接地址为 `https://kkl-twikoo.netlify.app/.netlify/functions/twikoo`。
+
+2026-10-30 配置记录：Netlify 站点与 GitHub 仓库统一命名为 `kkl-twikoo`，后端匿名评论的写入、读取和删除已验证，测试数据已清理。首页 `黑川物流/欢迎光临黑川物流～☕️.md`（`permalink: welcome`）已配置 `comments: true` 和永久 `comment-id: "welcome"`，评论串为 `/notes/welcome`。线上前端、CDN 完整性哈希和云函数版本已核对一致，配置与评论读取均返回成功。针对 Publish 虚拟滚动移除评论节点的问题，脚本已改为文章页脚挂载，并通过 Obsidian 发布。线上首页已验证评论表单显示、跳转正文再返回后的草稿保留；验证草稿已清空，未发送测试评论。管理端 `REQUIRED_FIELDS` 最终设为 `nick,mail`：昵称和邮箱必填，个人链接选填，访客无需注册账号。该配置已通过公开 API 和真实首页表单核对。此前的匿名提交测试评论已删除，评论串为空。即时通知最终改为 NapCat OneBot 群聊（`PUSHOO_CHANNEL=onebot`），替代此前的 Qmsg 和私聊方案。NapCat 地址与访问令牌仅保存在 Twikoo 配置中，不进入本仓库或文档；群消息已由用户确认送达。邮件通知使用 QQ SMTP 发件、Outlook 收件，并设置 `SC_MAIL_NOTIFY=true` 与群通知并行；测试邮件和真实评论邮件均已由用户确认正常。Cap 在测试后已恢复启用，测试评论已删除。
+
+后端更新在上述 GitHub 仓库中进行并推送到 `main`，Netlify 会自动部署。本仓库只维护 Obsidian Publish 前端，不使用 CLI 手动部署覆盖该站点。
+
+在 Netlify 站点的 **Site configuration → Environment variables** 设置 `MONGODB_URI`，值只在 Netlify 中保存，不要写进仓库或聊天；将其标记为私密不会影响函数运行时读取。Atlas 的 Network Access 需要允许 Netlify 使用的动态出口地址；Twikoo 官方方案为 `0.0.0.0/0`，数据库仍由独立用户名和密码保护。参见 [Twikoo Atlas 配置](https://twikoo.js.org/mongodb-atlas.html)。
+
+修改 `publish.js` 或 `publish.css` 后，在 Obsidian 的「发布更改」中发布它们及启用了评论的笔记。评论区出现后，点击右下角齿轮设置管理员密码。升级 Twikoo 时同步修改后端仓库的 `package.json` 和本仓库 `publish.js` 的版本，重新生成脚本完整性哈希，并先核对前后端兼容性。
