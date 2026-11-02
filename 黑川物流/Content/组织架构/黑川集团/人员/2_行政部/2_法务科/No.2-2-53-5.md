@@ -6,11 +6,11 @@ permalink: p/253
 
 ![](https://img.cntracker.net/img/3b287f4d3e06526235d34bb45e04153f.jpg)[^1]
 
-![](https://barcode.tec-it.com/barcode.ashx?data=No.2-02-53-5&code=PDF417)
+![](https://barcode.tec-it.com/barcode.ashx?data=No.2-2-53-5&code=PDF417)
 
 # 苍檩
 
-| 编号   | No.2-02-53-5 |
+| 编号   | No.2-2-53-5 |
 | ---- | ------------ |
 | 名称   | 苍檩           |
 | 代号   | 金穗           |
