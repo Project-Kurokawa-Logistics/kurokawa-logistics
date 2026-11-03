@@ -70,6 +70,10 @@ git push
 - 换行符已由仓库统一强制为 **LF**，任何设备都不用手动设置
 - `.obsidian/` 个人配置（设置、收藏夹、工作区）**不会同步**，每个人都用自己的编辑习惯
 
+## 网页语言识别
+
+Obsidian Publish 的初始 HTML 仍声明为英语。`__Misc/edge-language/` 中的 Cloudflare Worker 在主站返回 HTML 时将根元素修正为 `lang="zh-CN"`，并增加 `Content-Language: zh-CN`；`publish.js` 中的语言设置继续作为运行后的兜底。这样浏览器首次解析页面时就能读到中文声明，同时保留正常的网页翻译功能。配置、检查和回滚方式见 [页面语言修正说明](__Misc/edge-language/README.md)。
+
 ## 手机浏览器地址栏颜色
 
 在笔记中添加名为 `theme-color` 的**文本属性**，填入 `#2563EB` 这样的颜色值。源码形式如下（合并到笔记已有的属性中）：
@@ -120,11 +124,11 @@ background-rotation: 15
 
 应用名称为「黑川物流」，使用黑底白标 Logo，从官网首页启动，以独立窗口显示。Manifest 的默认主题色为黑色；浏览器支持时，各笔记的 `theme-color` 属性继续控制应用标题栏配色。
 
-安装配置与图标位于 `pwa/public/pwa/`。先将这些资源部署到 Cloudflare 的 `kurokawa-logistics.com/pwa/*` 路由，再在 Obsidian 的「发布更改」中发布 `publish.js`。具体部署及验证步骤见 [PWA 部署说明](pwa/README.md)。该路由只提供安装资源，正文继续通过 Obsidian Publish 发布。
+安装配置与图标位于 `__Misc/pwa/public/pwa/`。先将这些资源部署到 Cloudflare 的 `kurokawa-logistics.com/pwa/*` 路由，再在 Obsidian 的「发布更改」中发布 `publish.js`。具体部署及验证步骤见 [PWA 部署说明](__Misc/pwa/README.md)。该路由只提供安装资源，正文继续通过 Obsidian Publish 发布。
 
 支持的浏览器会读取安装配置，并根据自身规则显示原生安装图标或提示。主页在收到可安装通知后显示安装按钮；检测到本站 PWA 已安装时，同一按钮改为「在 PWA 中打开」，点击后由浏览器决定是否交给已安装的应用。没有可用安装入口时显示「你还可以将 黑川物流 添加到主屏幕来获得最完整的体验。」；已在 PWA 窗口内时隐藏整块区域。脚本保留浏览器默认安装推广。`KK-L.com` 继续跳转到主站，应用归属主站域名。
 
-PWA 统计沿用本站 GA4：`pwa_install_click` 记录主页安装按钮点击，`pwa_view` 记录通过独立应用窗口查看本站。在 GA4 事件报告中按名称筛选并查看「总用户数」可了解人数，「事件数」可了解次数。具体统计口径见 [PWA 部署说明](pwa/README.md#google-analytics-统计)。
+PWA 统计沿用本站 GA4：`pwa_install_click` 记录主页安装按钮点击，`pwa_view` 记录通过独立应用窗口查看本站。在 GA4 事件报告中按名称筛选并查看「总用户数」可了解人数，「事件数」可了解次数。具体统计口径见 [PWA 部署说明](__Misc/pwa/README.md#google-analytics-统计)。
 
 ## Twikoo 评论
 

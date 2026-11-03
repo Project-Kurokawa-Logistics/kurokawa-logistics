@@ -14,7 +14,7 @@
  *     复用已有 Google tag；尚未加载时从 googletagmanager.com 加载。
  *   Abacus / abacus.jasoncameron.dev：03 保存、读取累计催更点击次数。
  *   02 使用 Publish 已加载的笔记缓存；背景图由浏览器从填写的链接加载。
- *   05 从主站 /pwa/ 加载安装配置与图标；资源部署说明见仓库 pwa/README.md。
+ *   05 从主站 /pwa/ 加载安装配置与图标；部署说明见仓库 __Misc/pwa/README.md。
  *   Netlify / MongoDB Atlas：06 保存和读取评论，仅在启用的笔记中连接。
  *   npmmirror / jsDelivr：06 按固定版本和完整性哈希加载 Twikoo。
  *
@@ -533,7 +533,7 @@ var kurokawaTrackEvent = (function () {
 /* ========================================================================
  * 05 · PWA 安装配置与使用统计
  * ========================================================================
- * /pwa/ 下的 Manifest 和图标由 Cloudflare 单独托管；详见 pwa/README.md。
+ * /pwa/ 下的 Manifest 和图标由 Cloudflare 单独托管；详见 __Misc/pwa/README.md。
  * Manifest 声明应用名称、图标、启动页、独立窗口和默认主题色。
  * 主页按钮：可安装时调用原生提示；检测到已安装时请求在应用中打开。
  * 不能提供安装入口时显示添加到主屏幕的提示；在应用窗口内隐藏该区域。

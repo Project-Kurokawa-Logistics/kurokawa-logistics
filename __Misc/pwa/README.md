@@ -28,19 +28,19 @@ Cloudflare Worker 使用 Static Assets，无需运行自定义 Worker 脚本。�
 在仓库根目录运行：
 
 ```sh
-npm --prefix pwa install
-npm --prefix pwa run check
-npm --prefix pwa run dev
+npm --prefix __Misc/pwa install
+npm --prefix __Misc/pwa run check
+npm --prefix __Misc/pwa run dev
 ```
 
 启动后可以打开 `http://127.0.0.1:8787/pwa/manifest.webmanifest` 检查 JSON，也可以检查其中的每个图标地址。端口 8787 只用于本地预览安装资源，不是主站的完整预览。
 
 ## 发布到 Cloudflare
 
-首次使用 Wrangler 时，在终端运行 `npx --prefix pwa wrangler login`，并选择有权管理 `kurokawa-logistics.com` 的 Cloudflare 账号。然后在仓库根目录运行：
+首次使用 Wrangler 时，在终端运行 `npx --prefix __Misc/pwa wrangler login`，并选择有权管理 `kurokawa-logistics.com` 的 Cloudflare 账号。然后在仓库根目录运行：
 
 ```sh
-npm --prefix pwa run deploy
+npm --prefix __Misc/pwa run deploy
 ```
 
 Wrangler 会部署名为 `kurokawa-logistics-pwa` 的静态资源 Worker，并创建配置中指定的路由。若账号下有多个 Cloudflare 账户，可在当前终端设置 `CLOUDFLARE_ACCOUNT_ID` 指向主站所属账户；不要把令牌或本机凭据写进仓库。

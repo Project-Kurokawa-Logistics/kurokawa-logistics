@@ -4,6 +4,8 @@ permalink: p/s108
 
 #职员 #用户 #已植入龙髓
 
+![](https://img.cntracker.net/img/45e86db842a8ea128a148f7487659a29bdf83e5bf8fc33d215428bb9317bed9a.png)[^4]
+
 ![](https://barcode.tec-it.com/barcode.ashx?data=ID.STAFF-108&code=PDF417)
 
 # “老琅”（琅靖北）
@@ -66,3 +68,5 @@ permalink: p/s108
 [^2]: 即脖子以下全部瘫痪。
 
 [^3]: 纯装饰品，淘京多买的，但很有质感。
+
+[^4]: 插画作者：[[黑川江凌]]
