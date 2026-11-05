@@ -7,10 +7,19 @@
 @font-face {
   font-family: "SarasaMonoSC";
   src: url("https://blog.raster.team/fonts/SarasaMonoSC-Regular.ttf") format("truetype");
+  font-display: swap;
 }
 
-/* 2. 然后在变量中使用你定义的名称 */
+/* 2. 字体回退：正文优先沿用 Publish 的系统字体。
+ * 显式列出常用中文字体，让普通汉字继续使用系统字体；
+ * 汉字与组合附加符构成的故障字交给更纱，避免显示缺字方块。
+ * 通用 sans-serif 必须放在更纱之后。 */
 body {
+    --font-text-theme: ui-sans-serif, -apple-system, BlinkMacSystemFont, system-ui,
+        Roboto, "Helvetica", "Arial", "Segoe UI", "InterVariable", "Inter",
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+        "Noto Sans CJK SC", "Noto Sans SC", "SarasaMonoSC", sans-serif;
     --font-monospace-theme: "SymbolsNerdFont", "SarasaMonoSC", monospace;
 }
 
