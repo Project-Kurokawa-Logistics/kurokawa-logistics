@@ -1,6 +1,6 @@
 ![](https://cntracker.net/img/1e7ad23b7d7f9cb9508991da334b9b0c.png)
 
-![](https://barcode.tec-it.com/barcode.ashx?data=No.7-4-53-1&code=PDF417)
+![](https://barcode.tec-it.com/barcode.ashx?data=No.7-04-53-1&code=PDF417)
 
 
 # 薛高朗｜💠

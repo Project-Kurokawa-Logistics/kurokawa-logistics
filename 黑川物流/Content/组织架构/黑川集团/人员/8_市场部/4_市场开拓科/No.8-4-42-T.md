@@ -7,7 +7,7 @@ permalin: p/842
 
 ![](https://cntracker.net/img/a30cd37671cc3a9a3b35604067e7eb4e.jpg)
 
-![](https://barcode.tec-it.com/barcode.ashx?data=No.8-4-42-T&code=PDF417)
+![](https://barcode.tec-it.com/barcode.ashx?data=No.8-04-42-T&code=PDF417)
 
 # 沃因尔 · 德怀恩
 

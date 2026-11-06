@@ -4,7 +4,7 @@ permalink: p/fe45
 
 #半藏品 #战斗型 
 
-![](https://barcode.tec-it.com/barcode.ashx?data=No.FE-045-1&code=PDF417)
+![](https://barcode.tec-it.com/barcode.ashx?data=No.FE-045-01&code=PDF417)
 
 # 木白
 

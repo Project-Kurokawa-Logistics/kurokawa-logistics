@@ -1,4 +1,4 @@
-![](https://barcode.tec-it.com/barcode.ashx?data=No.AZ-3-?-?&code=PDF417)
+![](https://barcode.tec-it.com/barcode.ashx?data=No.AZ-3-███-█&code=PDF417)
 
 # 龙泽｜💠
 

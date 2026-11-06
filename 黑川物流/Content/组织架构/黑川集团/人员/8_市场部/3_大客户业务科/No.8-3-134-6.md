@@ -4,7 +4,7 @@ permalink: p/8134
 
 #半执行体 
 
-![](https://barcode.tec-it.com/barcode.ashx?data=8-3-134-6&code=PDF417)
+![](https://barcode.tec-it.com/barcode.ashx?data=No.8-3-134-6&code=PDF417)
 
 # “夏天”
 

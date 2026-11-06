@@ -4,7 +4,7 @@ permalink: p/475
 
 #收藏品 
 
-![](https://barcode.tec-it.com/barcode.ashx?data=No.4-05-75-1&code=PDF417)
+![](https://barcode.tec-it.com/barcode.ashx?data=No.4-5-75-1&code=PDF417)
 
 # MAGUNM
 

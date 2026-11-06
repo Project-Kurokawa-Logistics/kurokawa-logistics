@@ -1,6 +1,6 @@
 #用户 
 
-![](https://barcode.tec-it.com/barcode.ashx?data=ID.STAFF-███&code=PDF417)
+![](https://barcode.tec-it.com/barcode.ashx?data=ID.USER-███&code=PDF417)
 
 # ███｜💠
 

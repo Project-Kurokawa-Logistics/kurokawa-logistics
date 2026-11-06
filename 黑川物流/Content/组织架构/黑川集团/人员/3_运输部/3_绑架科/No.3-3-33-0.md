@@ -6,7 +6,7 @@ permalink: p/333
 
 ![](https://img.cntracker.net/img/a9fe3eef8e2952a7d8b919b80f627d5ca9a68dc8ad2bcb6ac727b887c55bf667.jpg)
 
-![](https://barcode.tec-it.com/barcode.ashx?data=No.3-3-33-0&code=PDF417)
+![](https://barcode.tec-it.com/barcode.ashx?data=No.3-03-33-0&code=PDF417)
 
 # E.D.D.Y.（艾尔德里奇）
 

@@ -6,7 +6,7 @@ permalin: p/8100
 
 ![](https://cntracker.net/img/3ea447c739561545d3b9e93922f18838.jpg)
 
-![](https://barcode.tec-it.com/barcode.ashx?data=No.8-04-100-5&code=PDF417)
+![](https://barcode.tec-it.com/barcode.ashx?data=No.8-4-100-5&code=PDF417)
 
 # 白尘
 

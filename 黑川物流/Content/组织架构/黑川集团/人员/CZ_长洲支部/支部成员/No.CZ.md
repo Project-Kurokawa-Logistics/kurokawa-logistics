@@ -3,7 +3,7 @@
 ![](https://cntracker.net/cdn-cgi/image/q=20/https://img.cntracker.net/img/b9c4ca121ce535c82d56be9d4254a135.png)[^1]
 
 
-![](https://barcode.tec-it.com/barcode.ashx?data=No.CZ-001-1&code=PDF417)
+![](https://barcode.tec-it.com/barcode.ashx?data=No.CZ&code=PDF417)
 
 # 格雷恩
 

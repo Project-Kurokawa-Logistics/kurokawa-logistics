@@ -7,7 +7,7 @@ theme-color: "#966495"
 
 ![](https://cntracker.net/cdn-cgi/image/q=30/https://img.cntracker.net/img/be919dce43bf52c5acad3d4b4be5374d.jpg)
 
-![](https://barcode.tec-it.com/barcode.ashx?data=No.8-1-1-1&code=PDF417)
+![](https://barcode.tec-it.com/barcode.ashx?data=No.8&code=PDF417)
 
 # “洛书”
 

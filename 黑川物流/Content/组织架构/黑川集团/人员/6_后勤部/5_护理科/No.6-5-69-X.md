@@ -6,7 +6,7 @@ permalink: p/669
 
 ![](https://img.cntracker.net/img/c6467f260cdb07f287c04aade523067e796c632d32e5c616c6b154ba888fadb5.png)[^1]
 
-![](https://barcode.tec-it.com/barcode.ashx?data=No.X-0-69-X&code=PDF417)
+![](https://barcode.tec-it.com/barcode.ashx?data=No.6-5-69-X&code=PDF417)
 
 # 白夜星川（"Dainese"）
 

@@ -4,7 +4,7 @@ theme-color: "#5698c3"
 ---
 #职员 #机密 
 
-![](https://barcode.tec-it.com/barcode.ashx?data=ID.ADMIN-2&code=PDF417)
+![](https://barcode.tec-it.com/barcode.ashx?data=ID.STAFF-12&code=PDF417)
 
 # 雨辰
 
