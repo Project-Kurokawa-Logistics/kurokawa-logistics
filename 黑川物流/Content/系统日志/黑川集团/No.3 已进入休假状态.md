@@ -2,10 +2,10 @@
 
 ![](https://cntracker.net/cdn-cgi/image/q=10/https://img.cntracker.net/img/c282f9cea4ee8aad307731f58733545e.png)
 
-作者：[[黑川江凌]]｜校对优化：[[瑞洛凩]]
-
 本日志记录了一个小职员的度假记录。  
-还有 No.3 的度假准备工作。 ^Summary
+还有 No.3 的度假准备工作。\
+\
+作者：[[黑川江凌]]｜校对优化：[[瑞洛凩]] ^Summary
 
 --------------------------------
 
