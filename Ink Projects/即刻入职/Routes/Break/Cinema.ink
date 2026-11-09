@@ -9,9 +9,12 @@
 =   Game_Over
 
 ~   COUNT_GAME_OVER ++
+/*
 
 在电影院被 AZ 入职
 
+*/
+【摘要】电影路线结算，在影院被 AZ 入职
 {
 
 -   COUNT_ROUTE_BREAK_CINEMA == 1:

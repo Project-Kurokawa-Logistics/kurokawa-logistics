@@ -25,9 +25,12 @@
 =   Game_Over
 
 ~   COUNT_GAME_OVER ++
+/*
 
 出差被 AZ 入职。
 
+*/
+【摘要】出差路线结算，途中被 AZ 入职
 {
 
 -   COUNT_ROUTE_WORK_BUSINESS_TRIP == 1:

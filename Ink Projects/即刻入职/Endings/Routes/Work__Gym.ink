@@ -1,12 +1,16 @@
 === Ending__Work__Gym
+/*
 
 <hr>
 
 <h1 style="color: red;">GAME OVER</h1>
 
+*/
+【摘要】健身路线结束，展示结局提示
 # IMAGE:  https:\/\/encrypted-tbn0.gstatic.com\/images?q=tbn:ANd9GcTEkP1Cb44RedeX84zvlRGppCTOHWkHEsy_ef-F2T4SC2rhRKbgrSbh_yUh8Z8KdXOGEUw&usqp=CAU
 
 // 待办（主创）：替换占位图片；保留当前图片引用，直到正式素材确认。
+/*
 
 你变成了一个执行体。
 
@@ -18,4 +22,6 @@
 
 可是……这一切对于你来说都还有什么意义呢？
 
+*/
+【摘要】变成失去自主意识的健身执行体
 ->  DONE

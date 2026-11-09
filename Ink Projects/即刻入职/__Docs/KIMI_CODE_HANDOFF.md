@@ -1,6 +1,7 @@
 # 《即刻入职》KIMI CODE 重构交接
 
 - 交接日期：2026-10-28
+- 记录范围：本文保留交接当时的验证结果与测试边界；最新正文显示模式和可复跑范围以 [README.md](README.md) 为准。
 - 工程目录：`Ink Projects/即刻入职/`
 - 后续执行：KIMI CODE
 - 当前阶段：Phase 1 的静态审查与运行时回归已完成技术计数项；后续 Phase 0 补测已完成两款 inklecate 交叉编译、29 项 smoke 与完整自然通关（历史记录，见 `PHASE0_VALIDATION.md`；脚本已删除、当前不可复跑）。架构评估已于 2026-10-28 完成：保留现有模块边界，不做大规模重构；`tools/phase0_smoke.cjs` 已按主创要求删除，`__Tests/` 的 11 项是当前唯一可复跑入口。两条 Shutdown 的 SAN 设计仍待主创确认，Inky GUI 实机回归、宿主 `#RESTART` 与作者验收尚未进行。

@@ -7,9 +7,12 @@
 {
 
 -   COUNT_ROUTE_BREAK_INTERVIEW != 0 and COUNT_ROUTE_BREAK_CINEMA != 0 and COUNT_ROUTE_BREAK_HOME != 0:
+    /*
 
     哪里也不想去。
 
+    */
+    【摘要】经历请假路线后只想继续留在家中
     ->  Break__Shutdown
 
 -   else:

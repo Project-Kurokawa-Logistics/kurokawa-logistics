@@ -1,6 +1,6 @@
 # 《即刻入职》Ink 命名与代码格式约定
 
-- 更新日期：2026-10-28
+- 更新日期：2026-11-09
 - 适用基线：目录迁移后的 `main`（PR #3）
 - 目的：让后续代码更容易审查，同时尽量避免无测试的批量改名破坏剧情跳转。
 
@@ -102,6 +102,21 @@
 }
 ```
 
+### 当前正文的编辑方式
+
+为了快速验证互动逻辑，当前正文使用原位注释加短摘要：
+
+```ink
+/*
+这里保留可继续编辑的完整剧情原文。
+*/
+【摘要】抵达场景并发现异常，准备行动
+```
+
+原文注释只包裹阅读文本，不包裹选择、条件、变量计算或跳转。每段摘要约十几字，放在同一逻辑位置，不合并跨选择、跨分支或跨状态更新的正文。恢复阅读显示时移除该段 `/*`、`*/` 并删除对应 `【摘要】`；不要把摘要与原文同时启用。
+
+正文含 `{PREVIOUS_WAKEUPS}`、`{Game_Over_Plus}` 等表达式时，在启用的摘要中保留其求值。shuffle／sequence 可简化纯文本分项，但不改变类型、分项数量或执行位置。选择标签与图片、清屏、重置标签保留；尤其不能将 `<-` 线程和隧道调用互换，这属于逻辑修改而非正文摘要化。
+
 ### 排版模板
 
 ```ink
@@ -156,4 +171,4 @@
 - `Work__Gym` 的 `Game_Over + 1` 是 `Work__Gym.Game_Over` Stitch 的历史访问次数加当前一次，不是 `COUNT_GAME_OVER`；`ResetState()` 会重置该计数。
 - `Dream7` 已被 INCLUDE，但当前随机池只调用 Dream1–Dream6。
 - `UI/Menus/Main.ink` 中的 `【DEV】` 状态诊断文本当前由块注释隐藏。
-- InkJS 2.4.0 编译、Phase 0 的 18 项 smoke 与 Phase 1 的 11 项回归已有通过记录（当前测试入口 `__Tests/`，`npm test`）；历史的两款 inklecate 交叉编译、29 项 smoke 与纯点击完整自然通关也已通过，但执行脚本 `tools/phase0_smoke.cjs` 已按主创要求删除，29 项与自然通关**当前不可复跑**，11 项回归也不等于完整自然通关。Inky GUI 实机回归、宿主 `#RESTART` 与作者验收仍未运行。参见 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)、[KIMI_CODE_HANDOFF.md](KIMI_CODE_HANDOFF.md) 与 [REFACTOR_PLAN.md](REFACTOR_PLAN.md)。
+- 当前摘要版通过 InkJS 2.4.0 编译与 `__Tests/` 的 12 项回归（`npm test`），含种子 `1/7/42` 的纯点击九路线自然通关；原 11 项仍覆盖直接路径与状态注入。历史 Phase 0 的 18／29 项 smoke 和两款 inklecate 结果保留在 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)，旧 29 项脚本不恢复。自然通关覆盖指定路线顺序，不能据此忽略 Dream4 点菜卡死、日志无法返回及重置残留字符。Inky GUI 实机回归、宿主 `#RESTART` 与作者验收仍未运行；最新范围见 [README.md](README.md)。

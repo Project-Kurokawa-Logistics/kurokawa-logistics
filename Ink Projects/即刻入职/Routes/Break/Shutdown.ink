@@ -9,9 +9,12 @@
 =   Game_Over
 
 ~   COUNT_GAME_OVER ++
+/*
 
 No.AZ 直接打开了家门进来入职。
 
+*/
+【摘要】居家终结，AZ 直接进门强制入职
 <-  Ending__Break__Shutdown
 
 ->  Menu__Game_Over
