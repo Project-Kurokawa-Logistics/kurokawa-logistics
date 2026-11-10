@@ -4,6 +4,8 @@ permalink: p/333a
 
 #半藏品 
 
+![](https://img.cntracker.net/img/c5b90ad127efc1ecf1c6eeee763862fedf767477e7e2f7b58303c6eae0934692.jpg)[^3]
+
 ![](https://barcode.tec-it.com/barcode.ashx?data=No.3-3-33-0-A&code=PDF417)
 
 
@@ -80,3 +82,5 @@ permalink: p/333a
 [^1]: 据 333 本人说明：当时解决了饥饿感归来时看到“宠物”逃跑并没有太多意外，只是收拾了现场后就此销声匿迹。
 
 [^2]: 坏掉的锁至今仍被其收藏。
+
+[^3]: 插画作者：shibatargon
