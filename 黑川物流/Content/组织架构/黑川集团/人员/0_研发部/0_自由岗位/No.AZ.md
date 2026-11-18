@@ -61,7 +61,7 @@ permalink: p/0
 
 ![](https://cntracker.net/cdn-cgi/image/q=30/https://img.cntracker.net/img/f937810f53004d426c1daa56a2955340.png)
 
-<center>（被他盯上目标，成为他的收藏品只是早晚的事。）</center>
+<center>（被他盯上的目标，迟早都会成为他的收藏品。）</center>
 
 --------------------------------
 
