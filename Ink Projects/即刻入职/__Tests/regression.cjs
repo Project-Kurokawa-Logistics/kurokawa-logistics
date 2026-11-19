@@ -620,3 +620,87 @@ test('仅菜单与剧情选项自然通关：seed 1/7/42，九路线唯一递增
     assert.ok(!allText.includes('【摘要】'));
   }
 });
+
+test('上终前后上班按钮行为：未触发前固定保留（含 BAD），触发后在 OK/BAD 显示一次性「上班｜真的假的？」并在 AWFUL 隐藏', () => {
+  // 1. BAD 且未触发上终：保留「上班｜去公司上班」，不出现「上班｜真的假的？」
+  const badBeforeShutdown = newStory({
+    SAN_SCORE: 60,
+    COUNT_ROUTE_WORK_GYM: 1,
+    COUNT_ROUTE_WORK_OFF_WORK: 1,
+    COUNT_ROUTE_WORK_BUSINESS_TRIP: 1,
+    COUNT_ROUTE_BREAK_INTERVIEW: 1,
+  });
+  badBeforeShutdown.ChoosePathString('Flow__Navigator.Index');
+  drain(badBeforeShutdown);
+  assert.ok(choiceTexts(badBeforeShutdown).includes('上班｜去公司上班'));
+  assert.ok(!choiceTexts(badBeforeShutdown).includes('上班｜真的假的？'));
+
+  // 2. OK 且已触发上终：不再出现「上班｜去公司上班」，出现一次性「上班｜真的假的？」；点击后输出抗拒文案并返回本菜单且该选项消失
+  const okAfterShutdown = newStory({
+    SAN_SCORE: 40,
+    COUNT_ROUTE_WORK_GYM: 1,
+    COUNT_ROUTE_WORK_OFF_WORK: 1,
+    COUNT_ROUTE_WORK_BUSINESS_TRIP: 1,
+    COUNT_ROUTE_WORK_NAPPING: 1,
+    COUNT_ROUTE_WORK_SHUTDOWN: 1,
+  });
+  okAfterShutdown.ChoosePathString('Flow__Navigator.Index');
+  const okNavText = drain(okAfterShutdown);
+  assert.ok(okNavText.includes('今天无论如何都不想去公司了'));
+  assert.ok(!choiceTexts(okAfterShutdown).includes('上班｜去公司上班'));
+  assert.ok(choiceTexts(okAfterShutdown).includes('上班｜真的假的？'));
+
+  const beforeRefuse = variables(okAfterShutdown);
+  const refuseText = choose(okAfterShutdown, '上班｜真的假的？');
+  assert.ok(refuseText.includes('天王老子来了今天也不想上班了。'));
+  assert.ok(!refuseText.includes('上班｜真的假的？'));
+  assert.deepEqual(variables(okAfterShutdown), beforeRefuse, '点击抗拒选项不应改变任何计数或 SAN');
+  assert.deepEqual(choiceTexts(okAfterShutdown), [
+    '请假｜去黑川物流面试',
+    '请假｜出门找人看电影玩',
+    '请假｜呆在家里回血',
+  ]);
+
+  // 下一轮再次进入选择菜单，「上班｜真的假的？」仍保持消失
+  okAfterShutdown.ChoosePathString('Flow__Going_To.Choice');
+  drain(okAfterShutdown);
+  assert.ok(!choiceTexts(okAfterShutdown).includes('上班｜真的假的？'));
+  assert.ok(!choiceTexts(okAfterShutdown).includes('上班｜去公司上班'));
+
+  // 3. BAD 且已触发上终（尚未点击过抗拒选项）：同样支持一次「上班｜真的假的？」后消失
+  const badAfterShutdown = newStory({
+    SAN_SCORE: 60,
+    COUNT_ROUTE_WORK_GYM: 1,
+    COUNT_ROUTE_WORK_OFF_WORK: 1,
+    COUNT_ROUTE_WORK_BUSINESS_TRIP: 1,
+    COUNT_ROUTE_WORK_NAPPING: 1,
+    COUNT_ROUTE_WORK_SHUTDOWN: 1,
+    COUNT_ROUTE_BREAK_INTERVIEW: 1,
+  });
+  badAfterShutdown.ChoosePathString('Flow__Navigator.Index');
+  drain(badAfterShutdown);
+  assert.ok(!choiceTexts(badAfterShutdown).includes('上班｜去公司上班'));
+  assert.ok(choiceTexts(badAfterShutdown).includes('上班｜真的假的？'));
+  const badRefuse = choose(badAfterShutdown, '上班｜真的假的？');
+  assert.ok(badRefuse.includes('天王老子来了今天也不想上班了。'));
+  assert.deepEqual(choiceTexts(badAfterShutdown), ['请假｜出门找人看电影玩', '请假｜呆在家里回血']);
+
+  // 4. AWFUL 且此前未点击过抗拒选项：仅剩居家终结乱码选项，不显示任何上班按钮
+  const awful = newStory({
+    SAN_SCORE: 70,
+    COUNT_ROUTE_WORK_GYM: 1,
+    COUNT_ROUTE_WORK_OFF_WORK: 1,
+    COUNT_ROUTE_WORK_BUSINESS_TRIP: 1,
+    COUNT_ROUTE_WORK_NAPPING: 1,
+    COUNT_ROUTE_WORK_SHUTDOWN: 1,
+    COUNT_ROUTE_BREAK_INTERVIEW: 1,
+    COUNT_ROUTE_BREAK_CINEMA: 1,
+    COUNT_ROUTE_BREAK_HOME: 1,
+  });
+  awful.ChoosePathString('Flow__Going_To.Choice');
+  drain(awful);
+  assert.equal(choiceTexts(awful).length, 1);
+  assert.ok(!choiceTexts(awful).includes('上班｜去公司上班'));
+  assert.ok(!choiceTexts(awful).includes('上班｜真的假的？'));
+});
+
