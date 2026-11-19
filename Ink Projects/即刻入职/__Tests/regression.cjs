@@ -399,7 +399,11 @@ test('全路线注入：最终和解 → 现实 No.8，前8次，无额外普通
   assert.ok(text.includes('前8次'), 'COUNT_GAME_OVER=9 时最终和解应显示前8次');
   assert.ok(!text.includes('前9次'));
   assert.ok(text.includes('感谢游玩'));
-  assert.ok(text.indexOf('耳鸣') >= 0 && text.indexOf('耳鸣') < text.indexOf('感谢游玩'), '应先最终和解后现实 No.8');
+  assert.ok(
+    text.indexOf('在空白房间醒来并与自己和解') >= 0 &&
+      text.indexOf('在空白房间醒来并与自己和解') < text.indexOf('感谢游玩'),
+    '应先最终和解后现实 No.8',
+  );
   assert.ok(!text.includes('夺命连环闹钟铃声'), '不应再插入普通醒来');
   assert.ok(!text.includes('人……为什么要上班……'), '不应再进入首日导航');
   assert.ok(!text.includes('重新连接'));
@@ -410,7 +414,7 @@ test('全路线注入：最终和解 → 现实 No.8，前8次，无额外普通
 
   story.ChoosePathString('Flow__Startup.Check');
   const again = drain(story);
-  assert.ok(!again.includes('耳鸣'), '第二次启动应直接进入现实 No.8');
+  assert.ok(!again.includes('在空白房间醒来并与自己和解'), '第二次启动应直接进入现实 No.8');
   assert.ok(again.includes('感谢游玩'));
   assert.deepEqual(choiceTexts(story), ['制作人员']);
 });
@@ -586,7 +590,10 @@ test('仅菜单与剧情选项自然通关：seed 1/7/42，九路线唯一递增
     allText += finalText;
     assert.ok(finalText.includes('前8次'));
     assert.ok(finalText.includes('感谢游玩'));
-    assert.ok(finalText.indexOf('耳鸣') >= 0 && finalText.indexOf('耳鸣') < finalText.indexOf('感谢游玩'));
+    assert.ok(
+      finalText.indexOf('在空白房间醒来并与自己和解') >= 0 &&
+        finalText.indexOf('在空白房间醒来并与自己和解') < finalText.indexOf('感谢游玩'),
+    );
     assert.ok(!routes.some((route) => finalText.includes(route.wake)), '终局前不应多余普通醒来');
     assert.deepEqual(choiceTexts(story), ['制作人员']);
     assert.equal(story.variablesState['HAS_ENTERED_FINAL_RECONCILIATION'], true);
