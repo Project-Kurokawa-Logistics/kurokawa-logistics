@@ -1,8 +1,8 @@
 # 《即刻入职》故事线路图与状态说明
 
-- 更新日期：2026-11-09
+- 更新日期：2026-11-18
 - 对应架构：目录迁移后的 `main`（PR #3）
-- **验证声明：** 本文根据当前 Ink 源码整理，箭头不表示每条路径均已运行验证。当前摘要版通过 InkJS 2.4.0 编译与 `__Tests/` 的 12 项回归：原 11 项直接路径／状态注入，加种子 `1/7/42` 的纯点击九路线自然通关。自然通关会选择目标行动、避开 Dream4 的点菜卡死，不表示该 BUG 已修复。历史 Phase 0 的 18／29 项 smoke、两款 inklecate 与自然通关记录见 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)，旧 29 项脚本仍不可复跑。Inky GUI 实机回归、宿主 `#RESTART` 与作者验收仍未运行。
+- **验证声明：** 本文根据当前 Ink 源码整理，箭头不表示每条路径均已运行验证。当前正文生效版通过 InkJS 2.4.0 编译与 `__Tests/` 的 12 项回归：原 11 项直接路径／状态注入，加种子 `1/7/42` 的纯点击九路线自然通关。自然通关会选择目标行动、避开 Dream4 的点菜卡死，不表示该 BUG 已修复。历史 Phase 0 的 18／29 项 smoke、两款 inklecate 与自然通关记录见 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)，旧 29 项脚本仍不可复跑。Inky GUI 实机回归、宿主 `#RESTART` 与作者验收仍未运行。
 
 ## 1. 主流程图
 
@@ -144,11 +144,11 @@ flowchart TD
   → 现实中醒来，接受 AZ 的安排，成为市场部部长 No.8
 ```
 
-当前 `Ending__Final_Reconciliation.ink` 在场景开始时设置 `HAS_ENTERED_FINAL_RECONCILIATION = true`，并用 `COUNT_GAME_OVER - 1` 生成前几次醒来的数量。状态注入、历史自然通关与当前摘要版的纯点选回归均确认 `COUNT_GAME_OVER = 9` 时显示“前8次”，终局顺序正确；最终醒来次数的叙事含义仍按 Phase 3 待核对。现实结局文件目前仍有 TODO 和 AI 草稿，需要主创审阅。
+当前 `Ending__Final_Reconciliation.ink` 在场景开始时设置 `HAS_ENTERED_FINAL_RECONCILIATION = true`，并用 `COUNT_GAME_OVER - 1` 生成前几次醒来的数量。状态注入、历史自然通关与当前正文生效版的纯点选回归均确认 `COUNT_GAME_OVER = 9` 时显示“前8次”，终局顺序正确；最终醒来次数的叙事含义仍按 Phase 3 待核对。现实结局文件目前仍有 TODO 和 AI 草稿，需要主创审阅。
 
 ## 6. 当前需验证的问题
 
-正文当前以 `/* 原文 */` 加 `【摘要】` 显示，选择、状态与跳转保持原样。摘要只用于加快逻辑验证；原文仍在原位置供主创编辑，恢复方式见 [INK_STYLE_GUIDE.md](INK_STYLE_GUIDE.md)。
+全工程正文与路线大纲当前已恢复直接生效（已移除所有 `/* 原文 */` 注释包裹与 `【摘要】` 行）。
 
 本次检查确认、尚未修复的问题：
 

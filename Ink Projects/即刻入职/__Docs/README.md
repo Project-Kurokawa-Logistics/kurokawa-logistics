@@ -2,27 +2,25 @@
 
 - **当前状态：** 目录与命名迁移已合并到 `main`（[PR #3](https://github.com/Project-Kurokawa-Logistics/kurokawa-logistics/pull/3)，merge commit [`728b84c2`](https://github.com/Project-Kurokawa-Logistics/kurokawa-logistics/commit/728b84c201693db1a4774e2ee4402873914eb4e1)）。2026-10-28 的架构评估结论：现有 `Core/Systems/Flow/Routes/Dreams/Endings/UI` 模块边界与 `__Docs`／`__Tests` 分离继续保留，当前不需要再次大规模重构或批量改名；路线结算重复与历史命名只作为后续小步技术债处理（见 [REFACTOR_PLAN.md](REFACTOR_PLAN.md) 第 1.1 节）。
 - **测试入口：** `__Tests/` 是当前**唯一可复跑**的测试入口（`inkjs@2.4.0`，12 项；在 `__Tests/` 下执行 `npm ci --no-audit --no-fund && npm test`）。包含原有 11 项状态／计数回归及新增的纯点击九路线自然通关。原 `tools/phase0_smoke.cjs` 已按主创要求删除，不恢复第二套测试轨道。
-- **验证边界：** 当前摘要版已通过 12 项回归，包括种子 `1/7/42` 从标题到九路线、最终和解、现实 No.8、制作人员及通关后回顾的自然流程；这不代表所有分支无 BUG，已知问题见下。历史 Phase 0 的 18／29 项 smoke、两款 inklecate 与自然通关结果仍见 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)，旧 29 项脚本仍不可复跑。Inky GUI 实机回归、宿主 `#RESTART` 与作者验收仍未完成；两条 Shutdown 的 SAN、Dream7、No.8 TODO 等设计事项仍然有效。
+- **验证边界：** 当前正文生效版已通过 12 项回归，包括种子 `1/7/42` 从标题到九路线、最终和解、现实 No.8、制作人员及通关后回顾的自然流程；这不代表所有分支无 BUG，已知问题见下。历史 Phase 0 的 18／29 项 smoke、两款 inklecate 与自然通关结果仍见 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)，旧 29 项脚本仍不可复跑。Inky GUI 实机回归、宿主 `#RESTART` 与作者验收仍未完成；两条 Shutdown 的 SAN、Dream7、No.8 TODO 等设计事项仍然有效。
 - **文档位置：** 当前统一使用 `__Docs/`；不再维护 `docs/` 双轨副本。
 - **后续执行：** 重构工作由 KIMI CODE 接手与审阅；后续如新增自然通关验证，应纳入 `__Tests/`，不恢复已删除的 `tools/` 脚本。
 
-## 正文摘要验证模式（2026-11-09）
+## 正文生效状态（2026-11-18）
 
-当前 `.ink` 源码使用摘要显示，供快速点选验证：127 段阅读正文保留在原位置的 Ink 原生 `/* … */` 注释中，紧接一条约十几字的 `【摘要】`。直接编辑注释内的原文即可继续创作，不需要维护第二份小说；恢复某段正文时移除包裹它的注释，并删除对应摘要。
+全工程 `.ink` 源码已移除此前用于逻辑快验的 `/* … */` 正文注释包裹与全部 `【摘要】` 行，恢复原文与新增路线大纲直接生效（仅保留 `Systems/Environment.ink` 与 `UI/Menus/Main.ink` 中的 `【DEV】` 调试状态块注释）。
 
-- 选择标签、条件、变量、路线计数、跳转、gather 层级及 `# CLEAR`／`# RESTART`／`# IMAGE` 等标签保留。选项本身仍显示原文字样，以便核对可见性和选择结果。
-- 次数表达式保留在摘要中；餐点 shuffle 和分隔线 sequence 保留类型、顺序和分项数，仅将输出文字缩短，避免改变随机抽取与序列推进。
-- 不使用 HTML 的 `<!-- … -->` 隐藏 Ink 正文；它不是 Ink 编译期注释，不能确保原文和内联表达式停止执行。
-- 本轮只改变显示文本，不修复既有逻辑问题：Dream4 的“点菜”与行动选项混排及点选后停止、更新日志两页之间无法返回标题，仍保留供后续定位。`Drone` 重置选择后的残留 `w` 也未修改。
-- 标题、制作人员、日志与故障页正文同样摘要化；图片标签保留，因此宿主仍可能显示原图。
+- `__Tests/regression.cjs` 的 12 项回归测试已同步切换为对实际生效正文的断言，并校验输出不再包含 `【摘要】`。
+- 既有待办逻辑问题仍保持记录：Dream4 的“点菜”与行动选项混排及点选后停止、更新日志两页之间无法返回标题、`Drone` 重置选择后的残留 `w`。
 
 ## 文档入口
 
-1. [KIMI_CODE_HANDOFF.md](KIMI_CODE_HANDOFF.md)：KIMI CODE 的执行交接、Phase 0／Phase 1 真实验证结果、边界和下一步。
-2. [REFACTOR_PLAN.md](REFACTOR_PLAN.md)：架构评估结论、分阶段重构计划、优先级、每阶段验收标准。
-3. [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)：历史 inklecate 交叉编译、29 项 smoke、完整自然通关与 Credits 修复记录；文首标明脚本已删除、命令不可复跑。
-4. [STORY_FLOW.md](STORY_FLOW.md)：故事设计约束与当前源码流程图；明确区分设计目标和已实现行为。
-5. [INK_STYLE_GUIDE.md](INK_STYLE_GUIDE.md)：当前命名规律、推荐变量与 Knot 写法、注释约定、Ink 排版约定。
+1. [NARRATIVE_DESIGN.md](NARRATIVE_DESIGN.md)：主创确认的叙事背景、洛书人物内核、胶兽人格彩蛋与普通路线崩溃机制、各路线剧情设计要点。
+2. [KIMI_CODE_HANDOFF.md](KIMI_CODE_HANDOFF.md)：KIMI CODE 的执行交接、Phase 0／Phase 1 真实验证结果、边界和下一步。
+3. [REFACTOR_PLAN.md](REFACTOR_PLAN.md)：架构评估结论、分阶段重构计划、优先级、每阶段验收标准。
+4. [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)：历史 inklecate 交叉编译、29 项 smoke、完整自然通关与 Credits 修复记录；文首标明脚本已删除、命令不可复跑。
+5. [STORY_FLOW.md](STORY_FLOW.md)：故事设计约束与当前源码流程图；明确区分设计目标和已实现行为。
+6. [INK_STYLE_GUIDE.md](INK_STYLE_GUIDE.md)：当前命名规律、推荐变量与 Knot 写法、注释约定、Ink 排版约定。
 
 ## 当前目录职责
 

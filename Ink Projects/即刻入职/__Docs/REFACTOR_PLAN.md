@@ -1,9 +1,9 @@
 # 《即刻入职》重构计划与验收记录
 
-- 更新日期：2026-11-09
+- 更新日期：2026-11-18
 - 当前基线：目录重构已合并至 `main`（PR #3，merge commit `728b84c201693db1a4774e2ee4402873914eb4e1`）
 - 架构结论（2026-10-28）：保留 `Core/Systems/Flow/Routes/Dreams/Endings/UI` 模块边界与 `__Docs`／`__Tests` 分离，当前不再进行大规模重构或批量改名；见第 1.1 节。
-- 状态：**当前摘要版通过 12 项回归，含原 11 项技术计数回归及种子 `1/7/42` 的纯点击九路线自然通关；摘要化未修复 Dream4 点菜、日志返回和重置残留字符问题。历史交叉验证见 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)；两条 Shutdown 的 SAN 设计待主创确认，Inky GUI 实机回归与作者验收尚未完成**
+- 状态：**当前正文生效版通过 12 项回归，含原 11 项技术计数回归及种子 `1/7/42` 的纯点击九路线自然通关；Dream4 点菜、日志返回和重置残留字符问题仍待单独修复。历史交叉验证见 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)；两条 Shutdown 的 SAN 设计待主创确认，Inky GUI 实机回归与作者验收尚未完成**
 - 测试入口：`__Tests/`（`npm ci --no-audit --no-fund && npm test`），固定 `inkjs@2.4.0`；这是当前唯一可复跑的测试入口，`tools/` 测试脚本已删除且不再维护。
 - 原则：先保证行为，再逐步整理；每次改动可审查、可测试、可回滚。
 - 后续执行：KIMI CODE；具体约束与下一步见 [KIMI_CODE_HANDOFF.md](KIMI_CODE_HANDOFF.md)。

@@ -2,7 +2,6 @@
 
 ~ HAS_ENTERED_FINAL_RECONCILIATION = true
 ~ temp PREVIOUS_WAKEUPS = COUNT_GAME_OVER - 1
-/*
 
 \*嘤————\*
 
@@ -114,6 +113,4 @@
 
 耳边，响起了滋滋的电流声。
 
-*/
-【摘要】前{PREVIOUS_WAKEUPS}次苏醒后终于在白色空间与自己和解
 -> Ending__No8_Reality
