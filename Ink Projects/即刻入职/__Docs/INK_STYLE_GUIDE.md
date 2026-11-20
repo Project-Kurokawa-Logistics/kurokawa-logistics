@@ -1,115 +1,61 @@
 # 《即刻入职》Ink 命名与代码格式约定
 
-- 更新日期：2026-11-09
-- 适用基线：目录迁移后的 `main`（PR #3）
-- 目的：让后续代码更容易审查，同时尽量避免无测试的批量改名破坏剧情跳转。
+- 更新日期：2026-11-20
+- 目的：保持 Ink 脚本结构清晰、便于协作审阅，避免误改变量或跳转逻辑。
 
-## 1. 当前工程约定
+## 1. 目录与命名约定
 
-### 目录和文件
+### 目录结构
 
 | 目录 | 用途 |
 | --- | --- |
-| `Core/` | 全局变量 |
+| `Core/` | 全局变量（集中放在 `Core/Variables.ink`） |
 | `Systems/` | 状态函数、身份判定、强制闯入、环境检查 |
 | `Flow/` | 启动、导航、行动选择 |
 | `Routes/Work/`、`Routes/Break/` | 事件与结算 |
 | `Dreams/` | 梦境路由和正文 |
 | `Endings/Routes/` | 普通路线的结局正文 |
-| `Endings/` | 最终和解、现实 No.8、结局回顾 |
+| `Endings/` | 最终和解、现实 No.8、结局回溯 |
 | `UI/` | 菜单、标题、日志、异常页、制作人员 |
-| `Dev/` | 开发测试与兜底节点 |
-| `__Tests/` | 当前唯一可复跑的编译与回归入口（`inkjs@2.4.0`，CommonJS） |
+| `Dev/` | 开发测试与兜底节点（默认不接入正式流程） |
+| `__Docs/` | 开发与叙事设计文档 |
+| `__Tests/` | 编译与回归测试入口（`inkjs@2.4.0`，CommonJS） |
 
-目录不使用数字前缀。文件名采用易读英文词组与下划线，例如 `Business_Trip.ink`、`Final_Reconciliation.ink`。
+目录不使用数字前缀；文件名采用易读英文词组与下划线（如 `Business_Trip.ink`、`Final_Reconciliation.ink`）。
 
 ### Knot、Stitch 与函数
 
-当前 Knot 名称使用双下划线表达模块层级，例如：
-
-- `Flow__Startup`
-- `Flow__Navigator`
-- `Work__Route_Hub`
-- `Ending__Final_Reconciliation`
-- `Ending__No8_Reality`
-- `Menu__Main`
-- `Page__Title`
-
-双下划线是项目自己的命名约定，不是 Ink 语言提供的命名空间功能。Stitch 目前仍有 `Check`、`Choice`、`Morning`、`Afternoon`、`Evening`、`Game_Over` 等历史名称；**不要仅为风格统一而批量改名**，因为 Divert 可能依赖 Stitch 的上下文。
-
-函数以动词说明用途：
-
-- `Get__Sanity_State(score)`：返回精神状态字符串。
-- `Get__Aboard_Status()`：返回 `Prototype`、`DRONE` 或 `No.8`。
-- `Get__Forced_Intrusion()`：返回 `WORK`、`BREAK` 或 `NONE`。
+- Knot 使用双下划线表达模块层级（如 `Flow__Startup`、`Work__Route_Hub`、`Ending__Final_Reconciliation`、`Menu__Main`）。
+- 历史 Stitch 名（`Check`、`Choice`、`Morning`、`Afternoon`、`Evening`、`Game_Over` 等）不要仅为形式统一而批量改名，避免破坏 Divert 上下文。
+- 函数以动词说明返回值：`Get__Sanity_State(score)`、`Get__Aboard_Status()`、`Get__Forced_Intrusion()`。
 
 ### 全局变量
 
-当前重构后的变量采用大写与语义前缀：
-
-| 类型 | 当前示例 | 约定 |
+| 类型 | 示例 | 约定 |
 | --- | --- | --- |
-| 精神数值 | `SAN_SCORE` | 数值越高，精神状态越差；初始 `-1` 是首次启动哨兵，首次打开邀请函后为 `0` |
-| 路线经历次数 | `COUNT_ROUTE_WORK_GYM`、`COUNT_ROUTE_BREAK_HOME` | 每条路线的实际进入次数；0 表示未经历，非 0 表示经历过；不能随意改成 bool |
-| 结算／重新连接序号 | `COUNT_GAME_OVER` | 九条路线已完成结算的全局总次数，也是「重新连接：第 N 次」的序号；不是唯一路线数 |
-| 菜单隐藏点击 | `COUNT_MENU_SEPARATOR` | 主菜单分隔线点击次数；第 6 次触发隐藏入口，与自然路线结算分开 |
-| 阶段布尔值 | `HAS_ENTERED_FINAL_RECONCILIATION` | 用 `HAS_` 表达已发生的阶段 |
-| 解锁布尔值 | `UNLOCKED_NO8_DATABASE` | 由第 6 次分隔线点击置 true；实际用途是隐藏初始化／重新连接入口，保留 |
+| 精神数值 | `SAN_SCORE` | 越高状态越差；初始 `-1` 为首次启动哨兵，首次打开邀请函后为 `0` |
+| 路线经历次数 | `COUNT_ROUTE_WORK_GYM` | 实际进入次数（`0` 未经历，非 `0` 已经历），不改为 bool |
+| 结算／重连序号 | `COUNT_GAME_OVER` | 九条路线已完成结算的总次数，也是「重新连接：第 N 次」序号 |
+| 菜单隐藏点击 | `COUNT_MENU_SEPARATOR` | 主菜单分隔线点击次数；第 6 次触发隐藏入口 |
+| 阶段布尔值 | `HAS_ENTERED_FINAL_RECONCILIATION` | `HAS_*`／`IS_*` 表达阶段状态 |
+| 解锁布尔值 | `UNLOCKED_NO8_DATABASE` | 第 6 次分隔线点击置 `true`，用于隐藏初始化／重新连接入口 |
 
-不要再用 `Flag__...` 命名一个实际由 `++` 更新的计数器。首次经历与重复经历有不同效果时，必须保留次数语义。
+状态字符串 `FINE`、`OK`、`BAD`、`AWFUL`、`Prototype`、`DRONE`、`No.8` 拼写必须完全一致。
 
-## 2. 推荐的新代码写法
-
-以下是新增代码的推荐写法，不代表所有旧文件已经完成迁移。
-
-- 全局计数使用 `COUNT_*`；布尔阶段使用 `HAS_*`／`IS_*`；解锁使用 `UNLOCKED_*`。
-- 函数名明确表示返回内容，避免让精神状态函数和身份状态函数共用含糊的 `Check` 名称。
-- Knot 使用 `Module__Purpose`，文件路径与其主要 Knot 尽可能对应。
-- 状态字符串如 `FINE`、`OK`、`BAD`、`AWFUL`、`Prototype`、`DRONE`、`No.8` 拼写必须完全一致。
-- 对复杂分支加注释解释**为什么存在这条条件**，而不只是复述下一跳。
-- 不要在选项呈现或预览过程中偷偷增加路线计数；状态副作用应发生在真正进入路线／结算的位置。
-- 需要显示某一 Knot／Stitch 的历史访问序号时，使用 Ink 的 Stitch 读计数并显式 `+ 1` 表示当前一次（如 `Work__Gym` 的 `Game_Over + 1`）；不要用 `COUNT_GAME_OVER` 顶替这类历史访问次数。
-- 每条结局的计数和精神数值变化应有明确约定，并由测试覆盖；不能仅靠复制粘贴保持一致。
+## 2. 注释与正文写法
 
 ### 注释约定
 
-- **解释性注释使用中文。** 面向维护者的说明、条件原因、设计约束都用中文写，方便主创与后续接手者审阅。
-- **代码标识符保留项目命名。** 注释里引用变量、Knot、Stitch、函数时使用源码中的原名（如 `SAN_SCORE`、`COUNT_GAME_OVER`、`Dream__Router.Check`），不要翻译、简写或另造别名。
-- **复杂条件解释原因，不写复述性噪音。** 说明“为什么需要这个条件／顺序”“它保护哪个设计约束”；不要逐行复述 `+ [选项]` 或 `-> Knot` 已经表达的内容。
-- 现有解释性注释已统一为中文；后续新增或修改注释时继续遵循本约定，不再新增英文说明。
+- **解释性注释使用中文**，面向主创与维护者说明“为什么存在该条件／顺序”。
+- **代码标识符保留源码原名**（如 `SAN_SCORE`、`COUNT_GAME_OVER`、`Dream__Router.Check`），不翻译或另造别名。
 
-示例（取自 `Systems/Intrusion.ink` 的实际写法）：
+### 正文与大纲占位
 
-```ink
-// 优先级与原始启动检查一致：先检查缺失的关键工作路线，再检查缺失的面试，
-// 最后检查缺失的健身房。顺序会影响多个条件同时成立时的返回值。
-{
-    - Get__Sanity_State(SAN_SCORE) == "BAD" and COUNT_ROUTE_WORK_OFF_WORK == 0:
-        ~ return "WORK"
+- 全工程 `.ink` 文件均采用正文直接生效，不再使用 `/* ... */` + `【摘要】` 包裹阅读文本。
+- 大纲占位直接写入 `.ink` 时，列表条目**不要以 `- ` 开头**（Ink 会解析为 gather 收束点），请使用 `· ` 等普通符号。
+- `END`、`DONE`、`->`、`<-`、`# CLEAR` 语义各不相同，不可机械互换；尤其不要将 `<-` 线程与隧道调用互换。
 
-    - Get__Sanity_State(SAN_SCORE) == "BAD" and COUNT_ROUTE_BREAK_INTERVIEW == 0:
-        ~ return "BREAK"
-}
-```
-
-不要写成：
-
-```ink
-// 如果状态是 BAD
-{ Get__Sanity_State(SAN_SCORE) == "BAD":
-    // 返回 WORK
-    ~ return "WORK"
-}
-```
-
-### 当前正文的编辑方式
-
-全工程已移除临时的 `/* … */` 正文注释包裹与 `【摘要】` 行，所有 `.ink` 文件中的阅读正文与未扩写段落大纲均直接编译生效。
-
-- 大纲阶段需要写入 `.ink` 占位时，条目列表不要以 `- ` 开头（在 Ink 中会被解析为 gather 收束点），可使用 `· ` 等普通符号。
-- 选择标签与图片、清屏、重置标签保留；尤其不能将 `<-` 线程和隧道调用互换。
-
-### 排版模板
+### 排版参考
 
 ```ink
 === Work__Example
@@ -127,40 +73,17 @@
     -> Game_Over
 
 = Game_Over
-    // 在这里调用已确认的统一结算逻辑；尚未实现前不要伪造函数。
     -> Menu__Game_Over
 ```
 
-注意：此模板只示范 Knot／Stitch 和选项排版。实际项目中 `END`、`DONE`、`->`、`<-`、`# CLEAR` 的语义并不相同，不能机械替换。全局 `VAR` 声明集中放在 `Core/Variables.ink`，不复制到每个路线文件。
+## 3. 维护规则与关键注意事项
 
-## 3. Ink 文件维护规则
-
-1. 新增文件后，同时把它加入 `即刻入职.ink` 的 INCLUDE 列表；Dev 测试文件除非明确需要，不要加入正式运行入口。
-2. 移动／改名文件后，全局搜索旧路径、旧 Knot 和所有调用方。
-3. 修改函数签名时同步检查所有调用；带参数函数和无参数函数的调用不能混用。
-4. 修改变量时检查声明、所有读取、所有写入、菜单条件、路线结局和隐藏入口。
-5. 保留作者的剧情原文与特殊乱码表现。除非任务明确要求，不要把未完文本替换成自拟的“完整剧情”。
-6. 修改条件时保留原有分支优先级，除非有明确的设定依据；Ink 条件按书写顺序判定，顺序本身可能影响结果。
-7. 一次 PR 尽量只处理一个逻辑问题，并附上编译和复现结果。
-
-## 4. 迁移策略
-
-**现在不做全量变量改名。** 先完成目录迁移后的编译、引用扫描和故事回归；之后按路线／功能逐步迁移，并在同一个 PR 中更新全部读写点。
-
-建议顺序：
-
-1. 先明确 `SAN_SCORE`、`COUNT_GAME_OVER` 和各路线计数的真实语义。
-2. 先修复经测试确认的计数遗漏或条件错误。
-3. 再考虑提炼重复结算逻辑；需要先验证 Ink 函数、tunnel 和变量作用域的真实行为。
-4. 最后再统一历史 Stitch／Knot 名称。旧名称只在有测试的具体任务中迁移。
-
-## 5. 当前需特别留意
-
-- `SAN_SCORE` 名称容易让人误以为数值越高越健康；当前实际规则是越高越差。没有完成测试和全量迁移前，必须在注释／文档中写清楚。
-- `Get__Sanity_State(score)` 的 `AWFUL` 不只取决于分数，还取决于普通路线经历情况。
-- `Get__Aboard_Status()` 的 No.8 判定与 `AWFUL` 的路线集合不是同一组条件。
-- `UNLOCKED_NO8_DATABASE` 由第 6 次分隔线点击置 true，实际用途是隐藏主菜单的初始化／重新连接入口；保留。
-- `Work__Gym` 的 `Game_Over + 1` 是 `Work__Gym.Game_Over` Stitch 的历史访问次数加当前一次，不是 `COUNT_GAME_OVER`；`ResetState()` 会重置该计数。
-- `Dream7` 已被 INCLUDE，但当前随机池只调用 Dream1–Dream6。
-- `Systems/Environment.ink` 与 `UI/Menus/Main.ink` 中的 `【DEV】` 状态诊断文本当前由块注释隐藏。
-- 当前正文生效版通过 InkJS 2.4.0 编译与 `__Tests/` 的 12 项回归（`npm test`），含种子 `1/7/42` 的纯点击九路线自然通关；原 11 项仍覆盖直接路径与状态注入。历史 Phase 0 的 18／29 项 smoke 和两款 inklecate 结果保留在 [PHASE0_VALIDATION.md](PHASE0_VALIDATION.md)，旧 29 项脚本不恢复。自然通关覆盖指定路线顺序，不能据此忽略 Dream4 点菜卡死、日志无法返回及重置残留字符。Inky GUI 实机回归、宿主 `#RESTART` 与作者验收仍未运行；最新范围见 [README.md](README.md)。
+1. 新增 `.ink` 文件后同步加入 `即刻入职.ink` 的 `INCLUDE` 列表（`Dev/` 测试文件除外）。
+2. 不要在选项呈现或预览过程中偷偷增加路线计数；副作用应只发生在真正进入路线／结算的位置。
+3. 保留作者原文与特殊乱码表现；未完文本或 Obsidian 同步中的段落不要擅自替换为自拟定稿。
+4. 修改条件时保持原有分支优先级（Ink 条件按书写顺序判定）。
+5. **特别留意：**
+   - `SAN_SCORE` 数值越高状态越差，不要按名称误判方向；
+   - `Work__Gym` 中的 `Game_Over + 1` 是 `Work__Gym.Game_Over` Stitch 的历史访问次数加当前一次，不是 `COUNT_GAME_OVER`，不可替换；
+   - `Systems/Environment.ink` 与 `UI/Menus/Main.ink` 中的 `【DEV】` 状态诊断文本当前由块注释隐藏；
+   - 每次改动脚本后在 `__Tests/` 执行 `npm test`，确保 47 个 `INCLUDE` 0 错误 0 警告且全部 13 项回归通过。
