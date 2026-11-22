@@ -528,6 +528,11 @@ test('仅菜单与剧情选项自然通关：seed 1/7/42，九路线唯一递增
       } else if (round === 1) {
         routeText += choose(story, '上班｜去公司上班');
         routeText += choose(story, '去｜出差');
+        for (let step = 0; step < 20 && !atGameOverMenu(story); step += 1) {
+          assert.ok(story.currentChoices.length > 0, `seed ${seed} 出差流程意外卡住`);
+          story.ChooseChoiceIndex(story.currentChoices[0].index);
+          routeText += drain(story);
+        }
       } else if (round === 2) {
         routeText += choose(story, '上班｜去公司上班');
         routeText += choose(story, '不去｜下次再说');
