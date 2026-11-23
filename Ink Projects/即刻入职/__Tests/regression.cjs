@@ -56,15 +56,15 @@ const ROUTE_CASES = [
 ];
 
 const GALLERY_ENTRIES = [
-  ['出差', '【摘要】出差外地时被入职的结局回顾'],
-  ['健身房', '【摘要】变成失去自主意识的健身执行体'],
-  ['下班路上', '【摘要】在下班途中遭 AZ 绑架的结局回顾'],
-  ['小憩', '【摘要】睡觉受罚买咖啡，途中被 AZ 入职'],
-  ['办公室', '【摘要】在全体员工注视下被强制入职'],
-  ['面试', '【摘要】在黑川物流被 AZ 入职的结局回顾'],
-  ['电影院', '【摘要】在电影院遭 AZ 入职的结局回顾'],
-  ['收快递', '【摘要】在家收快递时被入职的结局回顾'],
-  ['在家', '【摘要】AZ 来家中开饭并入职的结局回顾'],
+  ['出差', '你在外地被入职了。'],
+  ['健身房', '你变成了一个执行体。'],
+  ['下班路上', '你被 AZ 绑架了。'],
+  ['小憩', '上班睡觉被老板发现。'],
+  ['办公室', '在所有员工的注视下被入职了。'],
+  ['面试', '你在黑川物流被 AZ 入职了。'],
+  ['电影院', '你在电影院被 AZ 入职了。'],
+  ['收快递', '你在家被入职了。'],
+  ['在家', 'AZ 来你家开饭了。'],
 ];
 
 function allRoutes(value) {
@@ -141,8 +141,7 @@ test('初始全局值与首次自然启动：SAN 哨兵 -1 → 邀请函后 0，
   assert.deepEqual(variables(story), INITIAL_VARIABLES);
 
   const titleText = drain(story);
-  assert.ok(titleText.includes('【摘要】逻辑验证版本，原稿更新于20261029'), '自然启动应先到标题页');
-  assert.ok(!titleText.includes('更新日期：20261029'), '被注释的标题原文不应再输出');
+  assert.ok(titleText.includes('更新日期：20261029'), '自然启动应先到标题页');
   const menu = choiceTexts(story);
   assert.ok(menu.includes('初始化'));
   assert.ok(!menu.some((item) => item.includes('重新连接')), 'COUNT_GAME_OVER 为 0 时不应显示重新连接');
@@ -150,8 +149,7 @@ test('初始全局值与首次自然启动：SAN 哨兵 -1 → 邀请函后 0，
   choose(story, '初始化');
   choose(story, '继续');
   const letterText = choose(story, '打开 面试邀请函');
-  assert.ok(letterText.includes('【摘要】收到黑川物流市场部的面试邀请函'), '应实际打开邀请函');
-  assert.ok(!letterText.includes('<h1>黑川物流市场部面试邀请函</h1>'), '被注释的邀请函原文不应再输出');
+  assert.ok(letterText.includes('黑川物流市场部面试邀请函'), '应实际打开邀请函');
   assert.equal(story.variablesState['SAN_SCORE'], 0, '首次邀请函应把 SAN 从 -1 提升到 0');
 
   choose(story, '关闭邮件');
@@ -202,8 +200,7 @@ test('Gym 跨路线顺序：首次 → 回顾结局 → 重复，至少 1/2 次�
   drain(story);
   const beforeReview = variables(story);
   const reviewText = choose(story, '健身房');
-  assert.ok(reviewText.includes('【摘要】变成失去自主意识的健身执行体'));
-  assert.ok(!reviewText.includes('你没有自己的意识、你没有自己的判断。'));
+  assert.ok(reviewText.includes('你变成了一个执行体。'));
   assert.deepEqual(variables(story), beforeReview, '结局回顾不应改变任何全局值');
   assert.equal(story.variablesState['COUNT_GAME_OVER'], 2);
   assert.equal(
@@ -283,7 +280,7 @@ test('Ending__Route_Gallery：预览与九条结局回顾不改变 SAN / COUNT_G
   drain(story);
   choose(story, '健身房');
   const titleText = choose(story, '返回标题');
-  assert.ok(titleText.includes('【摘要】逻辑验证版本，原稿更新于20261029'));
+  assert.ok(titleText.includes('更新日期：20261029'));
   assert.deepEqual(variables(story), before);
 });
 
@@ -293,17 +290,16 @@ test('强制 WORK / 强制 BREAK：复用 Shutdown 结算，SAN 不变，随后�
   assert.equal(work.EvaluateFunction('Get__Forced_Intrusion'), 'WORK');
   work.ChoosePathString('Flow__Startup.Check');
   const workText = drain(work);
-  assert.ok(workText.includes('【摘要】被老板电话打醒，要求赶往公司'));
-  assert.ok(workText.includes('【摘要】进入老板办公室，被 AZ 强制入职'));
-  assert.ok(workText.includes('【摘要】在全体员工注视下被强制入职'));
+  assert.ok(workText.includes('有吉士'));
+  assert.ok(workText.includes('被 AZ 在办公室入职了'));
   assert.equal(work.variablesState['COUNT_ROUTE_WORK_SHUTDOWN'], 1);
   assert.equal(work.variablesState['COUNT_GAME_OVER'], 1);
   assert.equal(work.variablesState['SAN_SCORE'], 60, '强制 WORK 结算不增加 SAN');
   assert.ok(atGameOverMenu(work));
 
   const workEnv = choose(work, '断开连接');
-  assert.ok(workEnv.includes('【摘要】环境检查失败，进入 DRONE 故障页'), '强制 WORK 后应进入 DRONE 页');
-  assert.ok(!workEnv.includes('【摘要】逻辑验证版本，原稿更新于20261029'));
+  assert.ok(workEnv.includes('⟦'), '强制 WORK 后环境检查应进入 DRONE 页');
+  assert.ok(!workEnv.includes('更新日期：20261029'));
   assert.equal(work.variablesState['COUNT_ROUTE_WORK_SHUTDOWN'], 1);
   assert.equal(work.variablesState['COUNT_GAME_OVER'], 1);
 
@@ -316,16 +312,15 @@ test('强制 WORK / 强制 BREAK：复用 Shutdown 结算，SAN 不变，随后�
   assert.equal(breakStory.EvaluateFunction('Get__Forced_Intrusion'), 'BREAK');
   breakStory.ChoosePathString('Flow__Startup.Check');
   const breakText = drain(breakStory);
-  assert.ok(breakText.includes('【摘要】启动遭到强制闯入，AZ 前来敲门'));
-  assert.ok(breakText.includes('【摘要】居家终结，AZ 直接进门强制入职'));
-  assert.ok(breakText.includes('【摘要】AZ 来家中开饭并入职的结局回顾'));
+  assert.ok(breakText.includes('AZ 来敲门。'));
+  assert.ok(breakText.includes('AZ 来你家开饭了。'));
   assert.equal(breakStory.variablesState['COUNT_ROUTE_BREAK_SHUTDOWN'], 1);
   assert.equal(breakStory.variablesState['COUNT_GAME_OVER'], 1);
   assert.equal(breakStory.variablesState['SAN_SCORE'], 60, '强制 BREAK 结算不增加 SAN');
   assert.ok(atGameOverMenu(breakStory));
 
   const breakEnv = choose(breakStory, '断开连接');
-  assert.ok(breakEnv.includes('【摘要】环境检查失败，进入 DRONE 故障页'), '强制 BREAK 后应进入 DRONE 页');
+  assert.ok(breakEnv.includes('⟦'), '强制 BREAK 后环境检查应进入 DRONE 页');
   assert.equal(breakStory.variablesState['COUNT_ROUTE_BREAK_SHUTDOWN'], 1);
   assert.equal(breakStory.variablesState['COUNT_GAME_OVER'], 1);
 });
@@ -334,14 +329,14 @@ test('普通环境检查进入标题；Menu__Game_Over → 标题往返不增加
   const plain = newStory({ SAN_SCORE: 10 });
   plain.ChoosePathString('Check__Environment');
   const titleText = drain(plain);
-  assert.ok(titleText.includes('【摘要】逻辑验证版本，原稿更新于20261029'));
+  assert.ok(titleText.includes('更新日期：20261029'));
   assert.ok(choiceTexts(plain).includes('初始化'));
 
   const story = newStory({ SAN_SCORE: 20 });
   settleRoute(story, 'Work__Off_Work');
   const before = variables(story);
   const menuText = choose(story, '断开连接');
-  assert.ok(menuText.includes('【摘要】逻辑验证版本，原稿更新于20261029'));
+  assert.ok(menuText.includes('更新日期：20261029'));
   assert.deepEqual(variables(story), before);
   assert.ok(choiceTexts(story).includes('重新连接：第 1 次'));
 });
@@ -368,8 +363,7 @@ test('主菜单分隔线第 5/6 次边界、UNLOCKED 用途与隐藏入口', () 
   assert.equal(story.variablesState['UNLOCKED_NO8_DATABASE'], true);
   assert.equal(story.variablesState['COUNT_GAME_OVER'], 0, '彩蛋不是自然通关，COUNT_GAME_OVER 不应增加');
   assert.equal(story.variablesState['SAN_SCORE'], -1);
-  assert.ok(unlockText.includes('【摘要】隐藏入口解锁，以 No.8 身份回顾结局'));
-  assert.ok(!unlockText.includes('No.8，欢迎访问黑川物流数据库'));
+  assert.ok(unlockText.includes('No.8，欢迎访问黑川物流数据库'));
   const unlockedGallery = choiceTexts(story);
   assert.ok(unlockedGallery.includes('重置游戏'));
   assert.ok(!unlockedGallery.includes('返回上一级'));
@@ -402,15 +396,16 @@ test('全路线注入：最终和解 → 现实 No.8，前8次，无额外普通
 
   story.ChoosePathString('Flow__Startup.Check');
   const text = drain(story);
-  const reconciliation = '【摘要】前8次苏醒后终于在白色空间与自己和解';
-  const reality = '【摘要】现实苏醒成为 No.8，感谢游玩';
-  assert.ok(text.includes(reconciliation), 'COUNT_GAME_OVER=9 时最终和解应显示前8次');
+  assert.ok(text.includes('前8次'), 'COUNT_GAME_OVER=9 时最终和解应显示前8次');
   assert.ok(!text.includes('前9次'));
-  assert.ok(text.includes(reality));
-  assert.ok(text.indexOf(reconciliation) >= 0 && text.indexOf(reconciliation) < text.indexOf(reality), '应先最终和解后现实 No.8');
-  assert.ok(!text.includes('【摘要】首次被夺命连环闹钟铃声惊醒'), '不应再插入普通醒来');
-  assert.ok(!text.includes('【摘要】首次醒来，回顾独立生活并整理仪容'), '不应再进入首日导航');
-  assert.ok(!text.includes('感谢游玩！'), '被注释的现实原文不应再输出');
+  assert.ok(text.includes('感谢游玩'));
+  assert.ok(
+    text.indexOf('在空白房间醒来并与自己和解') >= 0 &&
+      text.indexOf('在空白房间醒来并与自己和解') < text.indexOf('感谢游玩'),
+    '应先最终和解后现实 No.8',
+  );
+  assert.ok(!text.includes('夺命连环闹钟铃声'), '不应再插入普通醒来');
+  assert.ok(!text.includes('人……为什么要上班……'), '不应再进入首日导航');
   assert.ok(!text.includes('重新连接'));
   assert.deepEqual(choiceTexts(story), ['制作人员']);
   assert.equal(story.variablesState['HAS_ENTERED_FINAL_RECONCILIATION'], true);
@@ -419,8 +414,8 @@ test('全路线注入：最终和解 → 现实 No.8，前8次，无额外普通
 
   story.ChoosePathString('Flow__Startup.Check');
   const again = drain(story);
-  assert.ok(!again.includes('【摘要】前8次'), '第二次启动应直接进入现实 No.8');
-  assert.ok(again.includes(reality));
+  assert.ok(!again.includes('在空白房间醒来并与自己和解'), '第二次启动应直接进入现实 No.8');
+  assert.ok(again.includes('感谢游玩'));
   assert.deepEqual(choiceTexts(story), ['制作人员']);
 });
 
@@ -449,56 +444,56 @@ test('仅菜单与剧情选项自然通关：seed 1/7/42，九路线唯一递增
     {
       counter: 'COUNT_ROUTE_BREAK_INTERVIEW',
       san: 10,
-      marker: '【摘要】面试结算暂用下班回家被入职文案',
-      wake: '【摘要】首次被夺命连环闹钟铃声惊醒',
+      marker: '你在黑川物流被 AZ 入职了。',
+      wake: '夺命连环闹钟铃声',
     },
     {
       counter: 'COUNT_ROUTE_WORK_BUSINESS_TRIP',
       san: 20,
-      marker: '【摘要】出差路线结算，途中被 AZ 入职',
-      wake: '【摘要】精神良好，正常听到闹钟并醒来',
+      marker: '你在外地被入职了。',
+      wake: '今天也是充满活力的一天。',
     },
     {
       counter: 'COUNT_ROUTE_WORK_GYM',
       san: 30,
-      marker: '【摘要】变成失去自主意识的健身执行体',
-      wake: '【摘要】精神良好，正常听到闹钟并醒来',
+      marker: '你变成了一个执行体。',
+      wake: '今天也是充满活力的一天。',
     },
     {
       counter: 'COUNT_ROUTE_BREAK_CINEMA',
       san: 40,
-      marker: '【摘要】电影路线结算，在影院被 AZ 入职',
-      wake: '【摘要】精神一般，闹钟响后疲惫地起床',
+      marker: '你在电影院被 AZ 入职了。',
+      wake: '感觉今天的精神差了点意思。',
     },
     {
       counter: 'COUNT_ROUTE_BREAK_HOME',
       san: 50,
-      marker: '【摘要】打开家门收快递时被 AZ 入职',
-      wake: '【摘要】精神一般，闹钟响后疲惫地起床',
+      marker: '你在家被入职了。',
+      wake: '感觉今天的精神差了点意思。',
     },
     {
       counter: 'COUNT_ROUTE_WORK_OFF_WORK',
       san: 60,
-      marker: '【摘要】下班回家路线结算，被 AZ 入职',
-      wake: '【摘要】精神一般，闹钟响后疲惫地起床',
+      marker: '你被 AZ 绑架了。',
+      wake: '感觉今天的精神差了点意思。',
     },
     {
       counter: 'COUNT_ROUTE_WORK_NAPPING',
       san: 70,
-      marker: '【摘要】在工位睡着，进入小憩路线结算',
-      wake: '【摘要】精神很差，听到闹钟便想将它砸掉',
+      marker: '上班睡觉被老板发现。',
+      wake: '闹钟的声音让我恨不得砸了它。',
     },
     {
       counter: 'COUNT_ROUTE_WORK_SHUTDOWN',
       san: 70,
-      marker: '【摘要】进入老板办公室，被 AZ 强制入职',
-      wake: '【摘要】精神很差，听到闹钟便想将它砸掉',
+      marker: '被 AZ 在办公室入职了。',
+      wake: '闹钟的声音让我恨不得砸了它。',
     },
     {
       counter: 'COUNT_ROUTE_BREAK_SHUTDOWN',
       san: 70,
-      marker: '【摘要】居家终结，AZ 直接进门强制入职',
-      wake: '【摘要】精神濒临崩溃，直接砸掉了闹钟',
+      marker: 'AZ 来你家开饭了。',
+      wake: '一把砸了闹钟。',
     },
   ];
 
@@ -514,7 +509,7 @@ test('仅菜单与剧情选项自然通关：seed 1/7/42，九路线唯一递增
     const story = new Story(build.json);
     story.state.storySeed = seed;
     let allText = drain(story);
-    assert.ok(allText.includes('【摘要】逻辑验证版本，原稿更新于20261029'), `seed ${seed} 应从标题开始`);
+    assert.ok(allText.includes('更新日期：20261029'), `seed ${seed} 应从标题开始`);
 
     for (let round = 0; round < routes.length; round += 1) {
       const route = routes[round];
@@ -533,6 +528,11 @@ test('仅菜单与剧情选项自然通关：seed 1/7/42，九路线唯一递增
       } else if (round === 1) {
         routeText += choose(story, '上班｜去公司上班');
         routeText += choose(story, '去｜出差');
+        for (let step = 0; step < 20 && !atGameOverMenu(story); step += 1) {
+          assert.ok(story.currentChoices.length > 0, `seed ${seed} 出差流程意外卡住`);
+          story.ChooseChoiceIndex(story.currentChoices[0].index);
+          routeText += drain(story);
+        }
       } else if (round === 2) {
         routeText += choose(story, '上班｜去公司上班');
         routeText += choose(story, '不去｜下次再说');
@@ -572,8 +572,8 @@ test('仅菜单与剧情选项自然通关：seed 1/7/42，九路线唯一递增
       }
 
       assert.ok(atGameOverMenu(story), `seed ${seed} 第 ${round + 1} 轮应自然到达 GAME OVER`);
-      assert.ok(routeText.includes(route.wake), `seed ${seed} 第 ${round + 1} 轮应经过当前摘要所示醒来`);
-      assert.ok(routeText.includes(route.marker), `seed ${seed} 第 ${round + 1} 轮应输出路线摘要`);
+      assert.ok(routeText.includes(route.wake), `seed ${seed} 第 ${round + 1} 轮应经过当前状态对应醒来`);
+      assert.ok(routeText.includes(route.marker), `seed ${seed} 第 ${round + 1} 轮应输出路线结局正文`);
       assert.equal(story.variablesState[route.counter], 1, `seed ${seed} ${route.counter} 应首次且仅一次`);
       assert.equal(story.variablesState['COUNT_GAME_OVER'], round + 1);
       assert.equal(story.variablesState['SAN_SCORE'], route.san);
@@ -586,18 +586,19 @@ test('仅菜单与剧情选项自然通关：seed 1/7/42，九路线唯一递增
       const titleText = choose(story, '断开连接');
       routeText += titleText;
       allText += routeText;
-      assert.ok(titleText.includes('【摘要】逻辑验证版本，原稿更新于20261029'));
-      assert.ok(!titleText.includes('【摘要】环境检查失败，进入 DRONE 故障页'));
+      assert.ok(titleText.includes('更新日期：20261029'));
+      assert.ok(!titleText.includes('⟦'));
       assert.ok(choiceTexts(story).includes(`重新连接：第 ${round + 1} 次`));
     }
 
     const finalText = choose(story, '重新连接：第 9 次');
     allText += finalText;
-    const reconciliation = '【摘要】前8次苏醒后终于在白色空间与自己和解';
-    const reality = '【摘要】现实苏醒成为 No.8，感谢游玩';
-    assert.ok(finalText.includes(reconciliation));
-    assert.ok(finalText.includes(reality));
-    assert.ok(finalText.indexOf(reconciliation) < finalText.indexOf(reality));
+    assert.ok(finalText.includes('前8次'));
+    assert.ok(finalText.includes('感谢游玩'));
+    assert.ok(
+      finalText.indexOf('在空白房间醒来并与自己和解') >= 0 &&
+        finalText.indexOf('在空白房间醒来并与自己和解') < finalText.indexOf('感谢游玩'),
+    );
     assert.ok(!routes.some((route) => finalText.includes(route.wake)), '终局前不应多余普通醒来');
     assert.deepEqual(choiceTexts(story), ['制作人员']);
     assert.equal(story.variablesState['HAS_ENTERED_FINAL_RECONCILIATION'], true);
@@ -605,9 +606,9 @@ test('仅菜单与剧情选项自然通关：seed 1/7/42，九路线唯一递增
     assert.equal(story.variablesState['SAN_SCORE'], 70);
 
     const creditsText = choose(story, '制作人员');
-    assert.ok(creditsText.includes('【摘要】展示作者、逻辑、校对等制作人员'));
+    assert.ok(creditsText.includes('【制作人员】'));
     const finalTitle = choose(story, '回到标题');
-    assert.ok(finalTitle.includes('【摘要】已达最终结局，可从宿主菜单重置'));
+    assert.ok(finalTitle.includes('您已达成最终结局'));
     assert.ok(!choiceTexts(story).some((item) => item.includes('重新连接')));
     assert.ok(choiceTexts(story).includes('结局回溯'));
 
@@ -615,13 +616,96 @@ test('仅菜单与剧情选项自然通关：seed 1/7/42，九路线唯一递增
     choose(story, '结局回溯');
     for (const [label] of GALLERY_ENTRIES) assert.ok(choiceTexts(story).includes(label));
     const reviewText = choose(story, '健身房');
-    assert.ok(reviewText.includes('【摘要】变成失去自主意识的健身执行体'));
+    assert.ok(reviewText.includes('你变成了一个执行体。'));
     assert.deepEqual(variables(story), beforeReview, '通关后回顾不应改变任何全局值');
 
-    assert.ok(!allText.includes('<h1>黑川物流市场部面试邀请函</h1>'));
-    assert.ok(!allText.includes('你变成了一个执行体。'));
-    assert.ok(!allText.includes('感谢游玩！'));
-    assert.ok(allText.includes('【摘要】收到黑川物流市场部的面试邀请函'));
-    assert.ok(allText.includes(reality));
+    assert.ok(allText.includes('<h1>黑川物流市场部面试邀请函</h1>'));
+    assert.ok(allText.includes('你变成了一个执行体。'));
+    assert.ok(allText.includes('感谢游玩！'));
+    assert.ok(!allText.includes('【摘要】'));
   }
 });
+
+test('上终前后上班按钮行为：未触发前固定保留（含 BAD），触发后在 OK/BAD 显示一次性「上班｜真的假的？」并在 AWFUL 隐藏', () => {
+  // 1. BAD 且未触发上终：保留「上班｜去公司上班」，不出现「上班｜真的假的？」
+  const badBeforeShutdown = newStory({
+    SAN_SCORE: 60,
+    COUNT_ROUTE_WORK_GYM: 1,
+    COUNT_ROUTE_WORK_OFF_WORK: 1,
+    COUNT_ROUTE_WORK_BUSINESS_TRIP: 1,
+    COUNT_ROUTE_BREAK_INTERVIEW: 1,
+  });
+  badBeforeShutdown.ChoosePathString('Flow__Navigator.Index');
+  drain(badBeforeShutdown);
+  assert.ok(choiceTexts(badBeforeShutdown).includes('上班｜去公司上班'));
+  assert.ok(!choiceTexts(badBeforeShutdown).includes('上班｜真的假的？'));
+
+  // 2. OK 且已触发上终：不再出现「上班｜去公司上班」，出现一次性「上班｜真的假的？」；点击后输出抗拒文案并返回本菜单且该选项消失
+  const okAfterShutdown = newStory({
+    SAN_SCORE: 40,
+    COUNT_ROUTE_WORK_GYM: 1,
+    COUNT_ROUTE_WORK_OFF_WORK: 1,
+    COUNT_ROUTE_WORK_BUSINESS_TRIP: 1,
+    COUNT_ROUTE_WORK_NAPPING: 1,
+    COUNT_ROUTE_WORK_SHUTDOWN: 1,
+  });
+  okAfterShutdown.ChoosePathString('Flow__Navigator.Index');
+  const okNavText = drain(okAfterShutdown);
+  assert.ok(okNavText.includes('今天无论如何都不想去公司了'));
+  assert.ok(!choiceTexts(okAfterShutdown).includes('上班｜去公司上班'));
+  assert.ok(choiceTexts(okAfterShutdown).includes('上班｜真的假的？'));
+
+  const beforeRefuse = variables(okAfterShutdown);
+  const refuseText = choose(okAfterShutdown, '上班｜真的假的？');
+  assert.ok(refuseText.includes('天王老子来了今天也不想上班了。'));
+  assert.ok(!refuseText.includes('上班｜真的假的？'));
+  assert.deepEqual(variables(okAfterShutdown), beforeRefuse, '点击抗拒选项不应改变任何计数或 SAN');
+  assert.deepEqual(choiceTexts(okAfterShutdown), [
+    '请假｜去黑川物流面试',
+    '请假｜出门找人看电影玩',
+    '请假｜呆在家里回血',
+  ]);
+
+  // 下一轮再次进入选择菜单，「上班｜真的假的？」仍保持消失
+  okAfterShutdown.ChoosePathString('Flow__Going_To.Choice');
+  drain(okAfterShutdown);
+  assert.ok(!choiceTexts(okAfterShutdown).includes('上班｜真的假的？'));
+  assert.ok(!choiceTexts(okAfterShutdown).includes('上班｜去公司上班'));
+
+  // 3. BAD 且已触发上终（尚未点击过抗拒选项）：同样支持一次「上班｜真的假的？」后消失
+  const badAfterShutdown = newStory({
+    SAN_SCORE: 60,
+    COUNT_ROUTE_WORK_GYM: 1,
+    COUNT_ROUTE_WORK_OFF_WORK: 1,
+    COUNT_ROUTE_WORK_BUSINESS_TRIP: 1,
+    COUNT_ROUTE_WORK_NAPPING: 1,
+    COUNT_ROUTE_WORK_SHUTDOWN: 1,
+    COUNT_ROUTE_BREAK_INTERVIEW: 1,
+  });
+  badAfterShutdown.ChoosePathString('Flow__Navigator.Index');
+  drain(badAfterShutdown);
+  assert.ok(!choiceTexts(badAfterShutdown).includes('上班｜去公司上班'));
+  assert.ok(choiceTexts(badAfterShutdown).includes('上班｜真的假的？'));
+  const badRefuse = choose(badAfterShutdown, '上班｜真的假的？');
+  assert.ok(badRefuse.includes('天王老子来了今天也不想上班了。'));
+  assert.deepEqual(choiceTexts(badAfterShutdown), ['请假｜出门找人看电影玩', '请假｜呆在家里回血']);
+
+  // 4. AWFUL 且此前未点击过抗拒选项：仅剩居家终结乱码选项，不显示任何上班按钮
+  const awful = newStory({
+    SAN_SCORE: 70,
+    COUNT_ROUTE_WORK_GYM: 1,
+    COUNT_ROUTE_WORK_OFF_WORK: 1,
+    COUNT_ROUTE_WORK_BUSINESS_TRIP: 1,
+    COUNT_ROUTE_WORK_NAPPING: 1,
+    COUNT_ROUTE_WORK_SHUTDOWN: 1,
+    COUNT_ROUTE_BREAK_INTERVIEW: 1,
+    COUNT_ROUTE_BREAK_CINEMA: 1,
+    COUNT_ROUTE_BREAK_HOME: 1,
+  });
+  awful.ChoosePathString('Flow__Going_To.Choice');
+  drain(awful);
+  assert.equal(choiceTexts(awful).length, 1);
+  assert.ok(!choiceTexts(awful).includes('上班｜去公司上班'));
+  assert.ok(!choiceTexts(awful).includes('上班｜真的假的？'));
+});
+
