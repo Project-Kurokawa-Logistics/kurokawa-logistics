@@ -1,6 +1,6 @@
 # 《即刻入职》开发文档
 
-- **更新日期：** 2026-11-20
+- **更新日期：** 2026-11-23
 - **工程目录：** `Ink Projects/即刻入职/`
 - **正文状态：** 全工程 `.ink` 源码均为正文直接生效（仅保留 `Systems/Environment.ink` 与 `UI/Menus/Main.ink` 中的 `【DEV】` 调试块注释）。其中 `Endings/Final_Reconciliation.ink` 当前保留单行占位与逻辑变量，完整图文正文统一在 Obsidian 仓库 `黑川物流/Content/临时发布/即刻入职/终局.md` 维护，定稿后回填。
 - **测试入口：** `__Tests/` 是唯一可复跑的编译与回归入口（固定 `inkjs@2.4.0`，共 13 项回归，含种子 `1/7/42` 的纯点击九路线自然通关）。
@@ -16,6 +16,7 @@ npm test
 1. [NARRATIVE_DESIGN.md](NARRATIVE_DESIGN.md)：主创确认的世界观时间点、角色内核、全路线彩蛋、硬性叙事约束与九条路线设计要点。
 2. [STORY_FLOW.md](STORY_FLOW.md)：主流程图、行动选项条件、精神状态与梦境概率、身份状态及终局机制。
 3. [INK_STYLE_GUIDE.md](INK_STYLE_GUIDE.md)：目录职责、变量与 Knot 命名规范、注释与排版约定、关键实现注意事项。
+4. [OPENING_INBOX_MOCKUP.md](OPENING_INBOX_MOCKUP.md)：开局电脑邮件收件箱窗口截图草案（含 `Assets/` 下的 HTML 源模板与初版渲染稿，待主创微调后定稿）。
 
 ## 目录职责
 
@@ -46,6 +47,7 @@ npm test
   - `Dream7` 已被 `INCLUDE` 但未加入随机池，是否启用待定；
   - `Endings/No8_Reality.ink` 仍为短草稿，待扩写现实苏醒场景；
   - `Systems/Environment.ink` 与 `UI/Menus/Main.ink` 中的 `【DEV】` 调试注释块是否保留；
+  - `Flow/Navigator.ink` 开局收件箱窗口截图草案已暂存于 `__Docs/Assets/`（说明见 [OPENING_INBOX_MOCKUP.md](OPENING_INBOX_MOCKUP.md)），待主创细调定稿后再替换纯文字收件箱并顺手修复附近笔误；
   - Inky GUI 实机回归、宿主 `# RESTART` 与最终作者验收。
 
 ## 维护约定
