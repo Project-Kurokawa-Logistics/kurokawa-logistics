@@ -57,3 +57,11 @@ permalink: p/0113
 # 系统日志
 
 ![[（莫烨和城槐安的互动）]]
+
+# 其它记录
+
+## 不许玩游戏了！
+
+![](https://cntracker.net/cdn-cgi/image/q=50/https://img.cntracker.net/img/9e5faf2c6baf4aeb004bfc9d1e66abc8ab0c02eabea3f2e628e23d91fbd126a6.jpg)[^1]
+
+[^1]: 插画作者：[[莫烨]]
