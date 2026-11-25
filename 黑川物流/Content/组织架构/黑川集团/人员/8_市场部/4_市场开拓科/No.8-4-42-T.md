@@ -33,9 +33,17 @@ permalin: p/842
 
 ## [[No.8-4-42-T 正在办理入职手续]]
 
-![](No.8-4-42-T%20正在办理入职手续.md#^Summary)
+[<img src="https://cntracker.net/cdn-cgi/image/fit=scale-down,width=800/https://img.cntracker.net/img/9b878fda02c099ad4c85df3bb7041245.jpg" style="width: 100%; aspect-ratio: 21/9; object-fit: cover;">](<No.8-4-42-T 正在办理入职手续>)
+
+![[No.8-4-42-T 正在办理入职手续#^Summary]]
 
 # 其他记录
+
+![](https://img.cntracker.net/img/c15110c9c9851ff6874cd6a34dc59eac69dddddea04327b6709cd6b10f49dba8.jpg)
+
+（在 842T 的请求下作出对应姿势的 [[No.1-5-23-2|123]]）
+
+--------------------------------
 
 ![](https://cntracker.net/cdn-cgi/image/q=20/https://img.cntracker.net/img/ca91fbe3467e3cd07ee24923da7c43f8de14e02dfbe43280a386a0e644817e4c.png)[^2]
 

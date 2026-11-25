@@ -4,7 +4,7 @@ permalink: p/354
 
 #半藏品 
 
-![](https://cntracker.net/cdn-cgi/image/q=50/https://img.cntracker.net/img/3fb25c18ed49609219c234bf1abaafa8.png)[^2]
+![](https://img.cntracker.net/img/07b21b0c054383db7916545712f9ba619c954fc7b569fa934880f2baca5af5bf.jpg)[^3]
 
 ![](https://barcode.tec-it.com/barcode.ashx?data=No.3-3-54-2&code=PDF417)
 
@@ -33,15 +33,37 @@ No.3 从人事部得知了解此事后立即亲自前往该个体所在的柔道
 
 虽然行政部与运输部之间关系略显紧张，但该藏品在空闲时经常前往行政部找弟弟[[No.2-2-53-5|苍檩]]玩，后者也常常与苍斌一同出没于员工咖啡厅与食堂。
 
+# 系统日志
+
+> [!NOTE] ## [[钩沉决滞]]
+>
+> [<img src="https://img.cntracker.net/img/b8d1766728998e52e420921a4047e47bed201e5f8bd578e88ff14612954ba947.jpg" style="width: 100%;">](<钩沉决滞>)
+>
+> ![[钩沉决滞#^Logline]]
+
 # 其他记录
+
+## 地位挑战（被动）
+
+![](https://img.cntracker.net/img/8686248ae620c8be56cc5536dc2f88f649882caab3c823b11b4433c1230183a6.jpg)[^5]
+
+<center>“胆子不小嘛。你怕是没有看过《黑川流柔道的训练与实践》的作者是谁嗷。刚才攻我的时候不是很嚣张吗，叫大点声骚货，被老子踩得爽不爽？”</center>
+
+## 转化子代
+
+![](https://img.cntracker.net/img/504a57a4614d34d6e9becc36668ae123fa57c7fe76358b037858f96c147d1c77.jpg)[^4]
+
+>[!QUOTE] “[[No.3-3-54-2-B|小熠]]…你是我的…我来保护你……”
 
 ## 入职记录
 
-“一本！放弃反抗吧贱狗。”（*粘稠的肢体撞击声）
-
-“Mfff……Mfff……”（*不屈的闷哼声）
-
-“骚狗。败北了还不老实？给我记好你主人的味道。”（*脱靴子的声音）
+> [!QUOTE] ……
+> 
+> “一本！放弃反抗吧贱狗。”（*粘稠的肢体撞击声）
+> 
+> “Mfff……Mfff……”（*不屈的闷哼声）
+> 
+> “骚狗。败北了还不老实？给我记好你主人的味道。”（*脱靴子的声音）
 
 ## 入职后偶尔重新玩柔道的 354
 
@@ -49,15 +71,32 @@ No.3 从人事部得知了解此事后立即亲自前往该个体所在的柔道
 
 ## 工作记录
 
+![](https://img.cntracker.net/img/07b21b0c054383db7916545712f9ba619c954fc7b569fa934880f2baca5af5bf.jpg)[^3]
+
+<center>（刚用点数兑换的设计，感觉干劲十足了呢～）</center>
+
+--------------------------------
+
+![](https://img.cntracker.net/img/3cc6a0b4f1389b3684a74a65b3fc9bfabd82c89a64b05a2bae8ff7cb9ef28a23.jpg)
+
+<center>“这么快就醒了？看来那箱肉货的质量不错嘛。”</center>
+
+--------------------------------
+
 ![](https://cntracker.net/cdn-cgi/image/q=50/https://img.cntracker.net/img/3fb25c18ed49609219c234bf1abaafa8.png)[^2]
 
 <center>开门！您订购的特别会员到了。</center>
 
 # 子代
 
-- [[No.3-3-54-2-B]]
-
+- ~~[[No.3-3-54-2-A]]~~（已成年）
 
 [^1]: 插图作者：shibatargon
 
 [^2]: 插画作者：单翼
+
+[^3]: 插画作者：persist-查克
+
+[^4]: 插画作者：bima\$\$\$
+
+[^5]: 插画作者：透视虎（微博）

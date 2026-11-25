@@ -27,7 +27,7 @@ permalink: p/253
 
 # 调动记录
 
-> [!QUOTE]
+> [!QUOTE] ……
 > 
 > “那是我的人！我的！”刚刚赶到人才市场 No.3 向正站在苍檩旁边拿着挂牌仔细的端详 No.2 大喊大叫。
 > 
@@ -45,6 +45,14 @@ permalink: p/253
 
 该个体头上的圆环状物件为我司财政部与研发部联合尝试研制的远程信号收发器试做版。其材质为银胶与白胶混合，与锚直接连接。可尝试向更远的范围传播与接收信号。
 
+# 系统日志
+
+> [!NOTE] ## [[钩沉决滞]]
+>
+> [<img src="https://img.cntracker.net/img/b8d1766728998e52e420921a4047e47bed201e5f8bd578e88ff14612954ba947.jpg" style="width: 100%;">](<钩沉决滞>)
+>
+> ![[钩沉决滞#^Logline]]
+
 # 其他记录
 
 - 个体表示，运输部部长耳朵上的挂件他很喜欢。
@@ -60,7 +68,7 @@ permalink: p/253
 
 ![](https://cntracker.net/cdn-cgi/image/q=30/https://img.cntracker.net/img/b6b873256a356017ba30c331782ac5b8b1a2a0b95e620d8de58fb504f22c68e6.png)[^2]
 
-给 [[No.3-3-54-2-B|354B]] 更新调试限制锚
+给 [[No.3-3-67-3|354A]] 更新调试限制锚
 
 [^1]: 插画作者：shibatargon
 
