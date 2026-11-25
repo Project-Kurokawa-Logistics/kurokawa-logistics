@@ -60,7 +60,7 @@ permalink: p/253
 
 ![](https://cntracker.net/cdn-cgi/image/q=30/https://img.cntracker.net/img/b6b873256a356017ba30c331782ac5b8b1a2a0b95e620d8de58fb504f22c68e6.png)[^2]
 
-给 [[No.3-3-54-2-B|354B]] 更新调试限制锚
+给 [[No.3-3-67-3|354A]] 更新调试限制锚
 
 [^1]: 插画作者：shibatargon
 

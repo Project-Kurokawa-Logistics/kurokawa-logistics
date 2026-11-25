@@ -1,6 +1,5 @@
 #兵蚁型 #半藏品  
-
-![](https://cntracker.net/cdn-cgi/image/q=60/https://img.cntracker.net/img/7b39c96299124526cc41b7a425b2cf339834e534b0eaded8a1c2c106038ff7ad.jpg)[^2]
+![](https://img.cntracker.net/img/5df3e389392e0c731432ec44f47b8b07005517ebb696e6bee80f8c9dfd5c165a.jpg)
 
 ![](https://barcode.tec-it.com/barcode.ashx?data=No.1-5-23-2&code=PDF417)
 
@@ -37,6 +36,9 @@
 # 系统日志
 
 ## [[No.8-4-42-T 正在办理入职手续]]
+
+[<img src="https://cntracker.net/cdn-cgi/image/fit=scale-down,width=800/https://img.cntracker.net/img/9b878fda02c099ad4c85df3bb7041245.jpg" style="width: 100%; aspect-ratio: 21/9; object-fit: cover;">](<No.8-4-42-T 正在办理入职手续>)
+
 ![[No.8-4-42-T 正在办理入职手续#^Summary]]
 
 # 其他记录
