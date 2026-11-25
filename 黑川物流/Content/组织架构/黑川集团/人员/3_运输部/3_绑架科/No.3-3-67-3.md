@@ -39,6 +39,16 @@ permalink: p/367
 “藏品对其长时间接触的熟人人类有更强烈的捕食和繁育欲望，人事部需加强对入职目标的人际关系的记录，以避免更多此类事件的发生。”
 
 
+# 系统日志
+
+> [!NOTE] ## [[钩沉决滞]]
+>
+> [<img src="https://img.cntracker.net/img/b8d1766728998e52e420921a4047e47bed201e5f8bd578e88ff14612954ba947.jpg" style="width: 100%;">](<钩沉决滞>)
+>
+> ![[钩沉决滞#^Logline]]
+
+# 其他记录
+
 ## 打包货物
 
 ![](https://img.cntracker.net/img/49abd2aa42ec6af8ca38d11048055b983c6dcdf83ec6806087c40b28b70fa0d5.jpg)[^3]

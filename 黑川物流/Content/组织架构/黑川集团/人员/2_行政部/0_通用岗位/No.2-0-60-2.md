@@ -43,6 +43,14 @@ permalink: p/260
 > 
 > “是啊，吃什么？”
 
+# 系统日志
+
+> [!NOTE] ## [[钩沉决滞]]
+>
+> [<img src="https://img.cntracker.net/img/b8d1766728998e52e420921a4047e47bed201e5f8bd578e88ff14612954ba947.jpg" style="width: 100%;">](<钩沉决滞>)
+>
+> ![[钩沉决滞#^Logline]]
+
 # 其他记录
 
 ## 照片
