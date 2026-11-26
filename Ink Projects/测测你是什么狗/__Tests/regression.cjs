@@ -85,6 +85,9 @@ test('1. 标题页、封面 IMAGE 标签与主菜单入口正常展示', () => {
   assert.ok(choices.some((c) => c.includes('9 题速测')));
   assert.ok(choices.some((c) => c.includes('27 题全开')));
   assert.ok(choices.some((c) => c.includes('犬种档案图鉴')));
+
+  const aboutOut = chooseBySubstring(story, '关于本测试');
+  assert.ok(aboutOut.text.includes('AIGC by Google Gemini 4 Carbon'));
 });
 
 test('2. 完整题库模式（27 题）：全部 12 种狗对称可达、满分恒为 54 分，且大骚狗原文 100% 还原', () => {
