@@ -14,13 +14,13 @@ if (!isOk(build)) {
 }
 
 const DOGS = [
-  { id: 1, key: 'DASAO', name: '大骚狗', image: 'IMAGE: images/dog_01_dasaogou.png', quote: '骚逼啊', speaker: 'AZ' },
-  { id: 2, key: 'XIAONAI', name: '小奶狗', image: 'IMAGE: images/dog_02_xiaonaigou.png', quote: '连诱捕素都省了', speaker: 'No.1' },
-  { id: 3, key: 'DALANG', name: '大狼狗', image: 'IMAGE: images/dog_03_dalanggou.png', quote: '体格合格，咬合力达标', speaker: 'No.4' },
+  { id: 1, key: 'DASAO', name: '天生大骚狗', image: 'IMAGE: images/dog_01_dasaogou.png', quote: '骚逼啊', speaker: 'AZ' },
+  { id: 2, key: 'XIAONAI', name: '纯情小奶狗', image: 'IMAGE: images/dog_02_xiaonaigou.png', quote: '连诱捕素都省了', speaker: 'No.1' },
+  { id: 3, key: 'DALANG', name: '硬汉大狼狗', image: 'IMAGE: images/dog_03_dalanggou.png', quote: '体格合格，咬合力达标', speaker: 'No.4' },
   { id: 4, key: 'LAOMU', name: '熟男老母狗', image: 'IMAGE: images/dog_04_laomugou.png', quote: '到底是上过几年班的老油条', speaker: 'No.6' },
   { id: 5, key: 'SAMOYE', name: '邪恶萨摩耶', image: 'IMAGE: images/dog_05_samoye.png', quote: '笑得这么干净', speaker: 'No.8' },
   { id: 6, key: 'NIUMA', name: '社畜牛马狗', image: 'IMAGE: images/dog_06_niumagou.png', quote: '别浪费限制锚了', speaker: 'No.7' },
-  { id: 7, key: 'BAIQUAN', name: '傲娇败犬', image: 'IMAGE: images/dog_07_baiquan.png', quote: '嘴挺硬，黑胶绷带再缠两圈就老实了', speaker: 'No.3' },
+  { id: 7, key: 'BAIQUAN', name: '傲娇小败犬', image: 'IMAGE: images/dog_07_baiquan.png', quote: '嘴挺硬，黑胶绷带再缠两圈就老实了', speaker: 'No.3' },
   { id: 8, key: 'HASHIQI', name: '发疯哈士奇', image: 'IMAGE: images/dog_08_hashiqi.png', quote: '离我的培养皿远点', speaker: 'No.5' },
   { id: 9, key: 'BIANMU', name: '高智商边牧', image: 'IMAGE: images/dog_09_bianmu.png', quote: '建议严查他的芯片', speaker: 'No.2' },
   { id: 10, key: 'JILV', name: '狂热纪律狗', image: 'IMAGE: images/dog_10_jilvgou.png', quote: '孩子们这么热情是好事', speaker: 'AZ' },
@@ -50,14 +50,22 @@ function chooseBySubstring(story, needle) {
   return drain(story);
 }
 
-// 在当前题目用快照模拟点击 4 个选项，挑选给目标犬种加分最多的那个选项（完全模拟该犬种人格作答）
+// 在当前题目的前 4 个作答选项中用快照模拟点击，挑选给目标犬种加分最多的那个选项
 function pickBestOptionForDog(story, scoreVarName) {
   const savedState = story.state.ToJson();
   const beforeScore = story.variablesState[scoreVarName];
   let bestIdx = 0;
   let bestGain = -1;
 
-  for (let i = 0; i < story.currentChoices.length; i += 1) {
+  // 前 4 项为题目答案，第 5 项固定为底部返回按钮
+  assert.equal(story.currentChoices.length, 5, '每道题应包含 4 个作答选项 + 1 个底部返回选项');
+  const navChoiceText = story.currentChoices[4].text;
+  assert.ok(
+    navChoiceText.includes('返回上一题') || navChoiceText.includes('返回标题页'),
+    `第 5 个选项必须位于最下方且为返回按钮，实际：${navChoiceText}`,
+  );
+
+  for (let i = 0; i < 4; i += 1) {
     story.state.LoadJson(savedState);
     story.ChooseChoiceIndex(i);
     drain(story);
@@ -75,7 +83,15 @@ function pickBestOptionForDog(story, scoreVarName) {
   return { gain: bestGain, stepResult: drain(story) };
 }
 
-test('1. 标题页、封面 IMAGE 标签与主菜单入口正常展示', () => {
+test('1. 标题页、关于页 AIGC 署名与全部 12 种狗狗五字称号校验', () => {
+  for (const dog of DOGS) {
+    assert.equal(
+      Array.from(dog.name).length,
+      5,
+      `犬种名称「${dog.name}」必须严格为 5 个字`,
+    );
+  }
+
   const story = new Story(build.json);
   const { text, tags } = drain(story);
   assert.ok(text.includes('测测你是什么狗'));
@@ -90,7 +106,7 @@ test('1. 标题页、封面 IMAGE 标签与主菜单入口正常展示', () => {
   assert.ok(aboutOut.text.includes('AIGC by Google Gemini 4 Carbon'));
 });
 
-test('2. 完整题库模式（27 题）：全部 12 种狗对称可达、满分恒为 54 分，且大骚狗原文 100% 还原', () => {
+test('2. 完整题库模式（27 题）：全部 12 种五字狗对称可达、满分恒为 54 分，且大骚狗评语原文保留', () => {
   for (const dog of DOGS) {
     const story = new Story(build.json);
     drain(story);
@@ -98,7 +114,11 @@ test('2. 完整题库模式（27 题）：全部 12 种狗对称可达、满分�
     const seenHeaders = new Set();
 
     for (let q = 1; q <= 27; q += 1) {
-      assert.equal(story.currentChoices.length, 4, `第 ${q} 题应有 4 个选项`);
+      if (q === 1) {
+        assert.ok(story.currentChoices[4].text.includes('返回标题页'));
+      } else {
+        assert.ok(story.currentChoices[4].text.includes('返回上一题'));
+      }
       const headerMatch = stepOut.text.match(/【第\s*(\d+)\s*\/\s*27\s*题\s*·\s*(.+?)】/);
       assert.ok(headerMatch, `第 ${q} 题缺少题号标题：${stepOut.text}`);
       assert.equal(Number(headerMatch[1]), q);
@@ -131,13 +151,13 @@ test('2. 完整题库模式（27 题）：全部 12 种狗对称可达、满分�
         stepOut.text.includes(
           '没有编号的骚狗是消耗品，研究完了会冻起来或者废物回收；有编号的玩坏的会被挂起来，每天擦擦身体放下来遛狗。如果脑子被洗坏变成贱狗了，那就只能退休了。',
         ),
-        '大骚狗档案评语必须与原图逐字一致',
+        '天生大骚狗档案评语必须与原图逐字一致',
       );
     }
   }
 });
 
-test('3. 随机速测模式（9 题）：在不同随机种子下，全部 12 种狗均稳定可达且满分恒为 18 分', () => {
+test('3. 随机速测模式（9 题）：在不同随机种子下，全部 12 种五字狗均稳定可达且满分恒为 18 分', () => {
   for (const seed of [7, 42, 2026]) {
     for (const dog of DOGS) {
       const story = new Story(build.json);
@@ -147,7 +167,11 @@ test('3. 随机速测模式（9 题）：在不同随机种子下，全部 12 �
       const seenSubtitles = [];
 
       for (let q = 1; q <= 9; q += 1) {
-        assert.equal(story.currentChoices.length, 4);
+        if (q === 1) {
+          assert.ok(story.currentChoices[4].text.includes('返回标题页'));
+        } else {
+          assert.ok(story.currentChoices[4].text.includes('返回上一题'));
+        }
         const headerMatch = stepOut.text.match(/【第\s*(\d+)\s*\/\s*9\s*题\s*·\s*(.+?)】/);
         assert.ok(headerMatch);
         assert.equal(Number(headerMatch[1]), q);
@@ -169,11 +193,72 @@ test('3. 随机速测模式（9 题）：在不同随机种子下，全部 12 �
   }
 });
 
-test('4. 多周目连续重测保留图鉴进度，且分隔线 5 连击解锁后台全图鉴预览', () => {
+test('4. 返回上一题：支持单步与连续多步撤回至第 1 题、分数零残留回滚、且速测模式撤回不换题', () => {
+  const story = new Story(build.json);
+  story.state.storySeed = 99;
+  drain(story);
+
+  // 进入 9 题速测，测试第 1 题返回标题页
+  const firstEntry = chooseBySubstring(story, '9 题速测');
+  assert.ok(firstEntry.text.includes('【第 1 / 9 题'));
+  const backTitle = chooseBySubstring(story, '返回标题页');
+  assert.ok(backTitle.text.includes('测测你是什么狗'));
+
+  // 重新进入 9 题速测，前 5 题全部故意按“天生大骚狗”作答，到达第 6 题
+  let stepOut = chooseBySubstring(story, '9 题速测');
+  const forwardTitles = [stepOut.text.match(/【第\s*1\s*\/\s*9\s*题\s*·\s*(.+?)】/)[1]];
+  for (let q = 1; q <= 5; q += 1) {
+    const { stepResult } = pickBestOptionForDog(story, 'SCORE_DASAO');
+    stepOut = stepResult;
+    const m = stepOut.text.match(/【第\s*(\d+)\s*\/\s*9\s*题\s*·\s*(.+?)】/);
+    assert.equal(Number(m[1]), q + 1);
+    forwardTitles.push(m[2]);
+  }
+  assert.ok(story.variablesState.SCORE_DASAO > 0);
+
+  // 连续点击 5 次“返回上一题”从第 6 题一路退回第 1 题，逐题验证题目未变且最终 12 犬种分数全部归零
+  for (let backTo = 5; backTo >= 1; backTo -= 1) {
+    stepOut = chooseBySubstring(story, '返回上一题');
+    const m = stepOut.text.match(/【第\s*(\d+)\s*\/\s*9\s*题\s*·\s*(.+?)】/);
+    assert.equal(Number(m[1]), backTo);
+    assert.equal(m[2], forwardTitles[backTo - 1], `撤回第 ${backTo} 题时应保持同一道题不刷掉`);
+  }
+
+  for (const dog of DOGS) {
+    assert.equal(
+      story.variablesState[`SCORE_${dog.key}`],
+      0,
+      `退回第 1 题后 SCORE_${dog.key} 应完全归零`,
+    );
+  }
+  assert.equal(story.variablesState.LAST_PRIMARY_DOG, 1);
+
+  // 现在改按“看门老实狗”答完 9 题（中途第 4 题再故意点错一次并立即撤回重选）
+  for (let q = 1; q <= 9; q += 1) {
+    if (q === 4) {
+      // 故意手滑选第 0 项，立刻点击“返回上一题”撤回
+      const beforeMisclickTitle = stepOut.text.match(/【第\s*4\s*\/\s*9\s*题\s*·\s*(.+?)】/)[1];
+      story.ChooseChoiceIndex(0);
+      drain(story);
+      const backQ4 = chooseBySubstring(story, '返回上一题');
+      assert.equal(
+        backQ4.text.match(/【第\s*4\s*\/\s*9\s*题\s*·\s*(.+?)】/)[1],
+        beforeMisclickTitle,
+      );
+    }
+    const { stepResult } = pickBestOptionForDog(story, 'SCORE_LAOSHI');
+    stepOut = stepResult;
+  }
+
+  assert.equal(story.variablesState.SCORE_LAOSHI, 18, '撤回重选后看门老实狗应精准拿到满分 18 分');
+  assert.ok(stepOut.text.includes('>看门老实狗<'));
+});
+
+test('5. 多周目连续重测保留图鉴进度，且分隔线 5 连击解锁后台全图鉴五字称号预览', () => {
   const story = new Story(build.json);
   drain(story);
 
-  // 先测出大骚狗
+  // 先测出天生大骚狗
   chooseBySubstring(story, '9 题速测');
   for (let q = 1; q <= 9; q += 1) {
     pickBestOptionForDog(story, 'SCORE_DASAO');
@@ -196,11 +281,18 @@ test('4. 多周目连续重测保留图鉴进度，且分隔线 5 连击解锁�
     chooseBySubstring(story, '————————');
   }
   assert.equal(story.variablesState.UNLOCKED_ALL_PREVIEW, true);
-  // 此时图鉴应展示全部 12 种狗 + 返回标题页 = 13 个选项
   assert.equal(story.currentChoices.length, 13);
 
-  // 从图鉴预览未测出的“看门老实狗”，确认不虚增 COUNT_PLAYED
-  const previewOut = chooseBySubstring(story, '12 · 看门老实狗');
-  assert.ok(previewOut.text.includes('>看门老实狗<'));
+  // 校验图鉴中的 12 个入口全部包含对应五字犬种称号
+  for (const dog of DOGS) {
+    assert.ok(
+      story.currentChoices.some((c) => c.text.includes(dog.name)),
+      `图鉴缺少「${dog.name}」入口`,
+    );
+  }
+
+  // 从图鉴预览未测出的“傲娇小败犬”，确认不虚增 COUNT_PLAYED
+  const previewOut = chooseBySubstring(story, '07 · 傲娇小败犬');
+  assert.ok(previewOut.text.includes('>傲娇小败犬<'));
   assert.equal(story.variablesState.COUNT_PLAYED, 2);
 });

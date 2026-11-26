@@ -31,10 +31,10 @@
     }
 
 // ----------------------------------------------------------------------------
-// 01. 大骚狗（严格还原参考图原文）
+// 01. 天生大骚狗（保留参考图评语与锐评原文）
 // ----------------------------------------------------------------------------
 === Card__01_DaSaoGou
-<span style="display: block; background: \#DF9B1B; color: \#FFFFFF; text-align: center; font-size: 1.75em; font-weight: bold; padding: 10px 20px; border-radius: 14px; margin: 6px 0 14px 0; letter-spacing: 0.08em;">大骚狗</span>
+<span style="display: block; background: \#DF9B1B; color: \#FFFFFF; text-align: center; font-size: 1.75em; font-weight: bold; padding: 10px 20px; border-radius: 14px; margin: 6px 0 14px 0; letter-spacing: 0.08em;">天生大骚狗</span>
 
 # IMAGE: images/dog_01_dasaogou.png
 
@@ -45,10 +45,10 @@
 -> Menu__After_Card(DOG_DASAO)
 
 // ----------------------------------------------------------------------------
-// 02. 小奶狗
+// 02. 纯情小奶狗
 // ----------------------------------------------------------------------------
 === Card__02_XiaoNaiGou
-<span style="display: block; background: \#E888A7; color: \#FFFFFF; text-align: center; font-size: 1.75em; font-weight: bold; padding: 10px 20px; border-radius: 14px; margin: 6px 0 14px 0; letter-spacing: 0.08em;">小奶狗</span>
+<span style="display: block; background: \#E888A7; color: \#FFFFFF; text-align: center; font-size: 1.75em; font-weight: bold; padding: 10px 20px; border-radius: 14px; margin: 6px 0 14px 0; letter-spacing: 0.08em;">纯情小奶狗</span>
 
 # IMAGE: images/dog_02_xiaonaigou.png
 
@@ -59,10 +59,10 @@
 -> Menu__After_Card(DOG_XIAONAI)
 
 // ----------------------------------------------------------------------------
-// 03. 大狼狗
+// 03. 硬汉大狼狗
 // ----------------------------------------------------------------------------
 === Card__03_DaLangGou
-<span style="display: block; background: \#3B4D6B; color: \#FFFFFF; text-align: center; font-size: 1.75em; font-weight: bold; padding: 10px 20px; border-radius: 14px; margin: 6px 0 14px 0; letter-spacing: 0.08em;">大狼狗</span>
+<span style="display: block; background: \#3B4D6B; color: \#FFFFFF; text-align: center; font-size: 1.75em; font-weight: bold; padding: 10px 20px; border-radius: 14px; margin: 6px 0 14px 0; letter-spacing: 0.08em;">硬汉大狼狗</span>
 
 # IMAGE: images/dog_03_dalanggou.png
 
@@ -115,10 +115,10 @@
 -> Menu__After_Card(DOG_NIUMA)
 
 // ----------------------------------------------------------------------------
-// 07. 傲娇败犬
+// 07. 傲娇小败犬
 // ----------------------------------------------------------------------------
 === Card__07_BaiQuan
-<span style="display: block; background: \#E05A47; color: \#FFFFFF; text-align: center; font-size: 1.75em; font-weight: bold; padding: 10px 20px; border-radius: 14px; margin: 6px 0 14px 0; letter-spacing: 0.08em;">傲娇败犬</span>
+<span style="display: block; background: \#E05A47; color: \#FFFFFF; text-align: center; font-size: 1.75em; font-weight: bold; padding: 10px 20px; border-radius: 14px; margin: 6px 0 14px 0; letter-spacing: 0.08em;">傲娇小败犬</span>
 
 # IMAGE: images/dog_07_baiquan.png
 

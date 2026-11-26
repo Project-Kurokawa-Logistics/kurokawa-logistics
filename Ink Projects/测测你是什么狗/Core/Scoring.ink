@@ -1,5 +1,5 @@
 // ============================================================================
-// 计分、重置、胜出判定与图鉴辅助函数
+// 计分、撤回上一题、重置、胜出判定与图鉴辅助函数
 // ============================================================================
 
 === function Reset__Current_Run(mode)
@@ -16,12 +16,49 @@
     ~ SCORE_JIXIE   = 0
     ~ SCORE_LAOSHI  = 0
 
+    ~ HIST_01 = 0
+    ~ HIST_02 = 0
+    ~ HIST_03 = 0
+    ~ HIST_04 = 0
+    ~ HIST_05 = 0
+    ~ HIST_06 = 0
+    ~ HIST_07 = 0
+    ~ HIST_08 = 0
+    ~ HIST_09 = 0
+    ~ HIST_10 = 0
+    ~ HIST_11 = 0
+    ~ HIST_12 = 0
+    ~ HIST_13 = 0
+    ~ HIST_14 = 0
+    ~ HIST_15 = 0
+    ~ HIST_16 = 0
+    ~ HIST_17 = 0
+    ~ HIST_18 = 0
+    ~ HIST_19 = 0
+    ~ HIST_20 = 0
+    ~ HIST_21 = 0
+    ~ HIST_22 = 0
+    ~ HIST_23 = 0
+    ~ HIST_24 = 0
+    ~ HIST_25 = 0
+    ~ HIST_26 = 0
+    ~ HIST_27 = 0
+
     ~ QUIZ_MODE = mode
-    ~ CURRENT_STEP = 0
+    ~ CURRENT_STEP = 1
     { mode == "FULL":
         ~ TOTAL_STEPS = 27
     - else:
         ~ TOTAL_STEPS = 9
+        ~ PICK_P01 = RANDOM(1, 3)
+        ~ PICK_P02 = RANDOM(1, 3)
+        ~ PICK_P03 = RANDOM(1, 3)
+        ~ PICK_P04 = RANDOM(1, 3)
+        ~ PICK_P05 = RANDOM(1, 3)
+        ~ PICK_P06 = RANDOM(1, 3)
+        ~ PICK_P07 = RANDOM(1, 3)
+        ~ PICK_P08 = RANDOM(1, 3)
+        ~ PICK_P09 = RANDOM(1, 3)
     }
     ~ LAST_PRIMARY_DOG = 1
     ~ IS_PREVIEW_MODE = false
@@ -54,12 +91,151 @@
         ~ SCORE_LAOSHI = SCORE_LAOSHI + pts
     }
 
-// 每个选项赋予：主倾向 +3，次倾向 +2，微倾向 +1
-=== function Apply__Choice(primary_id, secondary_id, tertiary_id)
+=== function Set__History(step, code)
+    {
+    - step == 1:
+        ~ HIST_01 = code
+    - step == 2:
+        ~ HIST_02 = code
+    - step == 3:
+        ~ HIST_03 = code
+    - step == 4:
+        ~ HIST_04 = code
+    - step == 5:
+        ~ HIST_05 = code
+    - step == 6:
+        ~ HIST_06 = code
+    - step == 7:
+        ~ HIST_07 = code
+    - step == 8:
+        ~ HIST_08 = code
+    - step == 9:
+        ~ HIST_09 = code
+    - step == 10:
+        ~ HIST_10 = code
+    - step == 11:
+        ~ HIST_11 = code
+    - step == 12:
+        ~ HIST_12 = code
+    - step == 13:
+        ~ HIST_13 = code
+    - step == 14:
+        ~ HIST_14 = code
+    - step == 15:
+        ~ HIST_15 = code
+    - step == 16:
+        ~ HIST_16 = code
+    - step == 17:
+        ~ HIST_17 = code
+    - step == 18:
+        ~ HIST_18 = code
+    - step == 19:
+        ~ HIST_19 = code
+    - step == 20:
+        ~ HIST_20 = code
+    - step == 21:
+        ~ HIST_21 = code
+    - step == 22:
+        ~ HIST_22 = code
+    - step == 23:
+        ~ HIST_23 = code
+    - step == 24:
+        ~ HIST_24 = code
+    - step == 25:
+        ~ HIST_25 = code
+    - step == 26:
+        ~ HIST_26 = code
+    - step == 27:
+        ~ HIST_27 = code
+    }
+
+=== function Get__History(step)
+    {
+    - step == 1:
+        ~ return HIST_01
+    - step == 2:
+        ~ return HIST_02
+    - step == 3:
+        ~ return HIST_03
+    - step == 4:
+        ~ return HIST_04
+    - step == 5:
+        ~ return HIST_05
+    - step == 6:
+        ~ return HIST_06
+    - step == 7:
+        ~ return HIST_07
+    - step == 8:
+        ~ return HIST_08
+    - step == 9:
+        ~ return HIST_09
+    - step == 10:
+        ~ return HIST_10
+    - step == 11:
+        ~ return HIST_11
+    - step == 12:
+        ~ return HIST_12
+    - step == 13:
+        ~ return HIST_13
+    - step == 14:
+        ~ return HIST_14
+    - step == 15:
+        ~ return HIST_15
+    - step == 16:
+        ~ return HIST_16
+    - step == 17:
+        ~ return HIST_17
+    - step == 18:
+        ~ return HIST_18
+    - step == 19:
+        ~ return HIST_19
+    - step == 20:
+        ~ return HIST_20
+    - step == 21:
+        ~ return HIST_21
+    - step == 22:
+        ~ return HIST_22
+    - step == 23:
+        ~ return HIST_23
+    - step == 24:
+        ~ return HIST_24
+    - step == 25:
+        ~ return HIST_25
+    - step == 26:
+        ~ return HIST_26
+    - step == 27:
+        ~ return HIST_27
+    }
+    ~ return 0
+
+// 记录本题选择至历史槽位、计分（主+3，次+2，微+1）并推进题号
+=== function Submit__Answer(primary_id, secondary_id, tertiary_id)
+    ~ temp code = primary_id * 1000000 + secondary_id * 10000 + tertiary_id * 100 + LAST_PRIMARY_DOG
+    ~ Set__History(CURRENT_STEP, code)
     ~ LAST_PRIMARY_DOG = primary_id
     ~ Add__Score_By_Id(primary_id, 3)
     ~ Add__Score_By_Id(secondary_id, 2)
     ~ Add__Score_By_Id(tertiary_id, 1)
+    ~ CURRENT_STEP = CURRENT_STEP + 1
+
+// 无损撤回指定题号的加分与上一主选倾向
+=== function Undo__Step(step)
+    ~ temp code = Get__History(step)
+    { code <= 0:
+        ~ return
+    }
+    ~ temp primary_id = code / 1000000
+    ~ temp rem1 = code mod 1000000
+    ~ temp secondary_id = rem1 / 10000
+    ~ temp rem2 = rem1 mod 10000
+    ~ temp tertiary_id = rem2 / 100
+    ~ temp prev_last_primary = rem2 mod 100
+
+    ~ Add__Score_By_Id(primary_id, -3)
+    ~ Add__Score_By_Id(secondary_id, -2)
+    ~ Add__Score_By_Id(tertiary_id, -1)
+    ~ LAST_PRIMARY_DOG = prev_last_primary
+    ~ Set__History(step, 0)
 
 === function Get__Dog_Score(dog_id)
     {
@@ -93,11 +269,11 @@
 === function Get__Dog_Name(dog_id)
     {
     - dog_id == DOG_DASAO:
-        ~ return "大骚狗"
+        ~ return "天生大骚狗"
     - dog_id == DOG_XIAONAI:
-        ~ return "小奶狗"
+        ~ return "纯情小奶狗"
     - dog_id == DOG_DALANG:
-        ~ return "大狼狗"
+        ~ return "硬汉大狼狗"
     - dog_id == DOG_LAOMU:
         ~ return "熟男老母狗"
     - dog_id == DOG_SAMOYE:
@@ -105,7 +281,7 @@
     - dog_id == DOG_NIUMA:
         ~ return "社畜牛马狗"
     - dog_id == DOG_BAIQUAN:
-        ~ return "傲娇败犬"
+        ~ return "傲娇小败犬"
     - dog_id == DOG_HASHIQI:
         ~ return "发疯哈士奇"
     - dog_id == DOG_BIANMU:
@@ -123,7 +299,6 @@
 === function Get__Winner_Id()
     ~ temp best_id = LAST_PRIMARY_DOG
     ~ temp best_score = Get__Dog_Score(best_id)
-    ~ temp offset = 1
     ~ temp candidate_id = 1
     ~ temp candidate_score = 0
 

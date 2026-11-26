@@ -13,17 +13,17 @@
 
 <hr>
 
-+   { UNLOCKED_DASAO or UNLOCKED_ALL_PREVIEW } [01 · 大骚狗]
++   { UNLOCKED_DASAO or UNLOCKED_ALL_PREVIEW } [01 · 天生大骚狗]
     ~ IS_PREVIEW_MODE = true
     # CLEAR
     -> Card__01_DaSaoGou
 
-+   { UNLOCKED_XIAONAI or UNLOCKED_ALL_PREVIEW } [02 · 小奶狗]
++   { UNLOCKED_XIAONAI or UNLOCKED_ALL_PREVIEW } [02 · 纯情小奶狗]
     ~ IS_PREVIEW_MODE = true
     # CLEAR
     -> Card__02_XiaoNaiGou
 
-+   { UNLOCKED_DALANG or UNLOCKED_ALL_PREVIEW } [03 · 大狼狗]
++   { UNLOCKED_DALANG or UNLOCKED_ALL_PREVIEW } [03 · 硬汉大狼狗]
     ~ IS_PREVIEW_MODE = true
     # CLEAR
     -> Card__03_DaLangGou
@@ -43,7 +43,7 @@
     # CLEAR
     -> Card__06_NiuMaGou
 
-+   { UNLOCKED_BAIQUAN or UNLOCKED_ALL_PREVIEW } [07 · 傲娇败犬]
++   { UNLOCKED_BAIQUAN or UNLOCKED_ALL_PREVIEW } [07 · 傲娇小败犬]
     ~ IS_PREVIEW_MODE = true
     # CLEAR
     -> Card__07_BaiQuan
