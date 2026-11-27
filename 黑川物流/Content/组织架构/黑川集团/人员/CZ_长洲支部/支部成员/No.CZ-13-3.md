@@ -20,9 +20,11 @@
 
 # 系统日志
 
-## [[难以抑制的狩猎欲望]]
-
-![](难以抑制的狩猎欲望.md#^Summary)
+> [!QUOTE] ## [[难以抑制的狩猎欲望]]
+> 
+> [<img src="https://cntracker.net/cdn-cgi/image/fit=scale-down,width=800/https://img.cntracker.net/img/9b878fda02c099ad4c85df3bb7041245.jpg" style="width: 100%; aspect-ratio: 21/9; object-fit: cover;">](难以抑制的狩猎欲望)
+> 
+> ![[难以抑制的狩猎欲望.md#^Summary]]
 
 # 其他记录
 

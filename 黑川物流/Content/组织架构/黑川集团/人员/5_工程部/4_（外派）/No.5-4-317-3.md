@@ -1,10 +1,10 @@
 #半藏品 #工蚁型
 
-![](https://barcode.tec-it.com/barcode.ashx?data=No.5-4-330-3&code=PDF417)
+![](https://barcode.tec-it.com/barcode.ashx?data=No.5-4-317-3&code=PDF417)
 
 # 贝恩
 
-| 编号 | No.5-4-330-3 |
+| 编号 | No.5-4-317-3 |
 | ---- | ---- |
 | 名称 | 贝恩 |
 | 原种族 | 巴巴里狮 |
