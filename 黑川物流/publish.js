@@ -8,6 +8,7 @@
  *   04 · KKN 语法高亮：已停用，历史代码保留备用。
  *   05 · PWA：原生安装入口、安装按钮点击统计与独立窗口使用统计。
  *   06 · Twikoo 评论：文章显式开启，使用永久 comment-id 区分评论串。
+ *   07 · 单页阅读位置：浏览器前进、后退时恢复正文的滚动位置。
  *
  * 外部服务
  *   Google Analytics：03 / 05 记录催更点击、PWA 安装按钮点击及 PWA 查看。
@@ -1078,6 +1079,145 @@ var kurokawaTrackEvent = (function () {
       subtree: true
     });
     handleNavigation();
+  }
+
+  connectPublish();
+})();
+
+
+/* ========================================================================
+ * 07 · 单页阅读位置
+ * ======================================================================== */
+(function () {
+  var STATE_KEY = 'kklScrollEntry';
+  var MAX_POSITIONS = 100;
+  var attempts = 0;
+
+  function connectPublish() {
+    var publish = window.publish;
+    var markdown = publish && publish.render && publish.render.renderer;
+    if (!markdown || !markdown.previewEl || typeof markdown.onRendered !== 'function' ||
+        typeof publish.on !== 'function') {
+      if (++attempts < 50) setTimeout(connectPublish, 200);
+      return;
+    }
+
+    var positions = new Map();
+    var entryPrefix = Math.random().toString(36).slice(2) + ':';
+    var nextEntryId = 0;
+    var active = null;
+    var traversal = null;
+    var wasSinglePage = isSinglePage();
+
+    function isSinglePage() {
+      return !document.body.classList.contains('sliding-windows');
+    }
+
+    function getPosition(state) {
+      return state && positions.get(state[STATE_KEY]);
+    }
+
+    function tagEntry(position) {
+      var state = history.state;
+      if (state && state[STATE_KEY] === position.id) return;
+      if (state != null && Object.prototype.toString.call(state) !== '[object Object]') return;
+      var nextState = Object.assign({}, state);
+      nextState[STATE_KEY] = position.id;
+      try {
+        history.replaceState(nextState, '');
+      } catch (error) {
+        // 浏览器限制历史记录写入时，保留 Publish 原有的导航行为。
+      }
+    }
+
+    function isCurrent(entry) {
+      return entry && entry === active && isSinglePage() &&
+        entry.position.filepath === publish.render.currentFilepath &&
+        entry.markdown === publish.render.renderer && entry.preview.isConnected;
+    }
+
+    function remember() {
+      if (!isCurrent(active) || active.restoring) return false;
+      var top = Math.max(0, active.preview.scrollTop);
+      if (top || active.position.top !== null) active.position.top = top;
+      return true;
+    }
+
+    function syncEntry(waitForRender) {
+      var request = traversal;
+      var filepath = publish.render.currentFilepath;
+      var markdown = publish.render.renderer;
+      var preview = markdown && markdown.previewEl;
+      traversal = null;
+      active = null;
+      if (!isSinglePage() || !filepath || !preview || !preview.isConnected ||
+          typeof markdown.onRendered !== 'function') return;
+
+      var returning = request && request.position && request.pathname === location.pathname &&
+        request.position.filepath === filepath;
+      var position = returning ? request.position : getPosition(history.state);
+      var target = returning ? position.top : null;
+      if (!position || position.filepath !== filepath) {
+        var id = entryPrefix + (++nextEntryId);
+        position = { id: id, filepath: filepath, top: null };
+        positions.set(id, position);
+        if (positions.size > MAX_POSITIONS) positions.delete(positions.keys().next().value);
+      }
+
+      var entry = { position: position, markdown: markdown, preview: preview, restoring: target !== null };
+      active = entry;
+      tagEntry(position);
+      if (!entry.restoring) return;
+
+      function restore() {
+        requestAnimationFrame(function () {
+          if (!isCurrent(entry)) return;
+          preview.scrollTo({ top: target, behavior: 'instant' });
+          entry.restoring = false;
+          remember();
+        });
+      }
+
+      if (waitForRender) markdown.onRendered(restore);
+      else restore();
+    }
+
+    function trackScroll(event) {
+      if (!active || event.target !== active.preview) return;
+      if (remember()) tagEntry(active.position);
+    }
+
+    document.addEventListener('scroll', trackScroll, { capture: true, passive: true });
+    document.addEventListener('click', function () {
+      if (remember()) tagEntry(active.position);
+    }, true);
+    window.addEventListener('popstate', function (event) {
+      if (!isSinglePage()) return;
+      // popstate 到达时，Publish 可能已把 renderer 指向目标笔记并清空正文。
+      // 只有离开和返回的是同一篇笔记，才不必等待下一次 navigated。
+      var previousFile = active && active.position.filepath;
+      remember();
+      active = null;
+      var request = { position: getPosition(event.state), pathname: location.pathname };
+      traversal = request;
+      if (request.position && request.position.filepath === previousFile) {
+        setTimeout(function () {
+          if (traversal === request && publish.render.currentFilepath === previousFile) syncEntry(false);
+        }, 0);
+      }
+    }, true);
+    publish.on('navigated', function () {
+      // 等 Publish 完成更新地址（包括标题锚点），再标记当前历史记录。
+      queueMicrotask(function () { syncEntry(true); });
+    });
+    new MutationObserver(function () {
+      var singlePage = isSinglePage();
+      if (singlePage === wasSinglePage) return;
+      wasSinglePage = singlePage;
+      traversal = null;
+      syncEntry(false);
+    }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    syncEntry(false);
   }
 
   connectPublish();
